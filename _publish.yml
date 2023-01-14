@@ -1,0 +1,4 @@
+- source: project
+  netlify:
+    - id: 7d9c5006-190a-4b20-9275-517a798b07b2
+      url: 'https://celebrated-truffle-4b528c.netlify.app'
