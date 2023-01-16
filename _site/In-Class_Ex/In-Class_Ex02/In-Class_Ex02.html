@@ -198,7 +198,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </ul></li>
   <li><a href="#importing-aspatial-data" id="toc-importing-aspatial-data" class="nav-link" data-scroll-target="#importing-aspatial-data">Importing Aspatial Data</a></li>
   <li><a href="#converting-aspatial-data-into-geospatial" id="toc-converting-aspatial-data-into-geospatial" class="nav-link" data-scroll-target="#converting-aspatial-data-into-geospatial">Converting Aspatial Data into Geospatial</a></li>
-  <li><a href="#project-transformation" id="toc-project-transformation" class="nav-link" data-scroll-target="#project-transformation">Project Transformation</a></li>
+  <li><a href="#project-transformation" id="toc-project-transformation" class="nav-link" data-scroll-target="#project-transformation">Project Transformation</a>
+  <ul class="collapse">
+  <li><a href="#showing-the-transformed-data-again" id="toc-showing-the-transformed-data-again" class="nav-link" data-scroll-target="#showing-the-transformed-data-again">Showing The Transformed Data Again</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -346,8 +349,57 @@ Geodetic CRS:  WGS 84
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>wp_sf <span class="ot">&lt;-</span> wp_sf <span class="sc">%&gt;%</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">26392</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<section id="showing-the-transformed-data-again" class="level3">
+<h3 class="anchored" data-anchor-id="showing-the-transformed-data-again">Showing The Transformed Data Again</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(wp_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coordinate Reference System:
+  User input: EPSG:26392 
+  wkt:
+PROJCRS["Minna / Nigeria Mid Belt",
+    BASEGEOGCRS["Minna",
+        DATUM["Minna",
+            ELLIPSOID["Clarke 1880 (RGS)",6378249.145,293.465,
+                LENGTHUNIT["metre",1]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433]],
+        ID["EPSG",4263]],
+    CONVERSION["Nigeria Mid Belt",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",4,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",8.5,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",0.99975,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",670553.98,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",0,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1]],
+    USAGE[
+        SCOPE["Engineering survey, topographic mapping."],
+        AREA["Nigeria between 6°30'E and 10°30'E, onshore and offshore shelf."],
+        BBOX[3.57,6.5,13.53,10.51]],
+    ID["EPSG",26392]]</code></pre>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

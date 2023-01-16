@@ -59,3 +59,9 @@ wp_sf
 wp_sf <- wp_sf %>%
   st_transform(crs = 26392)
 ```
+
+### Showing The Transformed Data Again
+
+```{r}
+st_crs(wp_sf)
+```
