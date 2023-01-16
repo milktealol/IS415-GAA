@@ -1,0 +1,7 @@
+---
+title: "In Class Exercise 2"
+---
+
+```{r}
+
+```
