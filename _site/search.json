@@ -12,5 +12,40 @@
     "title": "About",
     "section": "",
     "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex02/In-Class_Ex02.html",
+    "href": "In-Class_Ex/In-Class_Ex02/In-Class_Ex02.html",
+    "title": "In Class Exercise 2",
+    "section": "",
+    "text": "pacman::p_load(sf, tidyverse, funModeling)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex02/In-Class_Ex02.html#importing-geospatial-data",
+    "href": "In-Class_Ex/In-Class_Ex02/In-Class_Ex02.html#importing-geospatial-data",
+    "title": "In Class Exercise 2",
+    "section": "Importing Geospatial Data",
+    "text": "Importing Geospatial Data\n\nGeo Boundaries\n\ngeoNGA <- st_read(\"data/geospatial/\",\n                  layer = \"geoBoundaries-NGA-ADM2\") %>% \n  st_transform(crs = 26392)\n\nReading layer `geoBoundaries-NGA-ADM2' from data source \n  `/Users/danielchng/Desktop/Github/SMU-IS415/IS415-GAA/In-Class_Ex/In-Class_Ex02/data/geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 774 features and 6 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 2.668534 ymin: 4.273007 xmax: 14.67882 ymax: 13.89442\nGeodetic CRS:  WGS 84\n\n\n\n\nNGA\n\nNGA <- st_read(\"data/geospatial/\",\n               layer = \"nga_admbnda_adm2_osgof_20190417\") %>%\n  st_transform(crs = 26392)\n\nReading layer `nga_admbnda_adm2_osgof_20190417' from data source \n  `/Users/danielchng/Desktop/Github/SMU-IS415/IS415-GAA/In-Class_Ex/In-Class_Ex02/data/geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 774 features and 16 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 2.668534 ymin: 4.273007 xmax: 14.67882 ymax: 13.89442\nGeodetic CRS:  WGS 84"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex02/In-Class_Ex02.html#importing-aspatial-data",
+    "href": "In-Class_Ex/In-Class_Ex02/In-Class_Ex02.html#importing-aspatial-data",
+    "title": "In Class Exercise 2",
+    "section": "Importing Aspatial Data",
+    "text": "Importing Aspatial Data\n\nwp_nga <- read_csv(\"data/aspatial/WPdx.csv\") %>%\n  filter(`#clean_country_name` == \"Nigeria\")"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex02/In-Class_Ex02.html#converting-aspatial-data-into-geospatial",
+    "href": "In-Class_Ex/In-Class_Ex02/In-Class_Ex02.html#converting-aspatial-data-into-geospatial",
+    "title": "In Class Exercise 2",
+    "section": "Converting Aspatial Data into Geospatial",
+    "text": "Converting Aspatial Data into Geospatial\n\nwp_nga$Geometry = st_as_sfc(wp_nga$`New Georeferenced Column`)\nwp_nga\n\n# A tibble: 95,008 × 71\n   row_id `#source`      #lat_…¹ #lon_…² #repo…³ #stat…⁴ #wate…⁵ #wate…⁶ #wate…⁷\n    <dbl> <chr>            <dbl>   <dbl> <chr>   <chr>   <chr>   <chr>   <chr>  \n 1 429068 GRID3             7.98    5.12 08/29/… Unknown <NA>    <NA>    Tapsta…\n 2 222071 Federal Minis…    6.96    3.60 08/16/… Yes     Boreho… Well    Mechan…\n 3 160612 WaterAid          6.49    7.93 12/04/… Yes     Boreho… Well    Hand P…\n 4 160669 WaterAid          6.73    7.65 12/04/… Yes     Boreho… Well    <NA>   \n 5 160642 WaterAid          6.78    7.66 12/04/… Yes     Boreho… Well    Hand P…\n 6 160628 WaterAid          6.96    7.78 12/04/… Yes     Boreho… Well    Hand P…\n 7 160632 WaterAid          7.02    7.84 12/04/… Yes     Boreho… Well    Hand P…\n 8 642747 Living Water …    7.33    8.98 10/03/… Yes     Boreho… Well    Mechan…\n 9 642456 Living Water …    7.17    9.11 10/03/… Yes     Boreho… Well    Hand P…\n10 641347 Living Water …    7.20    9.22 03/28/… Yes     Boreho… Well    Hand P…\n# … with 94,998 more rows, 62 more variables: `#water_tech_category` <chr>,\n#   `#facility_type` <chr>, `#clean_country_name` <chr>, `#clean_adm1` <chr>,\n#   `#clean_adm2` <chr>, `#clean_adm3` <chr>, `#clean_adm4` <chr>,\n#   `#install_year` <dbl>, `#installer` <chr>, `#rehab_year` <lgl>,\n#   `#rehabilitator` <lgl>, `#management_clean` <chr>, `#status_clean` <chr>,\n#   `#pay` <chr>, `#fecal_coliform_presence` <chr>,\n#   `#fecal_coliform_value` <dbl>, `#subjective_quality` <chr>, …\n\n\n\nwp_sf <- st_sf(wp_nga, crs=4326)\nwp_sf\n\nSimple feature collection with 95008 features and 70 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 2.707441 ymin: 4.301812 xmax: 14.21828 ymax: 13.86568\nGeodetic CRS:  WGS 84\n# A tibble: 95,008 × 71\n   row_id `#source`      #lat_…¹ #lon_…² #repo…³ #stat…⁴ #wate…⁵ #wate…⁶ #wate…⁷\n *  <dbl> <chr>            <dbl>   <dbl> <chr>   <chr>   <chr>   <chr>   <chr>  \n 1 429068 GRID3             7.98    5.12 08/29/… Unknown <NA>    <NA>    Tapsta…\n 2 222071 Federal Minis…    6.96    3.60 08/16/… Yes     Boreho… Well    Mechan…\n 3 160612 WaterAid          6.49    7.93 12/04/… Yes     Boreho… Well    Hand P…\n 4 160669 WaterAid          6.73    7.65 12/04/… Yes     Boreho… Well    <NA>   \n 5 160642 WaterAid          6.78    7.66 12/04/… Yes     Boreho… Well    Hand P…\n 6 160628 WaterAid          6.96    7.78 12/04/… Yes     Boreho… Well    Hand P…\n 7 160632 WaterAid          7.02    7.84 12/04/… Yes     Boreho… Well    Hand P…\n 8 642747 Living Water …    7.33    8.98 10/03/… Yes     Boreho… Well    Mechan…\n 9 642456 Living Water …    7.17    9.11 10/03/… Yes     Boreho… Well    Hand P…\n10 641347 Living Water …    7.20    9.22 03/28/… Yes     Boreho… Well    Hand P…\n# … with 94,998 more rows, 62 more variables: `#water_tech_category` <chr>,\n#   `#facility_type` <chr>, `#clean_country_name` <chr>, `#clean_adm1` <chr>,\n#   `#clean_adm2` <chr>, `#clean_adm3` <chr>, `#clean_adm4` <chr>,\n#   `#install_year` <dbl>, `#installer` <chr>, `#rehab_year` <lgl>,\n#   `#rehabilitator` <lgl>, `#management_clean` <chr>, `#status_clean` <chr>,\n#   `#pay` <chr>, `#fecal_coliform_presence` <chr>,\n#   `#fecal_coliform_value` <dbl>, `#subjective_quality` <chr>, …"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex02/In-Class_Ex02.html#project-transformation",
+    "href": "In-Class_Ex/In-Class_Ex02/In-Class_Ex02.html#project-transformation",
+    "title": "In Class Exercise 2",
+    "section": "Project Transformation",
+    "text": "Project Transformation\n\nwp_sf <- wp_sf %>%\n  st_transform(crs = 26392)"
   }
 ]

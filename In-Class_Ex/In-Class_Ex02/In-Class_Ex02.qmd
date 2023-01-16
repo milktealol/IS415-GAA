@@ -1,7 +1,61 @@
 ---
 title: "In Class Exercise 2"
+date: "`r Sys.Date()`"
+format: html
+execute: 
+  message: false
+  warning: false
+editor: visual
 ---
 
-```{r}
+## Install sf and tidyverse
 
+```{r}
+#| code-fold: false
+#| code-summary: "Show the code"
+pacman::p_load(sf, tidyverse, funModeling)
+```
+
+## Importing Geospatial Data
+
+### Geo Boundaries
+
+```{r}
+geoNGA <- st_read("data/geospatial/",
+                  layer = "geoBoundaries-NGA-ADM2") %>% 
+  st_transform(crs = 26392)
+```
+
+### NGA
+
+```{r}
+NGA <- st_read("data/geospatial/",
+               layer = "nga_admbnda_adm2_osgof_20190417") %>%
+  st_transform(crs = 26392)
+```
+
+## Importing Aspatial Data
+
+```{r}
+wp_nga <- read_csv("data/aspatial/WPdx.csv") %>%
+  filter(`#clean_country_name` == "Nigeria")
+```
+
+## Converting Aspatial Data into Geospatial
+
+```{r}
+wp_nga$Geometry = st_as_sfc(wp_nga$`New Georeferenced Column`)
+wp_nga
+```
+
+```{r}
+wp_sf <- st_sf(wp_nga, crs=4326)
+wp_sf
+```
+
+## Project Transformation
+
+```{r}
+wp_sf <- wp_sf %>%
+  st_transform(crs = 26392)
 ```
