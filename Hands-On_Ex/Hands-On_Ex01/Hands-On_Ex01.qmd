@@ -1,3 +1,199 @@
 ---
 title: "Hands On Exercise 1"
 ---
+
+## Loading of packages
+
+```{r}
+pacman::p_load(sf, tidyverse)
+```
+
+## Importing of polygon feature data in shapefile format
+
+```{r}
+mpsz = st_read(dsn = "data/geospatial", 
+                  layer = "MP14_SUBZONE_WEB_PL")
+```
+
+```{r}
+cyclingpath = st_read(dsn = "data/geospatial", 
+                         layer = "CyclingPathGazette")
+```
+
+## Importing GIS data in kml format
+
+```{r}
+preschool = st_read("data/geospatial/preschools-location.kml")
+```
+
+## Checking content of A Simple Feature Data Frame
+
+```{r}
+st_geometry(mpsz)
+```
+
+Note that the print only displays basic information of the feature class such as type of geometry, the geographic extent of the features and the coordinate system of the data
+
+## Working with glimpse()
+
+```{r}
+glimpse(mpsz)
+```
+
+## Working with head()
+
+```{r}
+head(mpsz, n=5)
+```
+
+## Plotting the Geospatial Data
+
+```{r}
+plot(mpsz)
+```
+
+```{r}
+plot(st_geometry(mpsz))
+```
+
+```{r}
+plot(mpsz["PLN_AREA_N"])
+```
+
+## Working with projects
+
+Assigning EPSG code to simple feature data frame
+
+```{r}
+st_crs(mpsz)
+```
+
+Assign correct EPSG code to mpsz dataframe
+
+```{r}
+mpsz3414 <- st_set_crs(mpsz, 3414)
+```
+
+Checking CSR if correct again
+
+```{r}
+st_crs(mpsz3414)
+```
+
+## Transforming projection of preschool from wgs84 to svy21
+
+```{r}
+preschool3414 <- st_transform(preschool, 
+                              crs = 3414)
+```
+
+Note: In practice, we need to find out the appropriate project coordinate system to use before performing projection transformation
+
+## Importing and converting aspatial data
+
+```{r}
+listings <- read_csv("data/aspatial/listings.csv")
+```
+
+```{r}
+list(listings) 
+```
+
+## Creating simple feature data frame from an aspatial data frame
+
+```{r}
+listings_sf <- st_as_sf(listings, 
+                       coords = c("longitude", "latitude"),
+                       crs=4326) %>%
+  st_transform(crs = 3414)
+```
+
+```{r}
+glimpse(listings_sf)
+```
+
+## Geoprocessing with sf package
+
+### Buffering
+
+```{r}
+buffer_cycling <- st_buffer(cyclingpath, 
+                               dist=5, nQuadSegs = 30)
+```
+
+Calculating area of buffers
+
+```{r}
+buffer_cycling$AREA <- st_area(buffer_cycling)
+```
+
+Sum of Base R to derive total land involved
+
+```{r}
+sum(buffer_cycling$AREA)
+```
+
+## Point-in-polygon count
+
+```{r}
+mpsz3414$`PreSch Count`<- lengths(st_intersects(mpsz3414, preschool3414))
+```
+
+Check summary
+
+```{r}
+summary(mpsz3414$`PreSch Count`)
+```
+
+list planning subzone
+
+```{r}
+top_n(mpsz3414, 1, `PreSch Count`)
+```
+
+derive area of each planning subzone
+
+```{r}
+mpsz3414$Area <- mpsz3414 %>%
+  st_area()
+```
+
+Compute density
+
+```{r}
+mpsz3414 <- mpsz3414 %>%
+  mutate(`PreSch Density` = `PreSch Count`/Area * 1000000)
+```
+
+## EDA
+
+## Distribution of PreSch Density
+
+```{r}
+hist(mpsz3414$`PreSch Density`)
+```
+
+```{r}
+ggplot(data=mpsz3414, 
+       aes(x= as.numeric(`PreSch Density`)))+
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill="light blue") +
+  labs(title = "Are pre-school even distributed in Singapore?",
+       subtitle= "There are many planning sub-zones with a single pre-school, on the other hand, \nthere are two planning sub-zones with at least 20 pre-schools",
+      x = "Pre-school density (per km sq)",
+      y = "Frequency")
+```
+
+```{r}
+ggplot(data=mpsz3414, 
+       aes(y = `PreSch Count`, 
+           x= as.numeric(`PreSch Density`)))+
+  geom_point(color="black", 
+             fill="light blue") +
+  xlim(0, 40) +
+  ylim(0, 40) +
+  labs(title = "",
+      x = "Pre-school density (per km sq)",
+      y = "Pre-school count")
+```
