@@ -1,5 +1,5 @@
 ---
-title: "IS415-GAA"
+title: "IS415-GAA Daniel Chng"
 ---
 
 Welcome to IS415 **Geospatial Analyticvs and Applications**.

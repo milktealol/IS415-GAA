@@ -1,0 +1,12 @@
+---
+title: "In Class Exercise 3"
+date: "`r Sys.Date()`"
+format: html
+output:
+  html_document:
+    number_sections: true
+execute: 
+  message: false
+  warning: false
+editor: visual
+---
