@@ -1,6 +1,7 @@
 ---
 title: "Hands On Exercise 3"
-date: "`r Sys.Date()`"
+date: "29 January 23"
+date-modified: "`r Sys.Date()`"
 format: html
 execute: 
   message: false
@@ -46,15 +47,15 @@ mpsz_sf <- st_read(dsn = "data",
 Check to ensure they are projected in same projection system
 :::
 
-```{r}
+```{r eval=FALSE}
 st_crs(childcare_sf)
 ```
 
-```{r}
+```{r eval=FALSE}
 st_crs(mpsz_sf)
 ```
 
-```{r}
+```{r eval=FALSE}
 st_crs(sg_sf)
 ```
 
@@ -197,7 +198,7 @@ plot(sg_owin)
 
 and summary
 
-```{r}
+```{r eval=FALSE}
 summary(sg_owin)
 ```
 
