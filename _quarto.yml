@@ -30,9 +30,10 @@ website:
             text: Take Home Exercise 1
             
     right:
-      - href: index.qmd
+      - href: index.html
         text: Home
-      - about.qmd
+      - href: about.html
+        text: About
 
 format:
   html:
