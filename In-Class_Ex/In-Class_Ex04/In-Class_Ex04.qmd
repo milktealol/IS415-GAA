@@ -12,6 +12,54 @@ execute:
 editor: visual
 ---
 
-# Test
+# Getting Started
 
-## test
+## Importing Modules
+
+```{r}
+pacman::p_load(maptools, sf, raster, spatstat, tmap)
+```
+
+## Importing Data
+
+Childcare Services
+
+```{r}
+childcare_sf <- st_read("data/child-care-services-geojson.geojson") %>%
+  st_transform(crs = 3414)
+```
+
+Costal Outline
+
+```{r}
+sg_sf <- st_read(dsn = "data", layer="CostalOutline")
+```
+
+Subzones
+
+```{r}
+mpsz_sf <- st_read(dsn = "data", 
+                layer = "MP14_SUBZONE_WEB_PL")
+```
+
+## Convert to SF data frames to sp's Spatial class
+
+```{r}
+childcare <- as_Spatial(childcare_sf)
+mpsz <- as_Spatial(mpsz_sf)
+sg <- as_Spatial(sg_sf)
+```
+
+## Converting Spatial class into generic sp format
+
+```{r}
+childcare_sp <- as(childcare, "SpatialPoints")
+sg_sp <- as(sg, "SpatialPolygons")
+```
+
+## Converting generic sp format into spatstat's ppp format
+
+```{r}
+childcare_ppp <- as(childcare_sp, "ppp")
+childcare_ppp
+```
