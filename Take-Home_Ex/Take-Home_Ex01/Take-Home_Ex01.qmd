@@ -1,5 +1,5 @@
 ---
-title: "In Class Exercise 4"
+title: "Take Home Exercise 1"
 author: "Daniel Chng"
 date: "30 January 2023"
 date-modified: "`r Sys.Date()`"
@@ -11,7 +11,3 @@ execute:
   warning: false
 editor: visual
 ---
-
-# Test
-
-## test
