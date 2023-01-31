@@ -1,6 +1,7 @@
 ---
 title: "In Class Exercise 2"
-date: "`r Sys.Date()`"
+date: "16 January 23"
+date-modified: "`r Sys.Date()`"
 format: html
 execute: 
   message: false
@@ -60,8 +61,154 @@ wp_sf <- wp_sf %>%
   st_transform(crs = 26392)
 ```
 
-### Showing The Transformed Data Again
+# Geospatial Data Cleaning
+
+## Excluding redundent fields
 
 ```{r}
-st_crs(wp_sf)
+NGA <- NGA %>%
+  select(c(3:4, 8:9))
+```
+
+## Checking duplicate names
+
+```{r}
+NGA$ADM2_EN[duplicated(NGA$ADM2_EN)==TRUE]
+```
+
+Shows that there are LGAs with the same name
+
+## Correcting the error
+
+```{r}
+NGA$ADM2_EN[94] <- "Bassa, Kogi"
+NGA$ADM2_EN[95] <- "Bassa, Plateau"
+NGA$ADM2_EN[304] <- "Ifelodun, Kwara"
+NGA$ADM2_EN[305] <- "Ifelodun, Osun"
+NGA$ADM2_EN[355] <- "Irepodun, Kwara"
+NGA$ADM2_EN[356] <- "Irepodun, Osun"
+NGA$ADM2_EN[519] <- "Nasarawa, Kano"
+NGA$ADM2_EN[520] <- "Nasarawa, Nasarawa"
+NGA$ADM2_EN[546] <- "Obi, Benue"
+NGA$ADM2_EN[547] <- "Obi, Nasarawa"
+NGA$ADM2_EN[693] <- "Surulere, Lagos"
+NGA$ADM2_EN[694] <- "Surulere, Oyo"
+```
+
+## Rechecking data
+
+```{r}
+NGA$ADM2_EN[duplicated(NGA$ADM2_EN)==TRUE]
+```
+
+# Data Wrangling for water point data
+
+```{r}
+freq(data = wp_sf,
+     input = '#status_clean')
+```
+
+Performing data wrangling
+
+-   Rename column
+
+-   select which data to include
+
+-   mutate and replacena
+
+```{r}
+wp_sf_nga <- wp_sf %>% 
+  rename(status_clean = '#status_clean') %>%
+  select(status_clean) %>%
+  mutate(status_clean = replace_na(
+    status_clean, "unknown"))
+```
+
+## Extracting Water Point Data
+
+Extracting functional water point
+
+```{r}
+wp_functional <- wp_sf_nga %>%
+  filter(status_clean %in%
+           c("Functional",
+             "Functional but not in use",
+             "Functional but needs repair"))
+```
+
+Extracting non-functional water point
+
+```{r}
+wp_nonfunctional <- wp_sf_nga %>%
+  filter(status_clean %in%
+           c("Abandoned/Decommissioned",
+             "Abandoned",
+             "Non-Functional due to dry season",
+             "Non-Functional",
+             "Non functional due to dry season"))
+```
+
+Extracting unknown status water point
+
+```{r}
+wp_unknown <- wp_sf_nga %>%
+  filter(status_clean == "unknown")
+```
+
+Perform EDA
+
+```{r}
+freq(data = wp_functional,
+     input = 'status_clean')
+```
+
+```{r}
+freq(data = wp_nonfunctional,
+     input = 'status_clean')
+```
+
+```{r}
+freq(data = wp_unknown,
+     input = 'status_clean')
+```
+
+## Performing Point-in-Polygon Count
+
+Calculate number of functional water points that fall inside each LGA
+
+```{r}
+NGA_wp <- NGA %>% 
+  mutate(`total_wp` = lengths(
+    st_intersects(NGA, wp_sf_nga))) %>%
+  mutate(`wp_functional` = lengths(
+    st_intersects(NGA, wp_functional))) %>%
+  mutate(`wp_nonfunctional` = lengths(
+    st_intersects(NGA, wp_nonfunctional))) %>%
+  mutate(`wp_unknown` = lengths(
+    st_intersects(NGA, wp_unknown)))
+```
+
+## Visualizing attributes by using statistical graphs
+
+```{r}
+ggplot(data = NGA_wp,
+       aes(x = total_wp)) + 
+  geom_histogram(bins=20,
+                 color="black",
+                 fill="light blue") +
+  geom_vline(aes(xintercept=mean(
+    total_wp, na.rm=T)),
+             color="red", 
+             linetype="dashed", 
+             size=0.8) +
+  ggtitle("Distribution of total water points by LGA") +
+  xlab("No. of water points") +
+  ylab("No. of\nLGAs") +
+  theme(axis.title.y=element_text(angle = 0))
+```
+
+## Saving analytical data in rds format
+
+```{r}
+write_rds(NGA_wp, "data/rds/NGA_wp.rds")
 ```
