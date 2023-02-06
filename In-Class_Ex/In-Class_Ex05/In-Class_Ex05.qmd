@@ -1,0 +1,138 @@
+---
+title: "In Class Exercise 5"
+author: "Daniel Chng"
+date: "6 February 2023"
+date-modified: "`r Sys.Date()`"
+format: html
+execute: 
+  eval: true
+  echo: true
+  message: false
+  warning: false
+editor: visual
+---
+
+# 
+
+# Getting Started
+
+## Importing Module
+
+```{r}
+pacman::p_load(tidyverse, tmap, sf, sfdep)
+```
+
+## Importing Data
+
+```{r}
+studyArea <- st_read(dsn = "data",
+                     layer = "study_area") %>%
+  st_transform(crs = 3829)
+```
+
+::: callout-note
+CRS 3829 = Taiwan's projection map
+
+Can refer to EPSG.io
+:::
+
+```{r}
+stores <- st_read(dsn = "data",
+                  layer = "stores") %>%
+  st_transform(crs = 3829)
+```
+
+## Visualizing the SF layer
+
+::: callout-note
+The sequence of the layout matters if overlapping
+:::
+
+```{r}
+tmap_mode("view")
+tm_shape(studyArea) +
+  tm_polygons() +
+  tm_shape(stores) +
+  tm_dots(col = "Name",
+          size = 0.01,
+          border.col = "black",
+          border.lwd = 0.5) +
+  tm_view(set.zoom.limits = c(12, 16))
+```
+
+## Local Colocation Quotients (LCLQ)
+
+::: callout-note
+Taking only 6 neighbors. Include self will make it 7 so that there will never be a 50-50 change
+:::
+
+```{r}
+nb = include_self(
+  st_knn(st_geometry(stores), 6))
+```
+
+::: callout-note
+Converting into distance weight matrix
+
+Nearer target, higher weight, lower = lesser
+:::
+
+```{r}
+wt <- st_kernel_weights(nb,
+                        stores,
+                        "gaussian",
+                        adaptive = TRUE)
+```
+
+::: callout-note
+Making it a vector
+:::
+
+```{r}
+FamilyMart <- stores %>%
+  filter(Name == "Family Mart")
+A <- FamilyMart$Name
+```
+
+```{r}
+SevenEleven <- stores %>%
+  filter(Name == "7-Eleven")
+B <- SevenEleven$Name
+```
+
+::: callout-note
+A = Interest
+
+B = neighbour to check colocation
+
+nb = location (circle to search)
+
+wt = weight
+
+49 = simulation (will convert to P value after that)
+
+NA = No results, not near each other
+:::
+
+```{r}
+LCLQ <- local_colocation (A, B, nb, wt, 49)
+
+```
+
+::: callout-note
+Remember not to sort. Sequence is important
+:::
+
+```{r}
+LCLQ_stores <- cbind(stores, LCLQ)
+
+```
+
+```{r}
+tmap_mode("view")
+tm_shape(studyArea) + 
+  tm_polygons() +
+  tm_shape(LCLQ_stores) +
+  tm_dots(col = "X7.Eleven", size = 0.01) +
+  tm_view(set.zoom.limits = c(12,18))
+```

@@ -621,5 +621,47 @@
     "title": "In Class Exercise 2",
     "section": "Saving analytical data in rds format",
     "text": "Saving analytical data in rds format\n\nwrite_rds(NGA_wp, \"data/rds/NGA_wp.rds\")"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex05/In-Class_Ex05.html#importing-module",
+    "href": "In-Class_Ex/In-Class_Ex05/In-Class_Ex05.html#importing-module",
+    "title": "In Class Exercise 5",
+    "section": "Importing Module",
+    "text": "Importing Module\n\npacman::p_load(tidyverse, tmap, sf, sfdep)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex05/In-Class_Ex05.html#importing-data",
+    "href": "In-Class_Ex/In-Class_Ex05/In-Class_Ex05.html#importing-data",
+    "title": "In Class Exercise 5",
+    "section": "Importing Data",
+    "text": "Importing Data\n\nstudyArea <- st_read(dsn = \"data\",\n                     layer = \"study_area\") %>%\n  st_transform(crs = 3829)\n\nReading layer `study_area' from data source \n  `/Users/danielchng/Desktop/Github/SMU-IS415/IS415-GAA/In-Class_Ex/In-Class_Ex05/data' \n  using driver `ESRI Shapefile'\nSimple feature collection with 7 features and 7 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 121.4836 ymin: 25.00776 xmax: 121.592 ymax: 25.09288\nGeodetic CRS:  TWD97\n\n\n\n\n\n\n\n\nNote\n\n\n\nCRS 3829 = Taiwan’s projection map\nCan refer to EPSG.io\n\n\n\nstores <- st_read(dsn = \"data\",\n                  layer = \"stores\") %>%\n  st_transform(crs = 3829)\n\nReading layer `stores' from data source \n  `/Users/danielchng/Desktop/Github/SMU-IS415/IS415-GAA/In-Class_Ex/In-Class_Ex05/data' \n  using driver `ESRI Shapefile'\nSimple feature collection with 1409 features and 4 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 121.4902 ymin: 25.01257 xmax: 121.5874 ymax: 25.08557\nGeodetic CRS:  TWD97"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex05/In-Class_Ex05.html#visualizing-the-sf-layer",
+    "href": "In-Class_Ex/In-Class_Ex05/In-Class_Ex05.html#visualizing-the-sf-layer",
+    "title": "In Class Exercise 5",
+    "section": "Visualizing the SF layer",
+    "text": "Visualizing the SF layer\n\n\n\n\n\n\nNote\n\n\n\nThe sequence of the layout matters if overlapping\n\n\n\ntmap_mode(\"view\")\ntm_shape(studyArea) +\n  tm_polygons() +\n  tm_shape(stores) +\n  tm_dots(col = \"Name\",\n          size = 0.01,\n          border.col = \"black\",\n          border.lwd = 0.5) +\n  tm_view(set.zoom.limits = c(12, 16))"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex05/In-Class_Ex05.html#local-colocation-quotients-lclq",
+    "href": "In-Class_Ex/In-Class_Ex05/In-Class_Ex05.html#local-colocation-quotients-lclq",
+    "title": "In Class Exercise 5",
+    "section": "Local Colocation Quotients (LCLQ)",
+    "text": "Local Colocation Quotients (LCLQ)\n\n\n\n\n\n\nNote\n\n\n\nTaking only 6 neighbors. Include self will make it 7 so that there will never be a 50-50 change\n\n\n\nnb = include_self(\n  st_knn(st_geometry(stores), 6))\n\n\n\n\n\n\n\nNote\n\n\n\nConverting into distance weight matrix\nNearer target, higher weight, lower = lesser\n\n\n\nwt <- st_kernel_weights(nb,\n                        stores,\n                        \"gaussian\",\n                        adaptive = TRUE)\n\n\n\n\n\n\n\nNote\n\n\n\nMaking it a vector\n\n\n\nFamilyMart <- stores %>%\n  filter(Name == \"Family Mart\")\nA <- FamilyMart$Name\n\n\nSevenEleven <- stores %>%\n  filter(Name == \"7-Eleven\")\nB <- SevenEleven$Name\n\n\n\n\n\n\n\nNote\n\n\n\nA = Interest\nB = neighbour to check colocation\nnb = location (circle to search)\nwt = weight\n49 = simulation (will convert to P value after that)\nNA = No results, not near each other\n\n\n\nLCLQ <- local_colocation (A, B, nb, wt, 49)\n\n\n\n\n\n\n\nNote\n\n\n\nRemember not to sort. Sequence is important\n\n\n\nLCLQ_stores <- cbind(stores, LCLQ)\n\n\ntmap_mode(\"view\")\ntm_shape(studyArea) + \n  tm_polygons() +\n  tm_shape(LCLQ_stores) +\n  tm_dots(col = \"X7.Eleven\", size = 0.01) +\n  tm_view(set.zoom.limits = c(12,18))"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex05/data/study_area.html",
+    "href": "In-Class_Ex/In-Class_Ex05/data/study_area.html",
+    "title": "IS415-GAA",
+    "section": "",
+    "text": "<!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’>     dataset\n\n\n        0 0     false"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex05/data/stores.html",
+    "href": "In-Class_Ex/In-Class_Ex05/data/stores.html",
+    "title": "IS415-GAA",
+    "section": "",
+    "text": "<!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’>     \n\n\n        0 0     false"
   }
 ]
