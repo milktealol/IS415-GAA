@@ -11,3 +11,228 @@ execute:
   warning: false
 editor: visual
 ---
+
+# Getting Started
+
+## Importing of packages
+
+```{r}
+pacman::p_load(sf, sfdep, tidyverse, funModeling, spatstat, tmap)
+```
+
+## Handling Geospatial Data
+
+### Importing Geospatial Data set
+
+```{r}
+geoNGA <- st_read("data/geospatial/",
+                  layer = "geoBoundaries-NGA-ADM2") %>% 
+  st_transform(crs = 26392)
+```
+
+### Importing NGA Data set
+
+```{r}
+NGA <- st_read("data/geospatial/",
+               layer = "nga_admbnda_adm2_osgof_20190417") %>%
+  st_transform(crs = 26392)
+```
+
+## Handling Aspatial Data
+
+### Importing Aspatial Data
+
+Download dataset and remember to filter only to NGA
+
+```{r}
+wp_nga <- read_csv("data/aspatial/WPdx.csv")
+```
+
+### Converting water point data into sf point features
+
+```{r}
+wp_nga$Geometry = st_as_sfc(wp_nga$`New Georeferenced Column`)
+wp_nga
+```
+
+### Converting Tibble dataframe into sf object
+
+```{r}
+wp_sf <- st_sf(wp_nga, crs=4326)
+wp_sf
+```
+
+### Transform into Nigeria projected coordinate system
+
+```{r}
+wp_sf <- wp_sf %>%
+  st_transform(crs = 26392)
+```
+
+# Geospatial Data Cleaning
+
+## Excluding redundant fields
+
+```{r}
+NGA <- NGA %>%
+  dplyr::select(c(3:4, 8:9))
+```
+
+## Checking for duplicate names
+
+```{r}
+NGA$ADM2_EN[duplicated(NGA$ADM2_EN)==TRUE]
+```
+
+```{r}
+NGA$ADM2_EN[94] <- "Bassa, Kogi"
+NGA$ADM2_EN[95] <- "Bassa, Plateau"
+NGA$ADM2_EN[304] <- "Ifelodun, Kwara"
+NGA$ADM2_EN[305] <- "Ifelodun, Osun"
+NGA$ADM2_EN[355] <- "Irepodun, Kwara"
+NGA$ADM2_EN[356] <- "Irepodun, Osun"
+NGA$ADM2_EN[519] <- "Nasarawa, Kano"
+NGA$ADM2_EN[520] <- "Nasarawa, Nasarawa"
+NGA$ADM2_EN[546] <- "Obi, Benue"
+NGA$ADM2_EN[547] <- "Obi, Nasarawa"
+NGA$ADM2_EN[693] <- "Surulere, Lagos"
+NGA$ADM2_EN[694] <- "Surulere, Oyo"
+```
+
+## Confirming that duplicated name issue been addressed
+
+```{r}
+NGA$ADM2_EN[duplicated(NGA$ADM2_EN)==TRUE]
+```
+
+# Data Wrangling for Water Point Data
+
+## Visualizing Water Point Data
+
+Understanding visually NGA's waterpoint
+
+```{r}
+funModeling::freq(data = wp_sf,
+     input = '#status_clean')
+```
+
+## Renaming of columns
+
+```{r}
+wp_sf_nga <- wp_sf %>% 
+  rename(status_clean = '#status_clean') %>%
+  dplyr::select(status_clean) %>%
+  mutate(status_clean = replace_na(
+    status_clean, "unknown"))
+```
+
+## Extracting Water Point Data
+
+### Functional Water Point
+
+```{r}
+wp_functional <- wp_sf_nga %>%
+  filter(status_clean %in%
+           c("Functional",
+             "Functional but not in use",
+             "Functional but needs repair"))
+```
+
+### Non-functional Water Point
+
+```{r}
+wp_nonfunctional <- wp_sf_nga %>%
+  filter(status_clean %in%
+           c("Abandoned/Decommissioned",
+             "Abandoned",
+             "Non-Functional due to dry season",
+             "Non-Functional",
+             "Non functional due to dry season"))
+```
+
+### Unknown Status Water Point
+
+```{r}
+wp_unknown <- wp_sf_nga %>%
+  filter(status_clean == "unknown")
+```
+
+### EDA on Derived sf data frames
+
+#### Functional
+
+```{r}
+wp_functional <- wp_sf_nga %>%
+  filter(status_clean %in%
+           c("Functional",
+             "Functional but not in use",
+             "Functional but needs repair",
+             "Functional, needs repair",
+             "Functional, not in use"))
+```
+
+```{r}
+funModeling::freq(data = wp_functional,
+     input = 'status_clean')
+```
+
+#### Non-Functional
+
+```{r}
+wp_nonfunctional <- wp_sf_nga %>%
+  filter(status_clean %in%
+           c("Abandoned/Decommissioned",
+             "Non-Functional due to dry season",
+             "Non-Functional",
+             "Non-functional, dry"))
+```
+
+```{r}
+funModeling::freq(data = wp_nonfunctional,
+     input = 'status_clean')
+```
+
+#### Unknown
+
+```{r}
+wp_unknown <- wp_sf_nga %>%
+  filter(status_clean == "unknown")
+```
+
+```{r}
+funModeling::freq(data = wp_unknown,
+     input = 'status_clean')
+```
+
+## Performing Point-in-Polygon Count
+
+```{r}
+NGA_wp <- NGA %>% 
+  mutate(`total_wp` = lengths(
+    st_intersects(NGA, wp_sf_nga))) %>%
+  mutate(`wp_functional` = lengths(
+    st_intersects(NGA, wp_functional))) %>%
+  mutate(`wp_nonfunctional` = lengths(
+    st_intersects(NGA, wp_nonfunctional))) %>%
+  mutate(`wp_unknown` = lengths(
+    st_intersects(NGA, wp_unknown)))
+```
+
+## Visualizing attributes using statistical graphs
+
+```{r}
+ggplot(data = NGA_wp,
+       aes(x = total_wp)) + 
+  geom_histogram(bins=20,
+                 color="black",
+                 fill="light blue") +
+  geom_vline(aes(xintercept=mean(
+    total_wp, na.rm=T)),
+             color="red", 
+             linetype="dashed", 
+             size=0.8) +
+  ggtitle("Distribution of total water points by LGA") +
+  xlab("No. of water points") +
+  ylab("No. of\nLGAs") +
+  theme(axis.title.y=element_text(angle = 0))
+```
