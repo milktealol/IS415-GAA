@@ -63,3 +63,19 @@ sg_sp <- as(sg, "SpatialPolygons")
 childcare_ppp <- as(childcare_sp, "ppp")
 childcare_ppp
 ```
+
+## Visulising SF layers
+
+::: callout-note
+Dots smaller + zoom limit
+
+Note: Do not have too many interactive mode (abt 5 max)
+:::
+
+```{r}
+tmap_mode('view')
+tm_shape(childcare_sf)+
+  tm_dots(alph = 0.5,
+          size=0.01)+
+  tm_view(set.zoom.limits = c(11,14))
+```
