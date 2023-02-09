@@ -523,5 +523,68 @@
     "title": "In Class Exercise 2",
     "section": "Saving analytical data in rds format",
     "text": "Saving analytical data in rds format\n\nwrite_rds(NGA_wp, \"data/rds/NGA_wp.rds\")"
+  },
+  {
+    "objectID": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html",
+    "href": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html",
+    "title": "Take Home Exercise 1",
+    "section": "",
+    "text": "pacman::p_load(sf, sfdep, tidyverse, funModeling, spatstat, tmap)\n\n\n\n\n\n\n\ngeoNGA <- st_read(\"data/geospatial/\",\n                  layer = \"geoBoundaries-NGA-ADM2\") %>% \n  st_transform(crs = 26392)\n\nReading layer `geoBoundaries-NGA-ADM2' from data source \n  `C:\\Users\\Daniel\\Desktop\\Github\\IS419\\IS415-GAA\\Take-Home_Ex\\Take-Home_Ex01\\data\\geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 774 features and 6 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 2.668534 ymin: 4.273007 xmax: 14.67882 ymax: 13.89442\nGeodetic CRS:  WGS 84\n\n\n\n\n\n\nNGA <- st_read(\"data/geospatial/\",\n               layer = \"nga_admbnda_adm2_osgof_20190417\") %>%\n  st_transform(crs = 26392)\n\nReading layer `nga_admbnda_adm2_osgof_20190417' from data source \n  `C:\\Users\\Daniel\\Desktop\\Github\\IS419\\IS415-GAA\\Take-Home_Ex\\Take-Home_Ex01\\data\\geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 774 features and 16 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 2.668534 ymin: 4.273007 xmax: 14.67882 ymax: 13.89442\nGeodetic CRS:  WGS 84\n\n\n\n\n\n\n\n\nDownload dataset and remember to filter only to NGA\n\nwp_nga <- read_csv(\"data/aspatial/WPdx.csv\")\n\n\n\n\n\nwp_nga$Geometry = st_as_sfc(wp_nga$`New Georeferenced Column`)\nwp_nga\n\n# A tibble: 97,478 × 75\n   row_id `#source`      #lat_…¹ #lon_…² #repo…³ #stat…⁴ #wate…⁵ #wate…⁶ #wate…⁷\n    <dbl> <chr>            <dbl>   <dbl> <chr>   <chr>   <chr>   <chr>   <chr>  \n 1 158721 Federal Minis…    5.07    6.62 02/19/… Yes     Boreho… Well    Mechan…\n 2 158892 Federal Minis…    5.09    7.09 02/06/… Yes     Boreho… Well    Hand P…\n 3 323117 Federal Minis…    5.91    8.77 08/31/… Yes     Boreho… Well    Hand P…\n 4 300176 Federal Minis…    5.23    7.32 05/17/… Yes     Boreho… Well    Mechan…\n 5 324346 Federal Minis…    6.88    3.36 08/17/… Yes     Boreho… Well    Mechan…\n 6 297273 Federal Minis…    6.59    3.29 05/26/… Yes     Boreho… Well    Mechan…\n 7 296853 Federal Minis…    6.60    3.26 06/02/… Yes     Boreho… Well    Mechan…\n 8 323866 Federal Minis…    6.20    6.73 09/18/… Yes     Boreho… Well    Mechan…\n 9 297044 Federal Minis…    6.61    3.30 05/26/… Yes     Boreho… Well    Mechan…\n10 324321 Federal Minis…    6.96    3.60 08/16/… Yes     Boreho… Well    Mechan…\n# … with 97,468 more rows, 66 more variables: `#water_tech_category` <chr>,\n#   `#facility_type` <chr>, `#clean_country_name` <chr>, `#clean_adm1` <chr>,\n#   `#clean_adm2` <chr>, `#clean_adm3` <lgl>, `#clean_adm4` <lgl>,\n#   `#install_year` <dbl>, `#installer` <lgl>, `#rehab_year` <lgl>,\n#   `#rehabilitator` <lgl>, `#management_clean` <chr>, `#status_clean` <chr>,\n#   `#pay` <chr>, `#fecal_coliform_presence` <lgl>,\n#   `#fecal_coliform_value` <lgl>, `#subjective_quality` <chr>, …\n\n\n\n\n\n\nwp_sf <- st_sf(wp_nga, crs=4326)\nwp_sf\n\nSimple feature collection with 97478 features and 74 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 2.707441 ymin: 4.301812 xmax: 14.21828 ymax: 13.86568\nGeodetic CRS:  WGS 84\n# A tibble: 97,478 × 75\n   row_id `#source`      #lat_…¹ #lon_…² #repo…³ #stat…⁴ #wate…⁵ #wate…⁶ #wate…⁷\n *  <dbl> <chr>            <dbl>   <dbl> <chr>   <chr>   <chr>   <chr>   <chr>  \n 1 158721 Federal Minis…    5.07    6.62 02/19/… Yes     Boreho… Well    Mechan…\n 2 158892 Federal Minis…    5.09    7.09 02/06/… Yes     Boreho… Well    Hand P…\n 3 323117 Federal Minis…    5.91    8.77 08/31/… Yes     Boreho… Well    Hand P…\n 4 300176 Federal Minis…    5.23    7.32 05/17/… Yes     Boreho… Well    Mechan…\n 5 324346 Federal Minis…    6.88    3.36 08/17/… Yes     Boreho… Well    Mechan…\n 6 297273 Federal Minis…    6.59    3.29 05/26/… Yes     Boreho… Well    Mechan…\n 7 296853 Federal Minis…    6.60    3.26 06/02/… Yes     Boreho… Well    Mechan…\n 8 323866 Federal Minis…    6.20    6.73 09/18/… Yes     Boreho… Well    Mechan…\n 9 297044 Federal Minis…    6.61    3.30 05/26/… Yes     Boreho… Well    Mechan…\n10 324321 Federal Minis…    6.96    3.60 08/16/… Yes     Boreho… Well    Mechan…\n# … with 97,468 more rows, 66 more variables: `#water_tech_category` <chr>,\n#   `#facility_type` <chr>, `#clean_country_name` <chr>, `#clean_adm1` <chr>,\n#   `#clean_adm2` <chr>, `#clean_adm3` <lgl>, `#clean_adm4` <lgl>,\n#   `#install_year` <dbl>, `#installer` <lgl>, `#rehab_year` <lgl>,\n#   `#rehabilitator` <lgl>, `#management_clean` <chr>, `#status_clean` <chr>,\n#   `#pay` <chr>, `#fecal_coliform_presence` <lgl>,\n#   `#fecal_coliform_value` <lgl>, `#subjective_quality` <chr>, …\n\n\n\n\n\n\nwp_sf <- wp_sf %>%\n  st_transform(crs = 26392)"
+  },
+  {
+    "objectID": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#excluding-redundant-fields",
+    "href": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#excluding-redundant-fields",
+    "title": "Take Home Exercise 1",
+    "section": "Excluding redundant fields",
+    "text": "Excluding redundant fields\n\nNGA <- NGA %>%\n  dplyr::select(c(3:4, 8:9))"
+  },
+  {
+    "objectID": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#checking-for-duplicate-names",
+    "href": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#checking-for-duplicate-names",
+    "title": "Take Home Exercise 1",
+    "section": "Checking for duplicate names",
+    "text": "Checking for duplicate names\n\nNGA$ADM2_EN[duplicated(NGA$ADM2_EN)==TRUE]\n\n[1] \"Bassa\"    \"Ifelodun\" \"Irepodun\" \"Nasarawa\" \"Obi\"      \"Surulere\"\n\n\n\nNGA$ADM2_EN[94] <- \"Bassa, Kogi\"\nNGA$ADM2_EN[95] <- \"Bassa, Plateau\"\nNGA$ADM2_EN[304] <- \"Ifelodun, Kwara\"\nNGA$ADM2_EN[305] <- \"Ifelodun, Osun\"\nNGA$ADM2_EN[355] <- \"Irepodun, Kwara\"\nNGA$ADM2_EN[356] <- \"Irepodun, Osun\"\nNGA$ADM2_EN[519] <- \"Nasarawa, Kano\"\nNGA$ADM2_EN[520] <- \"Nasarawa, Nasarawa\"\nNGA$ADM2_EN[546] <- \"Obi, Benue\"\nNGA$ADM2_EN[547] <- \"Obi, Nasarawa\"\nNGA$ADM2_EN[693] <- \"Surulere, Lagos\"\nNGA$ADM2_EN[694] <- \"Surulere, Oyo\""
+  },
+  {
+    "objectID": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#confirming-that-duplicated-name-issue-been-addressed",
+    "href": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#confirming-that-duplicated-name-issue-been-addressed",
+    "title": "Take Home Exercise 1",
+    "section": "Confirming that duplicated name issue been addressed",
+    "text": "Confirming that duplicated name issue been addressed\n\nNGA$ADM2_EN[duplicated(NGA$ADM2_EN)==TRUE]\n\ncharacter(0)"
+  },
+  {
+    "objectID": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#visualizing-water-point-data",
+    "href": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#visualizing-water-point-data",
+    "title": "Take Home Exercise 1",
+    "section": "Visualizing Water Point Data",
+    "text": "Visualizing Water Point Data\nUnderstanding visually NGA’s waterpoint\n\nfunModeling::freq(data = wp_sf,\n     input = '#status_clean')\n\n\n\n\n                      #status_clean frequency percentage cumulative_perc\n1                        Functional     47228      48.45           48.45\n2                    Non-Functional     30638      31.43           79.88\n3                              <NA>     10154      10.42           90.30\n4          Functional, needs repair      4792       4.92           95.22\n5               Non-Functional, dry      2473       2.54           97.76\n6            Functional, not in use      1775       1.82           99.58\n7          Abandoned/Decommissioned       321       0.33           99.91\n8         Functional but not in use        86       0.09          100.00\n9  Non-Functional due to dry season         7       0.01          100.01\n10      Functional but needs repair         4       0.00          100.00"
+  },
+  {
+    "objectID": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#renaming-of-columns",
+    "href": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#renaming-of-columns",
+    "title": "Take Home Exercise 1",
+    "section": "Renaming of columns",
+    "text": "Renaming of columns\n\nwp_sf_nga <- wp_sf %>% \n  rename(status_clean = '#status_clean') %>%\n  dplyr::select(status_clean) %>%\n  mutate(status_clean = replace_na(\n    status_clean, \"unknown\"))"
+  },
+  {
+    "objectID": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#extracting-water-point-data",
+    "href": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#extracting-water-point-data",
+    "title": "Take Home Exercise 1",
+    "section": "Extracting Water Point Data",
+    "text": "Extracting Water Point Data\n\nFunctional Water Point\n\nwp_functional <- wp_sf_nga %>%\n  filter(status_clean %in%\n           c(\"Functional\",\n             \"Functional but not in use\",\n             \"Functional but needs repair\"))\n\n\n\nNon-functional Water Point\n\nwp_nonfunctional <- wp_sf_nga %>%\n  filter(status_clean %in%\n           c(\"Abandoned/Decommissioned\",\n             \"Abandoned\",\n             \"Non-Functional due to dry season\",\n             \"Non-Functional\",\n             \"Non functional due to dry season\"))\n\n\n\nUnknown Status Water Point\n\nwp_unknown <- wp_sf_nga %>%\n  filter(status_clean == \"unknown\")\n\n\n\nEDA on Derived sf data frames\n\nFunctional\n\nwp_functional <- wp_sf_nga %>%\n  filter(status_clean %in%\n           c(\"Functional\",\n             \"Functional but not in use\",\n             \"Functional but needs repair\",\n             \"Functional, needs repair\",\n             \"Functional, not in use\"))\n\n\nfunModeling::freq(data = wp_functional,\n     input = 'status_clean')\n\n\n\n\n                 status_clean frequency percentage cumulative_perc\n1                  Functional     47228      87.65           87.65\n2    Functional, needs repair      4792       8.89           96.54\n3      Functional, not in use      1775       3.29           99.83\n4   Functional but not in use        86       0.16           99.99\n5 Functional but needs repair         4       0.01          100.00\n\n\n\n\nNon-Functional\n\nwp_nonfunctional <- wp_sf_nga %>%\n  filter(status_clean %in%\n           c(\"Abandoned/Decommissioned\",\n             \"Non-Functional due to dry season\",\n             \"Non-Functional\",\n             \"Non-functional, dry\"))\n\n\nfunModeling::freq(data = wp_nonfunctional,\n     input = 'status_clean')\n\n\n\n\n                      status_clean frequency percentage cumulative_perc\n1                   Non-Functional     30638      98.94           98.94\n2         Abandoned/Decommissioned       321       1.04           99.98\n3 Non-Functional due to dry season         7       0.02          100.00\n\n\n\n\nUnknown\n\nwp_unknown <- wp_sf_nga %>%\n  filter(status_clean == \"unknown\")\n\n\nfunModeling::freq(data = wp_unknown,\n     input = 'status_clean')\n\n\n\n\n  status_clean frequency percentage cumulative_perc\n1      unknown     10154        100             100"
+  },
+  {
+    "objectID": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#performing-point-in-polygon-count",
+    "href": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#performing-point-in-polygon-count",
+    "title": "Take Home Exercise 1",
+    "section": "Performing Point-in-Polygon Count",
+    "text": "Performing Point-in-Polygon Count\n\nNGA_wp <- NGA %>% \n  mutate(`total_wp` = lengths(\n    st_intersects(NGA, wp_sf_nga))) %>%\n  mutate(`wp_functional` = lengths(\n    st_intersects(NGA, wp_functional))) %>%\n  mutate(`wp_nonfunctional` = lengths(\n    st_intersects(NGA, wp_nonfunctional))) %>%\n  mutate(`wp_unknown` = lengths(\n    st_intersects(NGA, wp_unknown)))"
+  },
+  {
+    "objectID": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#visualizing-attributes-using-statistical-graphs",
+    "href": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#visualizing-attributes-using-statistical-graphs",
+    "title": "Take Home Exercise 1",
+    "section": "Visualizing attributes using statistical graphs",
+    "text": "Visualizing attributes using statistical graphs\n\nggplot(data = NGA_wp,\n       aes(x = total_wp)) + \n  geom_histogram(bins=20,\n                 color=\"black\",\n                 fill=\"light blue\") +\n  geom_vline(aes(xintercept=mean(\n    total_wp, na.rm=T)),\n             color=\"red\", \n             linetype=\"dashed\", \n             size=0.8) +\n  ggtitle(\"Distribution of total water points by LGA\") +\n  xlab(\"No. of water points\") +\n  ylab(\"No. of\\nLGAs\") +\n  theme(axis.title.y=element_text(angle = 0))"
   }
 ]

@@ -12,7 +12,7 @@ execute:
 editor: visual
 ---
 
-# Getting Started
+# Getting Started 
 
 ## Importing of packages
 
