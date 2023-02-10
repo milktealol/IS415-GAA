@@ -1,5 +1,5 @@
 ---
-title: "Take Home Exercise 1"
+title: "Take Home Exercise 1: Application of Spatial Point Patterns Analysis to discover the geographical distribution of functional and non-function water points in Osun State, Nigeria"
 author: "Daniel Chng"
 date: "30 January 2023"
 date-modified: "`r Sys.Date()`"
@@ -12,17 +12,71 @@ execute:
 editor: visual
 ---
 
-# Getting Started 
+# 1 Understanding the scene
 
-## Importing of packages
+Water is an important resource to mankind. Clean and accessible water is critical to human health. It provides a healthy environment, a sustainable economy, reduces poverty and ensures peace and security. Yet over 40% of the global population does not have access to sufficient clean water. By 2025, 1.8 billion people will be living in countries or regions with absolute water scarcity, according to UN-Water. The lack of water poses a major threat to several sectors, including food security. Agriculture uses about 70% of the world\'s accessible freshwater.
+
+Developing countries are most affected by water shortages and poor water quality. Up to 80% of illnesses in the developing world are linked to inadequate water and sanitation. Despite technological advancement, providing clean water to the rural community is still a major development issues in many countries globally, especially countries in the Africa continent.
+
+To address the issue of providing clean and sustainable water supply to the rural community, a global [Water Point Data Exchange (WPdx)](https://www.waterpointdata.org/about/) project has been initiated. The main aim of this initiative is to collect water point related data from rural areas at the water point or small water scheme level and share the data via WPdx Data Repository, a cloud-based data library. What is so special of this project is that data are collected based on [WPDx Data Standard](https://www.waterpointdata.org/wp-content/uploads/2021/04/WPDx_Data_Standard.pdf).
+
+## 1.1 Objective
+
+Geospatial analytics hold tremendous potential to address complex problems facing society. In this study, you are tasked to apply appropriate spatial point patterns analysis methods to discover the geographical distribution of functional and non-function water points and their co-locations if any in Osun State, Nigeria.
+
+## 1.2 Our Task
+
+The specific tasks of this take-home exercise are as follows:
+
+### 1.2.1 Exploratory Spatial Data Analysis (ESDA)
+
+-   Derive kernel density maps of functional and non-functional water points. Using appropriate tmap functions,
+
+-   Display the kernel density maps on openstreetmap of Osub State, Nigeria.
+
+-   Describe the spatial patterns revealed by the kernel density maps. Highlight the advantage of kernel density map over point map.
+
+### 1.2.2 Second-order Spatial Point Patterns Analysis
+
+With reference to the spatial point patterns observed in ESDA:
+
+-   Formulate the null hypothesis and alternative hypothesis and select the confidence level.
+
+-   Perform the test by using appropriate Second order spatial point patterns analysis technique.
+
+-   With reference to the analysis results, draw statistical conclusions.
+
+### 1.2.3 Spatial Correlation Analysis
+
+In this section, you are required to confirm statistically if the spatial distribution of functional and non-functional water points are independent from each other.
+
+-   Formulate the null hypothesis and alternative hypothesis and select the confidence level.
+
+-   Perform the test by using appropriate Second order spatial point patterns analysis technique.
+
+-   With reference to the analysis results, draw statistical conclusions.
+
+## 1.3 Data
+
+#### 1.3.1 Apstial data
+
+For the purpose of this assignment, data from [WPdx Global Data Repositories](https://www.waterpointdata.org/access-data/) will be used. There are two versions of the data. They are: WPdx-Basic and WPdx+. You are required to use **WPdx+** data set.
+
+#### 1.3.2 Geospatial data
+
+This study will focus of Osun State, Nigeria. The state boundary GIS data of Nigeria can be downloaded either from The [Humanitarian Data Exchange](https://data.humdata.org/) portal or [geoBoundaries](https://www.geoboundaries.org/).
+
+# 2 Getting Started
+
+## 2.1 Importing of packages
 
 ```{r}
 pacman::p_load(sf, sfdep, tidyverse, funModeling, spatstat, tmap)
 ```
 
-## Handling Geospatial Data
+## 2.2 Handling Geospatial Data
 
-### Importing Geospatial Data set
+### 2.2.1 Importing Geospatial Data set
 
 ```{r}
 geoNGA <- st_read("data/geospatial/",
@@ -30,7 +84,7 @@ geoNGA <- st_read("data/geospatial/",
   st_transform(crs = 26392)
 ```
 
-### Importing NGA Data set
+### 2.2.2 Importing NGA Data set
 
 ```{r}
 NGA <- st_read("data/geospatial/",
@@ -38,9 +92,9 @@ NGA <- st_read("data/geospatial/",
   st_transform(crs = 26392)
 ```
 
-## Handling Aspatial Data
+## 2.3 Handling Aspatial Data
 
-### Importing Aspatial Data
+### 2.3.1 Importing Aspatial Data
 
 Download dataset and remember to filter only to NGA
 
@@ -48,41 +102,43 @@ Download dataset and remember to filter only to NGA
 wp_nga <- read_csv("data/aspatial/WPdx.csv")
 ```
 
-### Converting water point data into sf point features
+### 2.3.2 Converting water point data into sf point features
 
 ```{r}
 wp_nga$Geometry = st_as_sfc(wp_nga$`New Georeferenced Column`)
 wp_nga
 ```
 
-### Converting Tibble dataframe into sf object
+### 2.3.3 Converting Tibble dataframe into sf object
 
 ```{r}
 wp_sf <- st_sf(wp_nga, crs=4326)
 wp_sf
 ```
 
-### Transform into Nigeria projected coordinate system
+### 2.3.4 Transform into Nigeria projected coordinate system
 
 ```{r}
 wp_sf <- wp_sf %>%
   st_transform(crs = 26392)
 ```
 
-# Geospatial Data Cleaning
+# 3 Geospatial Data Cleaning
 
-## Excluding redundant fields
+## 3.1 Excluding redundant fields
 
 ```{r}
 NGA <- NGA %>%
   dplyr::select(c(3:4, 8:9))
 ```
 
-## Checking for duplicate names
+## 3.2 Checking for duplicate names
 
 ```{r}
 NGA$ADM2_EN[duplicated(NGA$ADM2_EN)==TRUE]
 ```
+
+## 3.2 Replacing duplicate names
 
 ```{r}
 NGA$ADM2_EN[94] <- "Bassa, Kogi"
@@ -99,24 +155,28 @@ NGA$ADM2_EN[693] <- "Surulere, Lagos"
 NGA$ADM2_EN[694] <- "Surulere, Oyo"
 ```
 
-## Confirming that duplicated name issue been addressed
+## 3.3 Confirming that duplicated name issue been addressed
 
 ```{r}
 NGA$ADM2_EN[duplicated(NGA$ADM2_EN)==TRUE]
 ```
 
-# Data Wrangling for Water Point Data
+# 4 Data Wrangling for Water Point Data
 
-## Visualizing Water Point Data
+## 4.1 Visualizing Water Point Data
 
-Understanding visually NGA's waterpoint
+```{r}
+osun_wp_sf <- subset(wp_sf, "clean_adm2" == "Osun")
+```
+
+Understanding visually NGA's water point
 
 ```{r}
 funModeling::freq(data = wp_sf,
      input = '#status_clean')
 ```
 
-## Renaming of columns
+## 4.2 Renaming of columns
 
 ```{r}
 wp_sf_nga <- wp_sf %>% 
@@ -126,9 +186,9 @@ wp_sf_nga <- wp_sf %>%
     status_clean, "unknown"))
 ```
 
-## Extracting Water Point Data
+## 4.3 Extracting Water Point Data
 
-### Functional Water Point
+### 4.3.1 Functional Water Point
 
 ```{r}
 wp_functional <- wp_sf_nga %>%
@@ -138,7 +198,7 @@ wp_functional <- wp_sf_nga %>%
              "Functional but needs repair"))
 ```
 
-### Non-functional Water Point
+### 4.3.2 Non-functional Water Point
 
 ```{r}
 wp_nonfunctional <- wp_sf_nga %>%
@@ -150,16 +210,16 @@ wp_nonfunctional <- wp_sf_nga %>%
              "Non functional due to dry season"))
 ```
 
-### Unknown Status Water Point
+### 4.3.3 Unknown Status Water Point
 
 ```{r}
 wp_unknown <- wp_sf_nga %>%
   filter(status_clean == "unknown")
 ```
 
-### EDA on Derived sf data frames
+### 4.3.4 EDA on Derived sf data frames
 
-#### Functional
+#### 4.3.4.1 Filtering Functional Water Point
 
 ```{r}
 wp_functional <- wp_sf_nga %>%
@@ -171,12 +231,14 @@ wp_functional <- wp_sf_nga %>%
              "Functional, not in use"))
 ```
 
+#### 4.3.4.2 Functional Status Clean
+
 ```{r}
 funModeling::freq(data = wp_functional,
      input = 'status_clean')
 ```
 
-#### Non-Functional
+#### 4.3.4.3 Non-Functional
 
 ```{r}
 wp_nonfunctional <- wp_sf_nga %>%
@@ -187,24 +249,28 @@ wp_nonfunctional <- wp_sf_nga %>%
              "Non-functional, dry"))
 ```
 
+#### 4.3.4.4 Non-Functional Status Clean
+
 ```{r}
 funModeling::freq(data = wp_nonfunctional,
      input = 'status_clean')
 ```
 
-#### Unknown
+#### 4.3.4.5 Unknown
 
 ```{r}
 wp_unknown <- wp_sf_nga %>%
   filter(status_clean == "unknown")
 ```
 
+#### 4.3.4.6 Unknown Status Clean
+
 ```{r}
 funModeling::freq(data = wp_unknown,
      input = 'status_clean')
 ```
 
-## Performing Point-in-Polygon Count
+## 4.4 Performing Point-in-Polygon Count
 
 ```{r}
 NGA_wp <- NGA %>% 
@@ -218,7 +284,7 @@ NGA_wp <- NGA %>%
     st_intersects(NGA, wp_unknown)))
 ```
 
-## Visualizing attributes using statistical graphs
+## 4.5 Visualizing attributes using statistical graphs
 
 ```{r}
 ggplot(data = NGA_wp,
@@ -235,4 +301,826 @@ ggplot(data = NGA_wp,
   xlab("No. of water points") +
   ylab("No. of\nLGAs") +
   theme(axis.title.y=element_text(angle = 0))
+```
+
+## 4.6 Saving Analytical Data in RDS Format
+
+```{r}
+write_rds(NGA_wp, "data/rds/NGA_wp.rds")
+```
+
+# 5 Basic Choropleth Mapping
+
+## 5.1 Quick Choropleth Plotting using tmap
+
+```{r}
+tmap_mode("plot")
+qtm(NGA_wp, 
+    fill = "wp_functional", "wp_nonfunctional") +
+  tm_layout(main.title = "Water Points",
+            bg.color = "lightblue") +
+  tm_graticules()
+```
+
+## 5.2 Visualising distribution of non-functional water point
+
+```{r}
+p1 <- tm_shape(NGA_wp) +
+  tm_fill("wp_functional",
+          n = 10,
+          style = "equal",
+          palette = "Blues") +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Distribution of functional water point by LGAs",
+            legend.outside = FALSE)
+```
+
+```{r}
+p2 <- tm_shape(NGA_wp) +
+  tm_fill("total_wp",
+          n = 10,
+          style = "equal",
+          palette = "Blues") +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Distribution of total  water point by LGAs",
+            legend.outside = FALSE)
+```
+
+```{r}
+tmap_arrange(p2, p1, nrow = 1)
+```
+
+## 5.3 Choropleth Map for Rates
+
+### 5.3.1 Deriving Proportion of Functional and Non-Functional Water Points
+
+```{r}
+NGA_wp <- NGA_wp %>%
+  mutate(pct_functional = wp_functional/total_wp) %>%
+  mutate(pct_nonfunctional = wp_nonfunctional/total_wp)
+```
+
+### 5.3.2 Plotting Map of Rate
+
+```{r}
+tm_shape(NGA_wp) +
+  tm_fill("pct_functional",
+          n = 10,
+          style = "equal",
+          palette = "Blues",
+          legend.hist = TRUE) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Rate map of functional water point by LGAs",
+            legend.outside = TRUE)
+```
+
+## 5.4 Highlighting Extreme Value Maps
+
+The percentile map is a special type of quantile map with six specific categories: 0-1%,1-10%, 10-50%,50-90%,90-99%, and 99-100%.
+
+### 5.4.1 Data Prep
+
+Step 1: Exclude NA records
+
+```{r}
+NGA_wp <- NGA_wp %>%
+  drop_na()
+```
+
+Step 2: Creating customised classification and extracting values
+
+```{r}
+percent <- c(0,.01,.1,.5,.9,.99,1)
+var <- NGA_wp["pct_functional"] %>%
+  st_set_geometry(NULL)
+quantile(var[,1], percent)
+```
+
+::: callout-note
+When variables are extracted from an sf data.frame, the geometry is extracted as well. For mapping and spatial manipulation, this is the expected behavior, but many base R functions cannot deal with the geometry. Specifically, the `quantile()` gives an error. As a result `st_set_geomtry(NULL)` is used to drop geomtry field.
+:::
+
+### 5.4.2 Creating get.var function
+
+-   arguments:
+
+    -   vname: variable name (as character, in quotes)
+
+    -   df: name of sf data frame
+
+-   returns:
+
+    -   v: vector with values (without a column name)
+
+```{r}
+get.var <- function(vname,df) {
+  v <- df[vname] %>% 
+    st_set_geometry(NULL)
+  v <- unname(v[,1])
+  return(v)
+}
+```
+
+### 5.4.3 Percentile Mapping Function
+
+```{r}
+percentmap <- function(vnam, df, legtitle=NA, mtitle="Percentile Map"){
+  percent <- c(0,.01,.1,.5,.9,.99,1)
+  var <- get.var(vnam, df)
+  bperc <- quantile(var, percent)
+  tm_shape(df) +
+  tm_polygons() +
+  tm_shape(df) +
+     tm_fill(vnam,
+             title=legtitle,
+             breaks=bperc,
+             palette="Blues",
+          labels=c("< 1%", "1% - 10%", "10% - 50%", "50% - 90%", "90% - 99%", "> 99%"))  +
+  tm_borders() +
+  tm_layout(main.title = mtitle, 
+            title.position = c("right","bottom"))
+}
+```
+
+### 5.4.4 Testing Percentile Mapping Function
+
+```{r}
+percentmap("total_wp", NGA_wp)
+```
+
+### 5.4.5 Box Mapping
+
+```{r}
+ggplot(data = NGA_wp,
+       aes(x = "",
+           y = wp_nonfunctional)) +
+  geom_boxplot()
+```
+
+### 5.4.6 Creating boxbreaks Function
+
+-   arguments:
+
+    -   v: vector with observations
+
+    -   mult: multiplier for IQR (default 1.5)
+
+-   returns:
+
+    -   bb: vector with 7 break points compute quartile and fences
+
+```{r}
+boxbreaks <- function(v,mult=1.5) {
+  qv <- unname(quantile(v))
+  iqr <- qv[4] - qv[2]
+  upfence <- qv[4] + mult * iqr
+  lofence <- qv[2] - mult * iqr
+  # initialize break points vector
+  bb <- vector(mode="numeric",length=7)
+  # logic for lower and upper fences
+  if (lofence < qv[1]) {  # no lower outliers
+    bb[1] <- lofence
+    bb[2] <- floor(qv[1])
+  } else {
+    bb[2] <- lofence
+    bb[1] <- qv[1]
+  }
+  if (upfence > qv[5]) { # no upper outliers
+    bb[7] <- upfence
+    bb[6] <- ceiling(qv[5])
+  } else {
+    bb[6] <- upfence
+    bb[7] <- qv[5]
+  }
+  bb[3:5] <- qv[2:4]
+  return(bb)
+}
+```
+
+### 5.4.7 Creating get.var Function
+
+-   arguments:
+
+    -   vname: variable name (as character, in quotes)
+
+    -   df: name of sf data frame
+
+-   returns:
+
+    -   v: vector with values (without a column name)
+
+```{r}
+get.var <- function(vname,df) {
+  v <- df[vname] %>% st_set_geometry(NULL)
+  v <- unname(v[,1])
+  return(v)
+}
+```
+
+### 5.4.8 Testing boxbreaks Function
+
+```{r}
+var <- get.var("wp_nonfunctional", NGA_wp) 
+boxbreaks(var)
+```
+
+```{r}
+boxmap <- function(vnam, df, 
+                   legtitle=NA,
+                   mtitle="Box Map",
+                   mult=1.5){
+  var <- get.var(vnam,df)
+  bb <- boxbreaks(var)
+  tm_shape(df) +
+    tm_polygons() +
+  tm_shape(df) +
+     tm_fill(vnam,title=legtitle,
+             breaks=bb,
+             palette="Blues",
+          labels = c("lower outlier", 
+                     "< 25%", 
+                     "25% - 50%", 
+                     "50% - 75%",
+                     "> 75%", 
+                     "upper outlier"))  +
+  tm_borders() +
+  tm_layout(main.title = mtitle, 
+            title.position = c("left",
+                               "top"))
+}
+```
+
+```{r}
+tmap_mode("plot")
+boxmap("wp_nonfunctional", NGA_wp)
+```
+
+### 5.4.9 Recode Zero
+
+Recode LGAs with zero total water point into NA.
+
+```{r}
+NGA_wp <- NGA_wp %>%
+  mutate(wp_functional = na_if(
+    total_wp, total_wp < 0))
+```
+
+### 5.4.10 Filter Data to Osun State
+
+```{r}
+osun_data <- subset(NGA_wp, ADM1_EN == "Osun")
+```
+
+Checking out the data
+
+```{r}
+head(osun_data)
+```
+
+### 5.4.11 Osun's Functional Water Points
+
+```{r}
+tm_shape(osun_data) +
+  tm_fill("wp_functional",
+          n = 10,
+          style = "equal",
+          palette = "Blues")
+```
+
+#### 5.4.11.1 Osun's Functional Water Points (Percentile Mapping)
+
+```{r}
+percentmap("wp_functional", osun_data)
+```
+
+#### 5.4.11.2 Osun's Functional Water Points (Box Mapping)
+
+```{r}
+boxmap("wp_functional", osun_data)
+```
+
+### 5.4.12 Osun's Non-Functional Water Points
+
+```{r}
+tm_shape(osun_data) +
+  tm_fill("wp_nonfunctional",
+          n = 10,
+          style = "equal",
+          palette = "Blues")
+```
+
+#### 5.4.12.1 Osun's Non-Functional Water Points (Percentile Mapping)
+
+```{r}
+percentmap("wp_nonfunctional", osun_data)
+```
+
+#### 5.4.12.2 Osun's Non-Functional Water Points (Box Mapping)
+
+```{r}
+boxmap("wp_nonfunctional", osun_data)
+```
+
+# 6 Geospatial Data Wrangling
+
+## 6.1 Converting sf data frames to sp's Spatial class
+
+```{r}
+osun <- as_Spatial(osun_data)
+functional <- as_Spatial(wp_functional)
+nonfunctional <- as_Spatial(wp_nonfunctional)
+```
+
+Checking the data
+
+```{r}
+osun
+```
+
+```{r}
+functional
+```
+
+```{r}
+nonfunctional
+```
+
+## 6.2 Converting Spatial Class to Generic sp Format
+
+```{r}
+osun_sp <- as(osun, "SpatialPolygons")
+functional_sp <- as(functional, "SpatialPoints")
+nonfunctional_sp <- as(nonfunctional, "SpatialPoints")
+```
+
+Checking Data
+
+```{r}
+osun_sp
+```
+
+```{r}
+functional_sp
+```
+
+```{r}
+nonfunctional_sp
+```
+
+## 6.3 Converting Generic sp Format into Spatstat's ppp Format
+
+```{r}
+functional_ppp <- as(functional_sp, "ppp")
+functional_ppp
+```
+
+```{r}
+nonfunctional_ppp <- as(nonfunctional_sp, "ppp")
+nonfunctional_ppp
+```
+
+### 6.3.1 Plotting functional_ppp and summary
+
+```{r}
+plot(functional_ppp)
+```
+
+```{r}
+summary(functional_ppp)
+```
+
+### 6.3.2 Plotting nonfunctional_ppp and summary
+
+```{r}
+plot(nonfunctional_ppp)
+```
+
+```{r}
+summary(nonfunctional_ppp)
+```
+
+## 6.4 Handing Duplicated Points (Example)
+
+For our case, based on the summary, there is no warnings about duplicated data
+
+```{r}
+any(duplicated(functional_ppp))
+```
+
+```{r}
+any(duplicated(nonfunctional_ppp))
+```
+
+### 6.4.1 Checking using jittering method
+
+```{r}
+functional_ppp_jit <- rjitter(functional_ppp,
+                              retry=TRUE,
+                              nsim=1,
+                              drop=TRUE)
+```
+
+```{r}
+nonfunctional_ppp_jit <- rjitter(nonfunctional_ppp,
+                              retry=TRUE,
+                              nsim=1,
+                              drop=TRUE)
+```
+
+```{r}
+any(duplicated(functional_ppp_jit))
+```
+
+```{r}
+any(duplicated(nonfunctional_ppp_jit))
+```
+
+## 6.5 Creating owin Object
+
+```{r}
+osun_owin <- as(osun_sp, "owin")
+```
+
+Plotting
+
+```{r}
+plot(osun_owin)
+```
+
+Summary
+
+```{r}
+summary(osun_owin)
+```
+
+## 6.6 Combining Point Events Object and owin Object
+
+```{r}
+functionalOsun_ppp = functional_ppp[osun_owin]
+nonfunctionalOsun_ppp = nonfunctional_ppp[osun_owin]
+```
+
+Functional
+
+```{r}
+summary(functionalOsun_ppp)
+```
+
+```{r}
+plot(functionalOsun_ppp)
+```
+
+Non-Functional
+
+```{r}
+summary(nonfunctionalOsun_ppp)
+```
+
+```{r}
+plot(nonfunctionalOsun_ppp)
+```
+
+# 7 First-Order Spatial Point Patterns Analysis
+
+## 7.1 Rescalling KDE Values
+
+Making sure all is in KM
+
+```{r}
+functionalOsun_ppp.km <- rescale(functionalOsun_ppp, 1000, "km")
+nonfunctionalOsun_ppp.km <- rescale(nonfunctionalOsun_ppp, 1000, "km")
+```
+
+## 7.2 Kernel Density Estimation
+
+Checking sigma value
+
+```{r}
+bw <- bw.diggle(functionalOsun_ppp)
+bw
+```
+
+Value is too small, thus we shall change it to use bw.CvL, automatic bandwidth calcuation
+
+```{r}
+bw.CvL(functionalOsun_ppp.km)
+```
+
+### 7.2.1 Functional
+
+```{r}
+kde_functionalOsun_bw <- density(functionalOsun_ppp.km,
+                                 sigma=bw.CvL,
+                                 edge=TRUE,
+                                 kernel="gaussian")
+```
+
+Plotting
+
+```{r}
+plot(kde_functionalOsun_bw)
+```
+
+### 7.2.2 Non-Functional
+
+```{r}
+kde_nonfunctionalOsun_bw <- density(nonfunctionalOsun_ppp.km,
+                                 sigma=bw.CvL,
+                                 edge=TRUE,
+                                 kernel="gaussian")
+```
+
+Plotting
+
+```{r}
+plot(kde_nonfunctionalOsun_bw)
+```
+
+## 7.3 Converting KDE Output into Grid Object
+
+## 7.3.1 Functional
+
+```{r}
+gridded_kde_functionalOsun_bw <- as.SpatialGridDataFrame.im(kde_functionalOsun_bw)
+spplot(gridded_kde_functionalOsun_bw)
+```
+
+### 7.3.2 Non-Functional
+
+```{r}
+gridded_kde_nonfunctionalOsun_bw <- as.SpatialGridDataFrame.im(kde_nonfunctionalOsun_bw)
+spplot(gridded_kde_nonfunctionalOsun_bw)
+```
+
+## 7.4 Converting Grid Output into Raster
+
+### 7.4.2 Non-Functional
+
+```{r}
+kde_nonfunctionalOsun_bw_raster <- raster(gridded_kde_nonfunctionalOsun_bw)
+```
+
+```{r}
+kde_nonfunctionalOsun_bw_raster
+```
+
+Assigning Projection System
+
+```{r}
+projection(kde_nonfunctionalOsun_bw_raster) <- CRS("+init=EPSG:26392 +datum=WGS84 +units=km")
+kde_nonfunctionalOsun_bw_raster
+```
+
+### 7.4.2 Functional
+
+```{r}
+kde_functionalOsun_bw_raster <- raster(gridded_kde_functionalOsun_bw)
+```
+
+```{r}
+kde_functionalOsun_bw_raster
+```
+
+Assigning Projection System
+
+```{r}
+projection(kde_functionalOsun_bw_raster) <- CRS("+init=EPSG:26392 +datum=WGS84 +units=km")
+kde_functionalOsun_bw_raster
+```
+
+## 7.5 Visualising in tmap
+
+### 7.5.1 Functional
+
+```{r}
+tmap_mode("view") +
+  tm_shape(kde_functionalOsun_bw_raster) + 
+  tm_basemap("OpenStreetMap") +
+  tm_raster("v") +
+  tm_layout(legend.position = c("right", "bottom"), frame = FALSE)
+```
+
+### 7.5.2 Non-Functional
+
+```{r}
+tmap_mode("view") +
+  tm_shape(kde_nonfunctionalOsun_bw_raster) + 
+  tm_basemap("OpenStreetMap") +
+  tm_raster("v") +
+  tm_layout(legend.position = c("right", "bottom"), frame = FALSE)
+```
+
+## 7.6 Point Map
+
+### 7.6.1 Importing Data for Point Map
+
+```{r}
+wp_nga_filter <- read_csv("data/aspatial/WPdx.csv")
+```
+
+### 7.6.2 Filtering for Point Map
+
+```{r}
+wp_nga_filter <- wp_nga_filter %>% 
+  rename(clean_adm1 = '#clean_adm1')
+```
+
+```{r}
+wp_nga_filter <- wp_nga_filter %>% 
+  rename(status_clean = '#status_clean')
+```
+
+```{r}
+wp_nga_filter <- subset(wp_nga_filter, clean_adm1 == "Osun")
+```
+
+```{r}
+wp_nga_filter$Geometry = st_as_sfc(wp_nga_filter$`New Georeferenced Column`)
+wp_nga_filter
+```
+
+```{r}
+wp_nga_filter <- st_sf(wp_nga_filter, crs=4326)
+wp_nga_filter
+```
+
+```{r}
+wp_nga_filter <- wp_nga_filter %>%
+  st_transform(crs = 26392)
+```
+
+```{r}
+wp_nga_filterpoint <- wp_nga_filter %>%
+  filter(status_clean == "Functional" | status_clean == "Functional but not in use" | status_clean == "Functional but needs repair" | status_clean == "Functional, needs repair" | status_clean == "Functional, not in use")
+```
+
+### 7.4 Plotting of Point Map
+
+```{r}
+wp_nga_filter_point <- tmap_mode("view")
+  tm_shape(wp_nga_filterpoint) +
+  tm_dots(col = "status_clean",
+             size = 0.01,
+             border.col = "black",
+             border.lwd = 0.5) +
+  tm_view(set.zoom.limits = c(9,11))
+```
+
+# 8 Second-Order Spatial Point Patterns Analysis
+
+## 8.1 Analysing Spatial Point Patterns Using G Function
+
+### 8.1.1 Functional
+
+```{r}
+G_Functional = Gest(functionalOsun_ppp_jit, correction = "border")
+plot(G_Functional, xlim=c(0,500))
+```
+
+#### 8.1.1.1 Performing Complete Spatial Randomness Test
+
+To confirm the observed spatial patterns above, a hypothesis test will be conducted. The hypothesis and test are as follows:
+
+Ho = The distribution of functional water points at Osun State, Nigeria, are randomly distributed.
+
+H1= The distribution of functional water points at Osun State, Nigeria are not randomly distributed.
+
+The null hypothesis will be rejected if p-value is smaller than alpha value of 0.001.
+
+Monte Carlo test with G-function
+
+```{r}
+G_Functional.csr <- envelope(functionalOsun_ppp, Gest, nsim = 999)
+```
+
+```{r}
+plot(G_Functional.csr)
+```
+
+### 8.1.2 Non-Functional
+
+```{r}
+G_Functional = Gest(functionalOsun_ppp_jit, correction = "border")
+plot(G_Functional, xlim=c(0,500))
+```
+
+#### 8.1.2.1 Performing Complete Spatial Randomness Test
+
+```{r}
+G_NonFunctional.csr <- envelope(nonfunctionalOsun_ppp, Gest, nsim = 999)
+```
+
+```{r}
+plot(G_NonFunctional.csr)
+```
+
+## 8.2 Analysing Spatial Point Patterns Using L Function
+
+### 8.2.1 Functional
+
+```{r}
+L_fun = Lest(functionalOsun_ppp, correction = "Ripley")
+plot(L_fun, . -r ~ r, 
+     ylab= "L(d)-r", xlab = "d(m)")
+```
+
+```{r}
+L_fun.csr <- envelope(functionalOsun_ppp, Lest, nsim = 39, rank = 1, glocal=TRUE)
+```
+
+```{r}
+plot(L_ck.csr, . - r ~ r, xlab="d", ylab="L(d)-r")
+```
+
+### 8.2.2 Non-Functional
+
+```{r}
+L_nonfun = Lest(nonfunctionalOsun_ppp, correction = "Ripley")
+plot(L_nonfun, . -r ~ r, 
+     ylab= "L(d)-r", xlab = "d(m)")
+```
+
+```{r}
+L_nonfun.csr <- envelope(nonfunctionalOsun_ppp, Lest, nsim = 39, rank = 1, glocal=TRUE)
+```
+
+```{r}
+plot(L_nonfun.csr, . - r ~ r, xlab="d", ylab="L(d)-r")
+```
+
+# 9 Local Colocation Quotients (LCLQ)
+
+## 9.1 Prepping Nearest Neighbor Data
+
+```{r}
+wp_sf_osun <- wp_sf %>% 
+  rename(status_clean = '#status_clean') %>%
+  rename(lat = '#lat_deg') %>%
+  rename(lng = '#lon_deg') %>%
+  rename(clean_adm1 = '#clean_adm1') %>%
+  mutate(status_clean = replace_na(
+    status_clean, "unknown"))
+```
+
+```{r}
+wp_sf_osun_filter <- subset(wp_sf_osun, clean_adm1 == "Osun")
+```
+
+```{r}
+wp_sf_osun_filter <- wp_sf_osun_filter %>%
+  dplyr::select(status_clean, lat, lng)
+```
+
+```{r}
+nb <- include_self(
+  st_knn(st_geometry(wp_sf_osun_filter), 6))
+```
+
+```{r}
+wt <- st_kernel_weights(nb, 
+                        wp_sf_osun_filter, 
+                        "gaussian", 
+                        adaptive = TRUE)
+```
+
+```{r}
+functional_Wp <- wp_sf_osun_filter %>%
+  filter(status_clean %in%
+           c("Functional",
+             "Functional but not in use",
+             "Functional but needs repair",
+             "Functional, needs repair",
+             "Functional, not in use"))
+A <- functionalWp$status_clean
+```
+
+```{r}
+nonfunctional_Wp <- wp_sf_osun_filter %>%
+  filter(status_clean %in%
+           c("Abandoned/Decommissioned",
+             "Non-Functional due to dry season",
+             "Non-Functional",
+             "Non-functional, dry"))
+B <- nonfunctional_Wp$status_clean
+```
+
+```{r}
+LCLQ <- local_colocation(A, B, nb, wt, 39)
+```
+
+```{r}
+LCLQ_WP <- cbind(wp_sf_osun_filter, LCLQ)
+```
+
+```{r}
+tmap_mode("view")
+tm_shape(LCLQ_WP)+ 
+  tm_dots(col = "Non.Functional",
+             size = 0.01,
+             border.col = "black",
+             border.lwd = 0.5) +
+  tm_view(set.zoom.limits = c(9, 16))
 ```
