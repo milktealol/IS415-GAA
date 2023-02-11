@@ -14,7 +14,7 @@ editor: visual
 
 # 1 Understanding the scene
 
-Water is an important resource to mankind. Clean and accessible water is critical to human health. It provides a healthy environment, a sustainable economy, reduces poverty and ensures peace and security. Yet over 40% of the global population does not have access to sufficient clean water. By 2025, 1.8 billion people will be living in countries or regions with absolute water scarcity, according to UN-Water. The lack of water poses a major threat to several sectors, including food security. Agriculture uses about 70% of the world\'s accessible freshwater.
+Water is an important resource to mankind. Clean and accessible water is critical to human health. It provides a healthy environment, a sustainable economy, reduces poverty and ensures peace and security. Yet over 40% of the global population does not have access to sufficient clean water. By 2025, 1.8 billion people will be living in countries or regions with absolute water scarcity, according to UN-Water. The lack of water poses a major threat to several sectors, including food security. Agriculture uses about 70% of the world's accessible freshwater.
 
 Developing countries are most affected by water shortages and poor water quality. Up to 80% of illnesses in the developing world are linked to inadequate water and sanitation. Despite technological advancement, providing clean water to the rural community is still a major development issues in many countries globally, especially countries in the Africa continent.
 
@@ -71,7 +71,7 @@ This study will focus of Osun State, Nigeria. The state boundary GIS data of Nig
 ## 2.1 Importing of packages
 
 ```{r}
-pacman::p_load(sf, sfdep, tidyverse, funModeling, spatstat, tmap)
+pacman::p_load(sf, sfdep, tidyverse, funModeling, spatstat, tmap, maptools, raster)
 ```
 
 ## 2.2 Handling Geospatial Data
@@ -679,7 +679,7 @@ functional_ppp
 
 ```{r}
 nonfunctional_ppp <- as(nonfunctional_sp, "ppp")
-nonfunctional_ppp
+nonfunctional_sp
 ```
 
 ### 6.3.1 Plotting functional_ppp and summary
@@ -714,7 +714,9 @@ any(duplicated(functional_ppp))
 any(duplicated(nonfunctional_ppp))
 ```
 
-### 6.4.1 Checking using jittering method
+### 6.4.1 Checking using another method (jittering)
+
+We will not be using the \_jit files below as this is just another method of checking duplicates and replacing them.
 
 ```{r}
 functional_ppp_jit <- rjitter(functional_ppp,
@@ -976,7 +978,7 @@ wp_nga_filter_point <- tmap_mode("view")
 ### 8.1.1 Functional
 
 ```{r}
-G_Functional = Gest(functionalOsun_ppp_jit, correction = "border")
+G_Functional = Gest(functionalOsun_ppp, correction = "border")
 plot(G_Functional, xlim=c(0,500))
 ```
 
@@ -1003,7 +1005,7 @@ plot(G_Functional.csr)
 ### 8.1.2 Non-Functional
 
 ```{r}
-G_Functional = Gest(functionalOsun_ppp_jit, correction = "border")
+G_Functional = Gest(functionalOsun_ppp, correction = "border")
 plot(G_Functional, xlim=c(0,500))
 ```
 
@@ -1021,35 +1023,41 @@ plot(G_NonFunctional.csr)
 
 ### 8.2.1 Functional
 
-```{r}
+``` {#|eval:false}
+{r}
 L_fun = Lest(functionalOsun_ppp, correction = "Ripley")
 plot(L_fun, . -r ~ r, 
      ylab= "L(d)-r", xlab = "d(m)")
 ```
 
-```{r}
+![](data/image/L_fun.png)
+
+``` {#|eval:false}
+{r}
 L_fun.csr <- envelope(functionalOsun_ppp, Lest, nsim = 39, rank = 1, glocal=TRUE)
+plot(L_fun.csr, . - r ~ r, xlab="d", ylab="L(d)-r")
 ```
 
-```{r}
-plot(L_ck.csr, . - r ~ r, xlab="d", ylab="L(d)-r")
-```
+![](data/image/L_fun_csr.png)
 
 ### 8.2.2 Non-Functional
 
-```{r}
+``` {#|eval:false}
+{r}
 L_nonfun = Lest(nonfunctionalOsun_ppp, correction = "Ripley")
 plot(L_nonfun, . -r ~ r, 
      ylab= "L(d)-r", xlab = "d(m)")
 ```
 
-```{r}
-L_nonfun.csr <- envelope(nonfunctionalOsun_ppp, Lest, nsim = 39, rank = 1, glocal=TRUE)
-```
+![](data/image/L_nonfun.png)
 
-```{r}
+``` {#|eval:false}
+{r}
+L_nonfun.csr <- envelope(nonfunctionalOsun_ppp, Lest, nsim = 39, rank = 1, glocal=TRUE)
 plot(L_nonfun.csr, . - r ~ r, xlab="d", ylab="L(d)-r")
 ```
+
+![](data/image/L_nonfun_csr.png)
 
 # 9 Local Colocation Quotients (LCLQ)
 
@@ -1094,7 +1102,7 @@ functional_Wp <- wp_sf_osun_filter %>%
              "Functional but needs repair",
              "Functional, needs repair",
              "Functional, not in use"))
-A <- functionalWp$status_clean
+A <- functional_Wp$status_clean
 ```
 
 ```{r}
