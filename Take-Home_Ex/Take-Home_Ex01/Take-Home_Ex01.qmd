@@ -1002,6 +1002,10 @@ G_Functional.csr <- envelope(functionalOsun_ppp, Gest, nsim = 999)
 plot(G_Functional.csr)
 ```
 
+::: callout-note
+It can be seen that G(r) is above envelope which indicates that the functional water points are clustered. Hence we reject the null hypothesis that functional water points in Osun are randomly distributed.
+:::
+
 ### 8.1.2 Non-Functional
 
 ```{r}
@@ -1018,6 +1022,10 @@ G_NonFunctional.csr <- envelope(nonfunctionalOsun_ppp, Gest, nsim = 999)
 ```{r}
 plot(G_NonFunctional.csr)
 ```
+
+::: callout-note
+Similar to function water points, we can be seen that G(r) is above envelope which indicates that the non-functional water points are clustered. Hence we reject the null hypothesis that non-functional water points in Osun are randomly distributed.
+:::
 
 ## 8.2 Analysing Spatial Point Patterns Using L Function
 
@@ -1040,6 +1048,10 @@ plot(L_fun.csr, . - r ~ r, xlab="d", ylab="L(d)-r")
 
 ![](data/image/L_fun_csr.png)
 
+::: callout-note
+It can be seen that L(d)-r is above the envelope which indicates that the functional water points are clustered. Hence we reject the null hypothesis that functional water points in Osun are randomly distributed.
+:::
+
 ### 8.2.2 Non-Functional
 
 ``` {#|eval:false}
@@ -1058,6 +1070,10 @@ plot(L_nonfun.csr, . - r ~ r, xlab="d", ylab="L(d)-r")
 ```
 
 ![](data/image/L_nonfun_csr.png)
+
+::: callout-note
+Similar to functional, it can be seen that L(d)-r is above the envelope which indicates that the non-functional water points are clustered. Hence we reject the null hypothesis that non-functional water points in Osun are randomly distributed.
+:::
 
 # 9 Local Colocation Quotients (LCLQ)
 
@@ -1087,12 +1103,16 @@ nb <- include_self(
   st_knn(st_geometry(wp_sf_osun_filter), 6))
 ```
 
+## 9.2 Computing Kernel Weights
+
 ```{r}
 wt <- st_kernel_weights(nb, 
                         wp_sf_osun_filter, 
                         "gaussian", 
                         adaptive = TRUE)
 ```
+
+## 9.3 Preparing Vector List
 
 ```{r}
 functional_Wp <- wp_sf_osun_filter %>%
@@ -1115,13 +1135,19 @@ nonfunctional_Wp <- wp_sf_osun_filter %>%
 B <- nonfunctional_Wp$status_clean
 ```
 
+## 9.4 Computing LCLQ
+
 ```{r}
 LCLQ <- local_colocation(A, B, nb, wt, 39)
 ```
 
+Joining of output table
+
 ```{r}
 LCLQ_WP <- cbind(wp_sf_osun_filter, LCLQ)
 ```
+
+Plotting of chart
 
 ```{r}
 tmap_mode("view")
@@ -1132,3 +1158,16 @@ tm_shape(LCLQ_WP)+
              border.lwd = 0.5) +
   tm_view(set.zoom.limits = c(9, 16))
 ```
+
+::: callout-note
+So with the LCQ of 1.007, it is more than 1. Thus, features of functional water points are more likely to have features of non-functional water point within the neighborhood itself.
+:::
+
+# 10 Conclusion
+
+Thus we can see that from first glance, it must seem that the water points are clustered based off from the initial choropleth mapping plots. But with further analysis, it shows that they are randomly distributed. Adding on to that, the LCQ result points to both functional and non-functional water points within the neighborhood itself. This might likely be a result to multiple factors like poor planning, maintenance, and other factors.
+
+\
+As quoted in one of the researcher article, \"Soft\" conditions include community ownership; a perceived need for the water point; and user skills, behaviors, norms, and practices. \"Hard\" conditions include human resources and suitable technologies. Finally, there are financial conditions, such as the availability of finance for capital expenditure and the ability of users to pay for services. Without all these conditions being met simultaneously, pumps are bound to fail.
+
+Source: <https://openknowledge.worldbank.org/handle/10986/29568>
