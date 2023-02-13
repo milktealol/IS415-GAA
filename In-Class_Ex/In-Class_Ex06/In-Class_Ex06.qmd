@@ -1,0 +1,146 @@
+---
+title: "In Class Exercise 6"
+author: "Daniel Chng"
+date: "13 February 2023"
+date-modified: "`r Sys.Date()`"
+format: html
+execute: 
+  eval: true
+  echo: true
+  message: false
+  warning: false
+editor: visual
+---
+
+::: callout-note
+Note, HONs uses spdep but ICE uses sfdep
+
+always clear environment when working on different project.
+:::
+
+# 1. Getting started
+
+## 1.1 Importing Packages
+
+```{r}
+pacman::p_load(sf, sfdep, tmap, tidyverse)
+```
+
+## 1.2 Importing Shapefile Data
+
+```{r}
+hunan <- st_read(dsn = "data/geospatial", 
+                 layer = "Hunan")
+```
+
+## 1.3 Importing CSV file
+
+```{r}
+hunan2012 <- read_csv("data/aspatial/Hunan_2012.csv")
+```
+
+## 1.4 Combining Both Data Frame by using left join
+
+::: callout-note
+More details on JOINS for dplyr <https://statisticsglobe.com/r-dplyr-join-inner-left-right-full-semi-anti>
+:::
+
+```{r}
+hunan_GDPPC <- left_join(hunan,hunan2012)%>%
+  select(1:4, 7, 15)
+```
+
+::: callout-note
+Note: When joining, upper and lower case will cause problems with joining. So can specify which is the join field so prevent this from happening. For this case, we did not because its the same casing and its smart enough to detect to join by Country.
+:::
+
+## 1.5 Visualising
+
+```{r}
+tmap_mode("plot")
+tm_shape(hunan_GDPPC) +
+  tm_fill("GDPPC",
+          style = "quantile",
+          palette = "Blues",
+          title = "GDPPC") +
+  tm_layout(main.title = "Distribution of GDP per capita by distribution",
+            main.title.position = "center",
+            main.title.size = 0.6,
+            legend.height = 0.45,
+            legend.width = 0.35,
+            frame = TRUE) +
+  tm_borders(alpha = 0.5) +
+  tm_compass(type = "8star", size = 2) +
+  tm_scale_bar() + 
+  tm_grid(alpha = 0.2)
+```
+
+# 2. Contiguity Neighbor method
+
+::: callout-note
+st_contiguity() is used to derive a contiguity neighbor list by using Queen's method
+:::
+
+```{r}
+cn_queen <- hunan_GDPPC %>%
+  mutate(nb = st_contiguity(geometry),
+         .before = 1)
+```
+
+::: callout-note
+**Usage**
+
+st_contiguity(geometry, queen = TRUE, ...)
+
+<https://sfdep.josiahparry.com/reference/st_contiguity.html>
+
+poly2nb \<- this is for SP format
+
+st_contiguity \<- this is for SF format
+
+.before \<- put the newly create field in the first column
+:::
+
+## 2.2 Derive contiguity neighbour list using Rook's method
+
+```{r}
+cn_rook <- hunan_GDPPC %>%
+  mutate(nb = st_contiguity(geometry),
+         queen = FALSE,
+         .before = 1)
+```
+
+::: callout-note
+Bishop method cant be done here. Only in spdep
+:::
+
+# 3. Computing contiguity weights
+
+## 3.1 Queen's method
+
+```{r}
+wm_q <- hunan_GDPPC %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb),
+         .before = 1)
+```
+
+::: callout-note
+Combine the method together
+
+-   First, generate the st_contiguity
+
+-   Then calculate the weight
+
+So can save 1 chunk of code
+:::
+
+## 3.2 Rooks method
+
+```{r}
+wm_r <- hunan_GDPPC %>%
+  mutate(nb = st_contiguity(geometry),
+         queen = FALSE,
+         wt = st_weights(nb),
+         .before = 1)
+```
