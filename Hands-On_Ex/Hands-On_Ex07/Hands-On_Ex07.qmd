@@ -1,0 +1,266 @@
+---
+title: "Hands On Exercise 7"
+author: "Daniel Chng"
+date: "19 February 2023"
+date-modified: "`r Sys.Date()`"
+format: html
+execute: 
+  eval: true
+  echo: true
+  message: false
+  warning: false
+editor: visual
+---
+
+Reference from <https://r4gdsa.netlify.app/chap09.html>
+
+This exercise we will learn how to compute Global and Local Measure of Spatial Autocorrelation (GLSA) by using spdep package.
+
+Goals to learn by the end of this exercise
+
+-   import geospatial data using appropriate function(s) of **sf** package,
+
+-   import csv file using appropriate function of **readr** package,
+
+-   perform relational join using appropriate join function of **dplyr** package,
+
+-   compute Global Spatial Autocorrelation (GSA) statistics by using appropriate functions of **spdep** package,
+
+    -   plot Moran scatterplot,
+
+    -   compute and plot spatial correlogram using appropriate function of **spdep** package.
+
+-   compute Local Indicator of Spatial Association (LISA) statistics for detecting clusters and outliers by using appropriate functions **spdep** package;
+
+-   compute Getis-Ord's Gi-statistics for detecting hot spot or/and cold spot area by using appropriate functions of **spdep** package; and
+
+-   to visualise the analysis output by using **tmap** package.
+
+# 1. Setting up Analytical Tools
+
+-   sf is use for importing and handling geospatial data in R,
+
+-   tidyverse is mainly use for wrangling attribute data in R,
+
+-   spdep will be used to compute spatial weights, global and local spatial autocorrelation statistics, and
+
+-   tmap will be used to prepare cartographic quality chropleth map.
+
+```{r}
+pacman::p_load(sf, spdep, tmap, tidyverse)
+```
+
+# 2. Importing of data
+
+## 2.1 Importing Shape File
+
+```{r}
+hunan <- st_read(dsn = "data/geospatial", 
+                 layer = "Hunan")
+```
+
+::: callout-note
+st_read is from sf package, so imported file will be in simple feature object of sf
+
+Do remember to also check the environment file
+:::
+
+## 2.2 Importing csv file
+
+```{r}
+hunan2012 <- read_csv("data/aspatial/Hunan_2012.csv")
+```
+
+## 2.3 Performing relational join
+
+```{r}
+hunan <- left_join(hunan,hunan2012) %>%
+  select(1:4, 7, 15)
+```
+
+## 2.4 Visualising Regional Development Indicator
+
+```{r}
+equal <- tm_shape(hunan) +
+  tm_fill("GDPPC",
+          n = 5,
+          style = "equal") +
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "Equal interval classification")
+
+quantile <- tm_shape(hunan) +
+  tm_fill("GDPPC",
+          n = 5,
+          style = "quantile") +
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "Equal quantile classification")
+
+tmap_arrange(equal, 
+             quantile, 
+             asp=1, 
+             ncol=2)
+```
+
+# 3. Global Spatial Autocorrelation
+
+Learn how to compute global spatial autocorrelation statistics to perform spatial complete randomness test
+
+## 3.1 Computing Contiguity Spatial Weights
+
+Uses Queens contiguity weight matrix
+
+```{r}
+wm_q <- poly2nb(hunan, 
+                queen=TRUE)
+summary(wm_q)
+```
+
+::: callout-note
+Summary report shows that there are 88 area units in Hunan. Most connected area unit has 11 neighbours. There are 2 area units with only 1 neighbor.
+:::
+
+## 3.2 Row-standardized Weights Matrix
+
+Assigning weights to each neighboring polygon.
+
+Using style="w", it will assign equal weights
+
+Equal weights is by assigning fraction 1/(#neighbors) to each neighboring country, then summing the weighted income values
+
+Drawback: Polygons along edges of study area will base their lagged values on fewer polygons, thus potentially over-or under-estimate true nature of spatial autocorrelation
+
+```{r}
+rswm_q <- nb2listw(wm_q, 
+                   style="W", 
+                   zero.policy = TRUE)
+rswm_q
+```
+
+## 3.3 Gobal Spatial Autocorrelation: Moran's I
+
+### 3.3.1 Maron's I Test
+
+```{r}
+moran.test(hunan$GDPPC, 
+           listw=rswm_q, 
+           zero.policy = TRUE, 
+           na.action=na.omit)
+```
+
+### 3.3.2 Computing Monte Carlo Moran's I
+
+```{r}
+set.seed(1234)
+bperm= moran.mc(hunan$GDPPC, 
+                listw=rswm_q, 
+                nsim=999, 
+                zero.policy = TRUE, 
+                na.action=na.omit)
+bperm
+```
+
+### 3.3.3 Visualizing Monte Carlo Moran's I
+
+Good practice to examine simulated Moran's I test statistics in greater detail
+
+Can be achieved by plotting distribution of statistical values as histogram by the codes below
+
+```{r}
+mean(bperm$res[1:999])
+```
+
+```{r}
+var(bperm$res[1:999])
+```
+
+```{r}
+summary(bperm$res[1:999])
+```
+
+```{r}
+hist(bperm$res, 
+     freq=TRUE, 
+     breaks=20, 
+     xlab="Simulated Moran's I")
+abline(v=0, 
+       col="red") 
+```
+
+## 3.4 Global Spatial Autocorrelation: Geary's
+
+### 3.4.1 Geary's C Test
+
+```{r}
+geary.test(hunan$GDPPC, listw=rswm_q)
+```
+
+### 3.4.2 Computing Monte Carlo Geary's C
+
+```{r}
+set.seed(1234)
+bperm=geary.mc(hunan$GDPPC, 
+               listw=rswm_q, 
+               nsim=999)
+bperm
+```
+
+### 3.4.3 Visualizing Monte Carlo Geary's C
+
+```{r}
+mean(bperm$res[1:999])
+```
+
+```{r}
+var(bperm$res[1:999])
+```
+
+```{r}
+summary(bperm$res[1:999])
+```
+
+```{r}
+hist(bperm$res, freq=TRUE, breaks=20, xlab="Simulated Geary c")
+abline(v=1, col="red") 
+```
+
+# 4. Spatial Correlogram
+
+Spatial Correlogram good for examining patterns of spatial autocorrelation in data or model residuals.
+
+Shows how correlated pairs of spatial observations when you increase distance (lag) between them
+
+## 4.1 Computing Moran's I Correlogram
+
+```{r}
+MI_corr <- sp.correlogram(wm_q, 
+                          hunan$GDPPC, 
+                          order=6, 
+                          method="I", 
+                          style="W")
+plot(MI_corr)
+```
+
+## 4.2 Examining Analysis Report
+
+By plotting, it does not provide complete interpretation. Hence important to examine full analysis report
+
+```{r}
+print(MI_corr)
+```
+
+## 4.3 Computing Geary's C Correlogram and Plot
+
+```{r}
+GC_corr <- sp.correlogram(wm_q, 
+                          hunan$GDPPC, 
+                          order=6, 
+                          method="C", 
+                          style="W")
+plot(GC_corr)
+```
+
+## 4.4 Examining Analysis Report
+
+```{r}
+print(GC_corr)
+```

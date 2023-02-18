@@ -943,5 +943,103 @@
     "title": "In Class Exercise 6",
     "section": "3.2 Rooks method",
     "text": "3.2 Rooks method\n\nwm_r <- hunan_GDPPC %>%\n  mutate(nb = st_contiguity(geometry),\n         queen = FALSE,\n         wt = st_weights(nb),\n         .before = 1)"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html",
+    "title": "Hands On Exercise 7",
+    "section": "",
+    "text": "Reference from https://r4gdsa.netlify.app/chap09.html\nThis exercise we will learn how to compute Global and Local Measure of Spatial Autocorrelation (GLSA) by using spdep package.\nGoals to learn by the end of this exercise"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#importing-shape-file",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#importing-shape-file",
+    "title": "Hands On Exercise 7",
+    "section": "2.1 Importing Shape File",
+    "text": "2.1 Importing Shape File\n\nhunan <- st_read(dsn = \"data/geospatial\", \n                 layer = \"Hunan\")\n\nReading layer `Hunan' from data source \n  `C:\\Users\\Daniel\\Desktop\\Github\\IS419\\IS415-GAA\\Hands-On_Ex\\Hands-On_Ex07\\data\\geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 88 features and 7 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84\n\n\n\n\n\n\n\n\nNote\n\n\n\nst_read is from sf package, so imported file will be in simple feature object of sf\nDo remember to also check the environment file"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#importing-csv-file",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#importing-csv-file",
+    "title": "Hands On Exercise 7",
+    "section": "2.2 Importing csv file",
+    "text": "2.2 Importing csv file\n\nhunan2012 <- read_csv(\"data/aspatial/Hunan_2012.csv\")"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#performing-relational-join",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#performing-relational-join",
+    "title": "Hands On Exercise 7",
+    "section": "2.3 Performing relational join",
+    "text": "2.3 Performing relational join\n\nhunan <- left_join(hunan,hunan2012) %>%\n  select(1:4, 7, 15)"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#visualising-regional-development-indicator",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#visualising-regional-development-indicator",
+    "title": "Hands On Exercise 7",
+    "section": "2.4 Visualising Regional Development Indicator",
+    "text": "2.4 Visualising Regional Development Indicator\n\nequal <- tm_shape(hunan) +\n  tm_fill(\"GDPPC\",\n          n = 5,\n          style = \"equal\") +\n  tm_borders(alpha = 0.5) +\n  tm_layout(main.title = \"Equal interval classification\")\n\nquantile <- tm_shape(hunan) +\n  tm_fill(\"GDPPC\",\n          n = 5,\n          style = \"quantile\") +\n  tm_borders(alpha = 0.5) +\n  tm_layout(main.title = \"Equal quantile classification\")\n\ntmap_arrange(equal, \n             quantile, \n             asp=1, \n             ncol=2)"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#computing-contiguity-spatial-weights",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#computing-contiguity-spatial-weights",
+    "title": "Hands On Exercise 7",
+    "section": "3.1 Computing Contiguity Spatial Weights",
+    "text": "3.1 Computing Contiguity Spatial Weights\nUses Queens contiguity weight matrix\n\nwm_q <- poly2nb(hunan, \n                queen=TRUE)\nsummary(wm_q)\n\nNeighbour list object:\nNumber of regions: 88 \nNumber of nonzero links: 448 \nPercentage nonzero weights: 5.785124 \nAverage number of links: 5.090909 \nLink number distribution:\n\n 1  2  3  4  5  6  7  8  9 11 \n 2  2 12 16 24 14 11  4  2  1 \n2 least connected regions:\n30 65 with 1 link\n1 most connected region:\n85 with 11 links\n\n\n\n\n\n\n\n\nNote\n\n\n\nSummary report shows that there are 88 area units in Hunan. Most connected area unit has 11 neighbours. There are 2 area units with only 1 neighbor."
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#row-standardized-weights-matrix",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#row-standardized-weights-matrix",
+    "title": "Hands On Exercise 7",
+    "section": "3.2 Row-standardized Weights Matrix",
+    "text": "3.2 Row-standardized Weights Matrix\nAssigning weights to each neighboring polygon.\nUsing style=“w”, it will assign equal weights\nEqual weights is by assigning fraction 1/(#neighbors) to each neighboring country, then summing the weighted income values\nDrawback: Polygons along edges of study area will base their lagged values on fewer polygons, thus potentially over-or under-estimate true nature of spatial autocorrelation\n\nrswm_q <- nb2listw(wm_q, \n                   style=\"W\", \n                   zero.policy = TRUE)\nrswm_q\n\nCharacteristics of weights list object:\nNeighbour list object:\nNumber of regions: 88 \nNumber of nonzero links: 448 \nPercentage nonzero weights: 5.785124 \nAverage number of links: 5.090909 \n\nWeights style: W \nWeights constants summary:\n   n   nn S0       S1       S2\nW 88 7744 88 37.86334 365.9147"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#gobal-spatial-autocorrelation-morans-i",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#gobal-spatial-autocorrelation-morans-i",
+    "title": "Hands On Exercise 7",
+    "section": "3.3 Gobal Spatial Autocorrelation: Moran’s I",
+    "text": "3.3 Gobal Spatial Autocorrelation: Moran’s I\n\n3.3.1 Maron’s I Test\n\nmoran.test(hunan$GDPPC, \n           listw=rswm_q, \n           zero.policy = TRUE, \n           na.action=na.omit)\n\n\n    Moran I test under randomisation\n\ndata:  hunan$GDPPC  \nweights: rswm_q    \n\nMoran I statistic standard deviate = 4.7351, p-value = 1.095e-06\nalternative hypothesis: greater\nsample estimates:\nMoran I statistic       Expectation          Variance \n      0.300749970      -0.011494253       0.004348351 \n\n\n\n\n3.3.2 Computing Monte Carlo Moran’s I\n\nset.seed(1234)\nbperm= moran.mc(hunan$GDPPC, \n                listw=rswm_q, \n                nsim=999, \n                zero.policy = TRUE, \n                na.action=na.omit)\nbperm\n\n\n    Monte-Carlo simulation of Moran I\n\ndata:  hunan$GDPPC \nweights: rswm_q  \nnumber of simulations + 1: 1000 \n\nstatistic = 0.30075, observed rank = 1000, p-value = 0.001\nalternative hypothesis: greater\n\n\n\n\n3.3.3 Visualizing Monte Carlo Moran’s I\nGood practice to examine simulated Moran’s I test statistics in greater detail\nCan be achieved by plotting distribution of statistical values as histogram by the codes below\n\nmean(bperm$res[1:999])\n\n[1] -0.01504572\n\n\n\nvar(bperm$res[1:999])\n\n[1] 0.004371574\n\n\n\nsummary(bperm$res[1:999])\n\n    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. \n-0.18339 -0.06168 -0.02125 -0.01505  0.02611  0.27593 \n\n\n\nhist(bperm$res, \n     freq=TRUE, \n     breaks=20, \n     xlab=\"Simulated Moran's I\")\nabline(v=0, \n       col=\"red\")"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#global-spatial-autocorrelation-gearys",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#global-spatial-autocorrelation-gearys",
+    "title": "Hands On Exercise 7",
+    "section": "3.4 Global Spatial Autocorrelation: Geary’s",
+    "text": "3.4 Global Spatial Autocorrelation: Geary’s\n\n3.4.1 Geary’s C Test\n\ngeary.test(hunan$GDPPC, listw=rswm_q)\n\n\n    Geary C test under randomisation\n\ndata:  hunan$GDPPC \nweights: rswm_q \n\nGeary C statistic standard deviate = 3.6108, p-value = 0.0001526\nalternative hypothesis: Expectation greater than statistic\nsample estimates:\nGeary C statistic       Expectation          Variance \n        0.6907223         1.0000000         0.0073364 \n\n\n\n\n3.4.2 Computing Monte Carlo Geary’s C\n\nset.seed(1234)\nbperm=geary.mc(hunan$GDPPC, \n               listw=rswm_q, \n               nsim=999)\nbperm\n\n\n    Monte-Carlo simulation of Geary C\n\ndata:  hunan$GDPPC \nweights: rswm_q \nnumber of simulations + 1: 1000 \n\nstatistic = 0.69072, observed rank = 1, p-value = 0.001\nalternative hypothesis: greater\n\n\n\n\n3.4.3 Visualizing Monte Carlo Geary’s C\n\nmean(bperm$res[1:999])\n\n[1] 1.004402\n\n\n\nvar(bperm$res[1:999])\n\n[1] 0.007436493\n\n\n\nsummary(bperm$res[1:999])\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. \n 0.7142  0.9502  1.0052  1.0044  1.0595  1.2722 \n\n\n\nhist(bperm$res, freq=TRUE, breaks=20, xlab=\"Simulated Geary c\")\nabline(v=1, col=\"red\")"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#computing-morans-i-correlogram",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#computing-morans-i-correlogram",
+    "title": "Hands On Exercise 7",
+    "section": "4.1 Computing Moran’s I Correlogram",
+    "text": "4.1 Computing Moran’s I Correlogram\n\nMI_corr <- sp.correlogram(wm_q, \n                          hunan$GDPPC, \n                          order=6, \n                          method=\"I\", \n                          style=\"W\")\nplot(MI_corr)"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#examining-analysis-report",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#examining-analysis-report",
+    "title": "Hands On Exercise 7",
+    "section": "4.2 Examining Analysis Report",
+    "text": "4.2 Examining Analysis Report\nBy plotting, it does not provide complete interpretation. Hence important to examine full analysis report\n\nprint(MI_corr)\n\nSpatial correlogram for hunan$GDPPC \nmethod: Moran's I\n         estimate expectation   variance standard deviate Pr(I) two sided    \n1 (88)  0.3007500  -0.0114943  0.0043484           4.7351       2.189e-06 ***\n2 (88)  0.2060084  -0.0114943  0.0020962           4.7505       2.029e-06 ***\n3 (88)  0.0668273  -0.0114943  0.0014602           2.0496        0.040400 *  \n4 (88)  0.0299470  -0.0114943  0.0011717           1.2107        0.226015    \n5 (88) -0.1530471  -0.0114943  0.0012440          -4.0134       5.984e-05 ***\n6 (88) -0.1187070  -0.0114943  0.0016791          -2.6164        0.008886 ** \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#computing-gearys-c-correlogram-and-plot",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#computing-gearys-c-correlogram-and-plot",
+    "title": "Hands On Exercise 7",
+    "section": "4.3 Computing Geary’s C Correlogram and Plot",
+    "text": "4.3 Computing Geary’s C Correlogram and Plot\n\nGC_corr <- sp.correlogram(wm_q, \n                          hunan$GDPPC, \n                          order=6, \n                          method=\"C\", \n                          style=\"W\")\nplot(GC_corr)"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#examining-analysis-report-1",
+    "href": "Hands-On_Ex/Hands-On_Ex07/Hands-On_Ex07.html#examining-analysis-report-1",
+    "title": "Hands On Exercise 7",
+    "section": "4.4 Examining Analysis Report",
+    "text": "4.4 Examining Analysis Report\n\nprint(GC_corr)\n\nSpatial correlogram for hunan$GDPPC \nmethod: Geary's C\n        estimate expectation  variance standard deviate Pr(I) two sided    \n1 (88) 0.6907223   1.0000000 0.0073364          -3.6108       0.0003052 ***\n2 (88) 0.7630197   1.0000000 0.0049126          -3.3811       0.0007220 ***\n3 (88) 0.9397299   1.0000000 0.0049005          -0.8610       0.3892612    \n4 (88) 1.0098462   1.0000000 0.0039631           0.1564       0.8757128    \n5 (88) 1.2008204   1.0000000 0.0035568           3.3673       0.0007592 ***\n6 (88) 1.0773386   1.0000000 0.0058042           1.0151       0.3100407    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+  },
+  {
+    "objectID": "Hands-On_Ex/Hands-On_Ex07_1/Hands-On_Ex07_1.html",
+    "href": "Hands-On_Ex/Hands-On_Ex07_1/Hands-On_Ex07_1.html",
+    "title": "Hands On Exercise 7.1",
+    "section": "",
+    "text": "Reference from https://r4gdsa.netlify.app/chap10.html"
   }
 ]

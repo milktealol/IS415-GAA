@@ -1,0 +1,15 @@
+---
+title: "Hands On Exercise 7.1"
+author: "Daniel Chng"
+date: "19 February 2023"
+date-modified: "`r Sys.Date()`"
+format: html
+execute: 
+  eval: true
+  echo: true
+  message: false
+  warning: false
+editor: visual
+---
+
+Reference from <https://r4gdsa.netlify.app/chap10.html>
