@@ -195,7 +195,8 @@ GDPPC_st <- spacetime(GDPPC, hunan,
                       .time_col = "Year")
 ```
 
-```{r}
+```{#|eval:false}
+{r}
 GDPPC_nb <- GDPPC_st %>%
   activate("geometry") %>%
   mutate(
@@ -208,7 +209,8 @@ GDPPC_nb <- GDPPC_st %>%
 
 ## Computing GI\\\*
 
-```{r}
+```{#|eval:false}
+{r}
 gi_stars <- GDPPC_nb %>%
   group_by(Year) %>%
   mutate(gi_star = local_gstar_perm(
