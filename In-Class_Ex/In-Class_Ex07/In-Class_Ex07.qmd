@@ -1,0 +1,217 @@
+---
+title: "In Class Exercise 7"
+author: "Daniel Chng"
+date: "20 February 2023"
+date-modified: "`r Sys.Date()`"
+format: html
+execute: 
+  eval: true
+  echo: true
+  message: false
+  warning: false
+editor: visual
+---
+
+# 1. Installing packages
+
+```{r}
+pacman::p_load(sf, sfdep, tmap, tidyverse, plotly)
+```
+
+# 2. Importing Data
+
+## 2.1 Importing Shape File
+
+```{r}
+hunan <- st_read(dsn = "data/geospatial", 
+                 layer = "Hunan")
+```
+
+## 2.2 Importing csv file
+
+```{r}
+hunan2012 <- read_csv("data/aspatial/Hunan_2012.csv")
+```
+
+## 2.3 Joining them together
+
+```{r}
+hunan_GDPPC <- left_join(hunan,hunan2012) %>%
+  select(1:4, 7, 15)
+```
+
+## 2.4 Plotting **Choropleth** map
+
+```{r}
+tmap_mode("plot")
+tm_shape(hunan_GDPPC) +
+  tm_fill("GDPPC",
+          style = "quantile",
+          palette = "Blues",
+          title = "GDPPC") +
+  tm_layout(main.title = "Distribution of GDP per capita by district, Hunan Province",
+            main.title.position = "center",
+            main.title.size = 1.2,
+            legend.height = 0.45,
+            legend.width = 0.35,
+            frame = TRUE) +
+  tm_borders(alpha = 0.5) +
+  tm_compass(type="8star", size = 2) + 
+  tm_scale_bar() +
+  tm_grid(alpha = 0.2)
+```
+
+# 3. Global Measures of Spatial Association
+
+## 3.1 Deriving contiguity weights: Queen Method
+
+```{r}
+wm_q <- hunan_GDPPC %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1)
+```
+
+## 3.2 Computing Global Moran' I
+
+```{r}
+moranI <- global_moran(wm_q$GDPPC,
+                       wm_q$nb,
+                       wm_q$wt)
+```
+
+## 3.3 Performing Global Moran'I Test
+
+```{r}
+global_moran_test(wm_q$GDPPC,
+                       wm_q$nb,
+                       wm_q$wt)
+```
+
+## 3.4 Performing Global Moran'I Permutation Test
+
+::: callout-note
+Remember to set seed value so that the result will be consistent (Put outside to make seed standard)
+:::
+
+```{r}
+set.seed(1234)
+```
+
+```{r}
+global_moran_perm(wm_q$GDPPC,
+                  wm_q$nb,
+                  wm_q$wt,
+                  nsim = 99)
+```
+
+## 3.5 Computing Local Moran's I
+
+```{r}
+lisa <- wm_q %>%
+  mutate(local_moran = local_moran(GDPPC, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+lisa
+```
+
+## 3.6 Visualizing local Moran's I
+
+```{r}
+tmap_mode("plot")
+tm_shape(lisa) +
+  tm_fill("ii") +
+  tm_borders(alpha = 0.5) +
+  tm_view(set.zoom.limits = c(6,8))
+```
+
+## 3.7 Visualizing the simulated one
+
+```{r}
+tmap_mode("plot")
+tm_shape(lisa) +
+  tm_fill("p_ii_sim") +
+  tm_borders(alpha = 0.5)
+```
+
+## 3.8 Visualizing local Moran's I
+
+```{r}
+lisa_sig <- lisa %>%
+  filter(p_ii <0.05)
+tmap_mode("plot")
+tm_shape(lisa) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig) +
+  tm_fill("mean") +
+  tm_borders(alpha = 0.4)
+```
+
+# 4. Hot Spot and Cold Spot Area Analysis
+
+## 4.1 Computing local Moran's I
+
+```{r}
+HCSA <- wm_q %>%
+  mutate(local_Gi = local_gstar_perm(
+    GDPPC, nb, wt, nsim = 99),
+    .before = 1) %>%
+  unnest(local_Gi)
+HCSA
+```
+
+## 4.2 Visualizing Gi\*
+
+```{r}
+tmap_mode("view")
+tm_shape(HCSA) +
+  tm_fill("gi_star") +
+  tm_borders(alpha = 0.5) +
+  tm_view(set.zoom.limit = c(6,8))
+```
+
+## 4.3 Visualizing p-value of HCSA
+
+```{r}
+tmap_mode("plot")
+tm_shape(HCSA) + 
+  tm_fill("p_sim") +
+  tm_borders(alpha = 0.5)
+```
+
+# EHSA
+
+# 1. Creating Time Series Cube
+
+```{r}
+GDPPC <- read_csv("data/aspatial/Hunan_GDPPC.csv")
+```
+
+```{r}
+GDPPC_st <- spacetime(GDPPC, hunan,
+                      .loc_col = "Country",
+                      .time_col = "Year")
+```
+
+```{r}
+GDPPC_nb <- GDPPC_st %>%
+  activate("geometry") %>%
+  mutate(
+    nb = include_self(st_contiguity(geometry)),
+    wt = st_weights(nb)
+  ) %>%
+  set_nbs("nb") %>%
+  set_wts("wt")
+```
+
+## Computing GI\\\*
+
+```{r}
+gi_stars <- GDPPC_nb %>%
+  group_by(Year) %>%
+  mutate(gi_star = local_gstar_perm(
+    GDPPC, nb, wt, nsim = 99)) %>%
+  tidyr::unnest(gi_star)
+```
