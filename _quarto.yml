@@ -34,8 +34,10 @@ website:
             text: In-Class Exercise 5
           - href: In-Class_Ex/In-Class_Ex06/In-Class_Ex06.html
             text: In-Class Exercise 6
-          - href: In-Class_Ex/In-Class_Ex06/In-Class_Ex07.html
-            text: In-Class Exercise 7
+          - href: In-Class_Ex/In-Class_Ex06/In-Class_Ex07-GLSA.html
+            text: In-Class Exercise 7-GLSA
+          - href: In-Class_Ex/In-Class_Ex06/In-Class_Ex07-EHSA.html
+            text: In-Class Exercise 7-EHSA
       - text: Take Home Exercise
         menu:
           - href: Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html

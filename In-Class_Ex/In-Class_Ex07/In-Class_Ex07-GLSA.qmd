@@ -1,5 +1,5 @@
 ---
-title: "In Class Exercise 7"
+title: "In Class Exercise 7 - GLSA"
 author: "Daniel Chng"
 date: "20 February 2023"
 date-modified: "`r Sys.Date()`"
@@ -179,41 +179,4 @@ tmap_mode("plot")
 tm_shape(HCSA) + 
   tm_fill("p_sim") +
   tm_borders(alpha = 0.5)
-```
-
-# EHSA
-
-# 1. Creating Time Series Cube
-
-```{r}
-GDPPC <- read_csv("data/aspatial/Hunan_GDPPC.csv")
-```
-
-```{r}
-GDPPC_st <- spacetime(GDPPC, hunan,
-                      .loc_col = "Country",
-                      .time_col = "Year")
-```
-
-```{#|eval:false}
-{r}
-GDPPC_nb <- GDPPC_st %>%
-  activate("geometry") %>%
-  mutate(
-    nb = include_self(st_contiguity(geometry)),
-    wt = st_weights(nb)
-  ) %>%
-  set_nbs("nb") %>%
-  set_wts("wt")
-```
-
-## Computing GI\\\*
-
-```{#|eval:false}
-{r}
-gi_stars <- GDPPC_nb %>%
-  group_by(Year) %>%
-  mutate(gi_star = local_gstar_perm(
-    GDPPC, nb, wt, nsim = 99)) %>%
-  tidyr::unnest(gi_star)
 ```

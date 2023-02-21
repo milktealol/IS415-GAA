@@ -130,14 +130,14 @@
     "href": "Hands-On_Ex/Hands-On_Ex03/Hands-On_Ex03.html#clark-and-evans-test-cck",
     "title": "Hands On Exercise 3",
     "section": "Clark and Evans Test: cck",
-    "text": "Clark and Evans Test: cck\n\nclarkevans.test(childcare_ck_ppp,\n                correction=\"none\",\n                clipregion=NULL,\n                alternative=c(\"two.sided\"),\n                nsim=999)\n\n\n    Clark-Evans test\n    No edge correction\n    Monte Carlo test based on 999 simulations of CSR with fixed n\n\ndata:  childcare_ck_ppp\nR = 0.9465, p-value = 0.108\nalternative hypothesis: two-sided"
+    "text": "Clark and Evans Test: cck\n\nclarkevans.test(childcare_ck_ppp,\n                correction=\"none\",\n                clipregion=NULL,\n                alternative=c(\"two.sided\"),\n                nsim=999)\n\n\n    Clark-Evans test\n    No edge correction\n    Monte Carlo test based on 999 simulations of CSR with fixed n\n\ndata:  childcare_ck_ppp\nR = 0.98024, p-value = 0.256\nalternative hypothesis: two-sided"
   },
   {
     "objectID": "Hands-On_Ex/Hands-On_Ex03/Hands-On_Ex03.html#clark-and-evans-test-tampines",
     "href": "Hands-On_Ex/Hands-On_Ex03/Hands-On_Ex03.html#clark-and-evans-test-tampines",
     "title": "Hands On Exercise 3",
     "section": "Clark and Evans Test: Tampines",
-    "text": "Clark and Evans Test: Tampines\n\nclarkevans.test(childcare_tm_ppp,\n                correction=\"none\",\n                clipregion=NULL,\n                alternative=c(\"two.sided\"),\n                nsim=999)\n\n\n    Clark-Evans test\n    No edge correction\n    Monte Carlo test based on 999 simulations of CSR with fixed n\n\ndata:  childcare_tm_ppp\nR = 0.78305, p-value = 0.002\nalternative hypothesis: two-sided"
+    "text": "Clark and Evans Test: Tampines\n\nclarkevans.test(childcare_tm_ppp,\n                correction=\"none\",\n                clipregion=NULL,\n                alternative=c(\"two.sided\"),\n                nsim=999)\n\n\n    Clark-Evans test\n    No edge correction\n    Monte Carlo test based on 999 simulations of CSR with fixed n\n\ndata:  childcare_tm_ppp\nR = 0.79403, p-value = 0.002\nalternative hypothesis: two-sided"
   },
   {
     "objectID": "Hands-On_Ex/Hands-On_Ex02/Hands-On_Ex02.html",
@@ -305,7 +305,7 @@
     "href": "Hands-On_Ex/Hands-On_Ex07_1/Hands-On_Ex07_1.html#calculating-local-morans-i-of-gdppc2023-at-the-country-level",
     "title": "Hands On Exercise 7.1",
     "section": "5.1 Calculating local Moran’s I of GDPPC2023 at the country level",
-    "text": "5.1 Calculating local Moran’s I of GDPPC2023 at the country level\n\nfips <- order(hunan$County)\nlocalMI <- localmoran(hunan$GDPPC, rswm_q)\nhead(localMI)\n\n            Ii          E.Ii       Var.Ii        Z.Ii Pr(z != E(Ii))\n1 -0.001468468 -2.815006e-05 4.723841e-04 -0.06626904      0.9471636\n2  0.025878173 -6.061953e-04 1.016664e-02  0.26266425      0.7928094\n3 -0.011987646 -5.366648e-03 1.133362e-01 -0.01966705      0.9843090\n4  0.001022468 -2.404783e-07 5.105969e-06  0.45259801      0.6508382\n5  0.014814881 -6.829362e-05 1.449949e-03  0.39085814      0.6959021\n6 -0.038793829 -3.860263e-04 6.475559e-03 -0.47728835      0.6331568\n\n\nlocalmoran() function returns a matrix of values whose columns are:\n\nIi: the local Moran's I statistics\nE.Ii: the expectation of local moran statistic under the randomisation hypothesis\nVar.Ii: the variance of local moran statistic under the randomisation hypothesis\nZ.Ii:the standard deviate of local moran statistic\nPr(): the p-value of local moran statistic"
+    "text": "5.1 Calculating local Moran’s I of GDPPC2023 at the country level\n\nfips <- order(hunan$County)\nlocalMI <- localmoran(hunan$GDPPC, rswm_q)\nhead(localMI)\n\n            Ii          E.Ii       Var.Ii        Z.Ii Pr(z != E(Ii))\n1 -0.001468468 -2.815006e-05 4.723841e-04 -0.06626904      0.9471636\n2  0.025878173 -6.061953e-04 1.016664e-02  0.26266425      0.7928094\n3 -0.011987646 -5.366648e-03 1.133362e-01 -0.01966705      0.9843090\n4  0.001022468 -2.404783e-07 5.105969e-06  0.45259801      0.6508382\n5  0.014814881 -6.829362e-05 1.449949e-03  0.39085814      0.6959021\n6 -0.038793829 -3.860263e-04 6.475559e-03 -0.47728835      0.6331568\n\n\nlocalmoran() function returns a matrix of values whose columns are:\n\nIi: the local Moran’s I statistics\nE.Ii: the expectation of local moran statistic under the randomisation hypothesis\nVar.Ii: the variance of local moran statistic under the randomisation hypothesis\nZ.Ii:the standard deviate of local moran statistic\nPr(): the p-value of local moran statistic"
   },
   {
     "objectID": "Hands-On_Ex/Hands-On_Ex07_1/Hands-On_Ex07_1.html#list-content-of-local-moran-matrix",
@@ -949,7 +949,7 @@
     "href": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#analysing-spatial-point-patterns-using-g-function",
     "title": "Take Home Exercise 1: Application of Spatial Point Patterns Analysis to discover the geographical distribution of functional and non-function water points in Osun State, Nigeria",
     "section": "8.1 Analysing Spatial Point Patterns Using G Function",
-    "text": "8.1 Analysing Spatial Point Patterns Using G Function\n\n8.1.1 Functional\n\nG_Functional = Gest(functionalOsun_ppp, correction = \"border\")\nplot(G_Functional, xlim=c(0,500))\n\n\n\n\n\n8.1.1.1 Performing Complete Spatial Randomness Test\nTo confirm the observed spatial patterns above, a hypothesis test will be conducted. The hypothesis and test are as follows:\nHo = The distribution of functional water points at Osun State, Nigeria, are randomly distributed.\nH1= The distribution of functional water points at Osun State, Nigeria are not randomly distributed.\nThe null hypothesis will be rejected if p-value is smaller than alpha value of 0.001.\nMonte Carlo test with G-function\n\nG_Functional.csr <- envelope(functionalOsun_ppp, Gest, nsim = 999)\n\nGenerating 999 simulations of CSR  ...\n1, 2, 3, ......10 [etd 2:26] .........20 [etd 2:21] .........\n30 [etd 2:20] .........40 [etd 2:18] .........50 [etd 2:16] ........\n.60 [etd 2:14] .........70 [etd 2:12] .........80 [etd 2:10] .......\n..90 [etd 2:09] .........100 [etd 2:07] .........110 [etd 2:06] ......\n...120 [etd 2:05] .........130 [etd 2:03] .........140 [etd 2:01] .....\n....150 [etd 2:00] .........160 [etd 1:58] .........170 [etd 1:57] ....\n.....180 [etd 1:55] .........190 [etd 1:54] .........200 [etd 1:52] ...\n......210 [etd 1:51] .........220 [etd 1:50] .........230 [etd 1:48] ..\n.......240 [etd 1:47] .........250 [etd 1:47] .........260 [etd 1:45] .\n........270 [etd 1:44] .........280 [etd 1:42] .........290\n [etd 1:41] .........300 [etd 1:39] .........310 [etd 1:38] .........\n320 [etd 1:36] .........330 [etd 1:35] .........340 [etd 1:33] ........\n.350 [etd 1:32] .........360 [etd 1:30] .........370 [etd 1:29] .......\n..380 [etd 1:27] .........390 [etd 1:26] .........400 [etd 1:24] ......\n...410 [etd 1:23] .........420 [etd 1:22] .........430 [etd 1:20] .....\n....440 [etd 1:19] .........450 [etd 1:17] .........460 [etd 1:16] ....\n.....470 [etd 1:15] .........480 [etd 1:13] .........490 [etd 1:12] ...\n......500 [etd 1:10] .........510 [etd 1:09] .........520 [etd 1:07] ..\n.......530 [etd 1:06] .........540 [etd 1:05] .........550 [etd 1:03] .\n........560 [etd 1:02] .........570 [etd 1:00] .........580\n [etd 59 sec] .........590 [etd 58 sec] .........600 [etd 56 sec] .........\n610 [etd 55 sec] .........620 [etd 53 sec] .........630 [etd 52 sec] ........\n.640 [etd 50 sec] .........650 [etd 49 sec] .........660 [etd 48 sec] .......\n..670 [etd 46 sec] .........680 [etd 45 sec] .........690 [etd 43 sec] ......\n...700 [etd 42 sec] .........710 [etd 41 sec] .........720 [etd 39 sec] .....\n....730 [etd 38 sec] .........740 [etd 36 sec] .........750 [etd 35 sec] ....\n.....760 [etd 34 sec] .........770 [etd 32 sec] .........780 [etd 31 sec] ...\n......790 [etd 29 sec] .........800 [etd 28 sec] .........810 [etd 27 sec] ..\n.......820 [etd 25 sec] .........830 [etd 24 sec] .........840 [etd 22 sec] .\n........850 [etd 21 sec] .........860 [etd 20 sec] .........870\n [etd 18 sec] .........880 [etd 17 sec] .........890 [etd 15 sec] .........\n900 [etd 14 sec] .........910 [etd 13 sec] .........920 [etd 11 sec] ........\n.930 [etd 10 sec] .........940 [etd 8 sec] .........950 [etd 7 sec] .......\n..960 [etd 5 sec] .........970 [etd 4 sec] .........980 [etd 3 sec] ......\n...990 [etd 1 sec] ........ 999.\n\nDone.\n\n\n\nplot(G_Functional.csr)\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nIt can be seen that G(r) is above envelope which indicates that the functional water points are clustered. Hence we reject the null hypothesis that functional water points in Osun are randomly distributed.\n\n\n\n\n\n8.1.2 Non-Functional\n\nG_Functional = Gest(functionalOsun_ppp, correction = \"border\")\nplot(G_Functional, xlim=c(0,500))\n\n\n\n\n\n8.1.2.1 Performing Complete Spatial Randomness Test\n\nG_NonFunctional.csr <- envelope(nonfunctionalOsun_ppp, Gest, nsim = 999)\n\nGenerating 999 simulations of CSR  ...\n1, 2, 3, ......10.........20.........30.........40.........50.........60........\n.70.........80.........90.........100.........110.........120.........130......\n...140.........150.........160.........170.........180.........190.........200....\n.....210.........220.........230.........240.........250.........260.........270..\n.......280.........290.........300.........310.........320.........330.........340\n.........350.........360.........370.........380.........390.........400........\n.410.........420.........430.........440.........450.........460.........470......\n...480.........490.........500.........510.........520.........530.........540....\n.....550.........560.........570.........580.........590.........600.........610..\n.......620.........630.........640.........650.........660.........670.........680\n.........690.........700.........710.........720.........730.........740........\n.750.........760.........770.........780.........790.........800.........810......\n...820.........830.........840.........850.........860.........870.........880....\n.....890.........900.........910.........920.........930.........940.........950..\n.......960.........970.........980.........990........ 999.\n\nDone.\n\n\n\nplot(G_NonFunctional.csr)\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nSimilar to function water points, we can be seen that G(r) is above envelope which indicates that the non-functional water points are clustered. Hence we reject the null hypothesis that non-functional water points in Osun are randomly distributed."
+    "text": "8.1 Analysing Spatial Point Patterns Using G Function\n\n8.1.1 Functional\n\nG_Functional = Gest(functionalOsun_ppp, correction = \"border\")\nplot(G_Functional, xlim=c(0,500))\n\n\n\n\n\n8.1.1.1 Performing Complete Spatial Randomness Test\nTo confirm the observed spatial patterns above, a hypothesis test will be conducted. The hypothesis and test are as follows:\nHo = The distribution of functional water points at Osun State, Nigeria, are randomly distributed.\nH1= The distribution of functional water points at Osun State, Nigeria are not randomly distributed.\nThe null hypothesis will be rejected if p-value is smaller than alpha value of 0.001.\nMonte Carlo test with G-function\n\nG_Functional.csr <- envelope(functionalOsun_ppp, Gest, nsim = 999)\n\nGenerating 999 simulations of CSR  ...\n1, 2, 3, ......10.........20.........30.........40.........50.........60........\n.70.........80.........90.........100.........110.........120.........130......\n...140.........150.........160.........170.........180.........190.........200....\n.....210.........220.........230.........240.........250.........260.........270..\n.......280.........290.........300.........310.........320.........330.........340\n.........350.........360.........370.........380.........390.........400........\n.410.........420.........430.........440.........450.........460.........470......\n...480.........490.........500.........510.........520.........530.........540....\n.....550.........560.........570.........580.........590.........600.........610..\n.......620.........630.........640.........650.........660.........670.........680\n.........690.........700.........710.........720.........730.........740........\n.750.........760.........770.........780.........790.........800.........810......\n...820.........830.........840.........850.........860.........870.........880....\n.....890.........900.........910.........920.........930.........940.........950..\n.......960.........970.........980.........990........ 999.\n\nDone.\n\n\n\nplot(G_Functional.csr)\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nIt can be seen that G(r) is above envelope which indicates that the functional water points are clustered. Hence we reject the null hypothesis that functional water points in Osun are randomly distributed.\n\n\n\n\n\n8.1.2 Non-Functional\n\nG_Functional = Gest(functionalOsun_ppp, correction = \"border\")\nplot(G_Functional, xlim=c(0,500))\n\n\n\n\n\n8.1.2.1 Performing Complete Spatial Randomness Test\n\nG_NonFunctional.csr <- envelope(nonfunctionalOsun_ppp, Gest, nsim = 999)\n\nGenerating 999 simulations of CSR  ...\n1, 2, 3, ......10.........20.........30.........40.........50.........60........\n.70.........80.........90.........100.........110.........120.........130......\n...140.........150.........160.........170.........180.........190.........200....\n.....210.........220.........230.........240.........250.........260.........270..\n.......280.........290.........300.........310.........320.........330.........340\n.........350.........360.........370.........380.........390.........400........\n.410.........420.........430.........440.........450.........460.........470......\n...480.........490.........500.........510.........520.........530.........540....\n.....550.........560.........570.........580.........590.........600.........610..\n.......620.........630.........640.........650.........660.........670.........680\n.........690.........700.........710.........720.........730.........740........\n.750.........760.........770.........780.........790.........800.........810......\n...820.........830.........840.........850.........860.........870.........880....\n.....890.........900.........910.........920.........930.........940.........950..\n.......960.........970.........980.........990........ 999.\n\nDone.\n\n\n\nplot(G_NonFunctional.csr)\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nSimilar to function water points, we can be seen that G(r) is above envelope which indicates that the non-functional water points are clustered. Hence we reject the null hypothesis that non-functional water points in Osun are randomly distributed."
   },
   {
     "objectID": "Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html#analysing-spatial-point-patterns-using-l-function",
@@ -1183,6 +1183,132 @@
     "text": "Saving analytical data in rds format\n\nwrite_rds(NGA_wp, \"data/rds/NGA_wp.rds\")"
   },
   {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "",
+    "text": "pacman::p_load(sf, sfdep, tmap, tidyverse, plotly)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#importing-shape-file",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#importing-shape-file",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "2.1 Importing Shape File",
+    "text": "2.1 Importing Shape File\n\nhunan <- st_read(dsn = \"data/geospatial\", \n                 layer = \"Hunan\")\n\nReading layer `Hunan' from data source \n  `/Users/danielchng/Desktop/Github/SMU-IS415/IS415-GAA/In-Class_Ex/In-Class_Ex07/data/geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 88 features and 7 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#importing-csv-file",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#importing-csv-file",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "2.2 Importing csv file",
+    "text": "2.2 Importing csv file\n\nhunan2012 <- read_csv(\"data/aspatial/Hunan_2012.csv\")"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#joining-them-together",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#joining-them-together",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "2.3 Joining them together",
+    "text": "2.3 Joining them together\n\nhunan_GDPPC <- left_join(hunan,hunan2012) %>%\n  select(1:4, 7, 15)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#plotting-choropleth-map",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#plotting-choropleth-map",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "2.4 Plotting Choropleth map",
+    "text": "2.4 Plotting Choropleth map\n\ntmap_mode(\"plot\")\ntm_shape(hunan_GDPPC) +\n  tm_fill(\"GDPPC\",\n          style = \"quantile\",\n          palette = \"Blues\",\n          title = \"GDPPC\") +\n  tm_layout(main.title = \"Distribution of GDP per capita by district, Hunan Province\",\n            main.title.position = \"center\",\n            main.title.size = 1.2,\n            legend.height = 0.45,\n            legend.width = 0.35,\n            frame = TRUE) +\n  tm_borders(alpha = 0.5) +\n  tm_compass(type=\"8star\", size = 2) + \n  tm_scale_bar() +\n  tm_grid(alpha = 0.2)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#deriving-contiguity-weights-queen-method",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#deriving-contiguity-weights-queen-method",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "3.1 Deriving contiguity weights: Queen Method",
+    "text": "3.1 Deriving contiguity weights: Queen Method\n\nwm_q <- hunan_GDPPC %>%\n  mutate(nb = st_contiguity(geometry),\n         wt = st_weights(nb,\n                         style = \"W\"),\n         .before = 1)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#computing-global-moran-i",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#computing-global-moran-i",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "3.2 Computing Global Moran’ I",
+    "text": "3.2 Computing Global Moran’ I\n\nmoranI <- global_moran(wm_q$GDPPC,\n                       wm_q$nb,\n                       wm_q$wt)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#performing-global-morani-test",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#performing-global-morani-test",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "3.3 Performing Global Moran’I Test",
+    "text": "3.3 Performing Global Moran’I Test\n\nglobal_moran_test(wm_q$GDPPC,\n                       wm_q$nb,\n                       wm_q$wt)\n\n\n    Moran I test under randomisation\n\ndata:  x  \nweights: listw    \n\nMoran I statistic standard deviate = 4.7351, p-value = 1.095e-06\nalternative hypothesis: greater\nsample estimates:\nMoran I statistic       Expectation          Variance \n      0.300749970      -0.011494253       0.004348351"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#performing-global-morani-permutation-test",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#performing-global-morani-permutation-test",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "3.4 Performing Global Moran’I Permutation Test",
+    "text": "3.4 Performing Global Moran’I Permutation Test\n\n\n\n\n\n\nNote\n\n\n\nRemember to set seed value so that the result will be consistent (Put outside to make seed standard)\n\n\n\nset.seed(1234)\n\n\nglobal_moran_perm(wm_q$GDPPC,\n                  wm_q$nb,\n                  wm_q$wt,\n                  nsim = 99)\n\n\n    Monte-Carlo simulation of Moran I\n\ndata:  x \nweights: listw  \nnumber of simulations + 1: 100 \n\nstatistic = 0.30075, observed rank = 100, p-value < 2.2e-16\nalternative hypothesis: two.sided"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#computing-local-morans-i",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#computing-local-morans-i",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "3.5 Computing Local Moran’s I",
+    "text": "3.5 Computing Local Moran’s I\n\nlisa <- wm_q %>%\n  mutate(local_moran = local_moran(GDPPC, nb, wt, nsim = 99),\n         .before = 1) %>%\n  unnest(local_moran)\nlisa\n\nSimple feature collection with 88 features and 20 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84\n# A tibble: 88 × 21\n         ii        eii   var_ii    z_ii    p_ii p_ii_…¹ p_fol…² skewn…³ kurtosis\n      <dbl>      <dbl>    <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>    <dbl>\n 1 -0.00147  0.00177    4.18e-4 -0.158  0.874      0.82    0.41  -0.812  0.652  \n 2  0.0259   0.00641    1.05e-2  0.190  0.849      0.96    0.48  -1.09   1.89   \n 3 -0.0120  -0.0374     1.02e-1  0.0796 0.937      0.76    0.38   0.824  0.0461 \n 4  0.00102 -0.0000349  4.37e-6  0.506  0.613      0.64    0.32   1.04   1.61   \n 5  0.0148  -0.00340    1.65e-3  0.449  0.654      0.5     0.25   1.64   3.96   \n 6 -0.0388  -0.00339    5.45e-3 -0.480  0.631      0.82    0.41   0.614 -0.264  \n 7  3.37    -0.198      1.41e+0  3.00   0.00266    0.08    0.04   1.46   2.74   \n 8  1.56    -0.265      8.04e-1  2.04   0.0417     0.08    0.04   0.459 -0.519  \n 9  4.42     0.0450     1.79e+0  3.27   0.00108    0.02    0.01   0.746 -0.00582\n10 -0.399   -0.0505     8.59e-2 -1.19   0.234      0.28    0.14  -0.685  0.134  \n# … with 78 more rows, 12 more variables: mean <fct>, median <fct>,\n#   pysal <fct>, nb <nb>, wt <list>, NAME_2 <chr>, ID_3 <int>, NAME_3 <chr>,\n#   ENGTYPE_3 <chr>, County <chr>, GDPPC <dbl>, geometry <POLYGON [°]>, and\n#   abbreviated variable names ¹​p_ii_sim, ²​p_folded_sim, ³​skewness"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#visualizing-local-morans-i",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#visualizing-local-morans-i",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "3.6 Visualizing local Moran’s I",
+    "text": "3.6 Visualizing local Moran’s I\n\ntmap_mode(\"plot\")\ntm_shape(lisa) +\n  tm_fill(\"ii\") +\n  tm_borders(alpha = 0.5) +\n  tm_view(set.zoom.limits = c(6,8))"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#visualizing-the-simulated-one",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#visualizing-the-simulated-one",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "3.7 Visualizing the simulated one",
+    "text": "3.7 Visualizing the simulated one\n\ntmap_mode(\"plot\")\ntm_shape(lisa) +\n  tm_fill(\"p_ii_sim\") +\n  tm_borders(alpha = 0.5)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#visualizing-local-morans-i-1",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#visualizing-local-morans-i-1",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "3.8 Visualizing local Moran’s I",
+    "text": "3.8 Visualizing local Moran’s I\n\nlisa_sig <- lisa %>%\n  filter(p_ii <0.05)\ntmap_mode(\"plot\")\ntm_shape(lisa) +\n  tm_polygons() +\n  tm_borders(alpha = 0.5) +\ntm_shape(lisa_sig) +\n  tm_fill(\"mean\") +\n  tm_borders(alpha = 0.4)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#computing-local-morans-i-1",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#computing-local-morans-i-1",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "4.1 Computing local Moran’s I",
+    "text": "4.1 Computing local Moran’s I\n\nHCSA <- wm_q %>%\n  mutate(local_Gi = local_gstar_perm(\n    GDPPC, nb, wt, nsim = 99),\n    .before = 1) %>%\n  unnest(local_Gi)\nHCSA\n\nSimple feature collection with 88 features and 16 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84\n# A tibble: 88 × 17\n    gi_star   e_gi     var_gi  p_value p_sim p_fol…¹ skewn…² kurto…³ nb    wt   \n      <dbl>  <dbl>      <dbl>    <dbl> <dbl>   <dbl>   <dbl>   <dbl> <nb>  <lis>\n 1 -0.00567 0.0115 0.00000812  9.95e-1  0.82    0.41   1.03    1.23  <int> <dbl>\n 2 -0.235   0.0110 0.00000581  8.14e-1  1       0.5    0.912   1.05  <int> <dbl>\n 3  0.298   0.0114 0.00000776  7.65e-1  0.7     0.35   0.455  -0.732 <int> <dbl>\n 4  0.145   0.0121 0.0000111   8.84e-1  0.64    0.32   0.900   0.726 <int> <dbl>\n 5  0.356   0.0113 0.0000119   7.21e-1  0.64    0.32   1.08    1.31  <int> <dbl>\n 6 -0.480   0.0116 0.00000706  6.31e-1  0.82    0.41   0.364  -0.676 <int> <dbl>\n 7  3.66    0.0116 0.00000825  2.47e-4  0.02    0.01   0.909   0.664 <int> <dbl>\n 8  2.14    0.0116 0.00000714  3.26e-2  0.16    0.08   1.13    1.48  <int> <dbl>\n 9  4.55    0.0113 0.00000656  5.28e-6  0.02    0.01   1.36    4.14  <int> <dbl>\n10  1.61    0.0109 0.00000341  1.08e-1  0.18    0.09   0.269  -0.396 <int> <dbl>\n# … with 78 more rows, 7 more variables: NAME_2 <chr>, ID_3 <int>,\n#   NAME_3 <chr>, ENGTYPE_3 <chr>, County <chr>, GDPPC <dbl>,\n#   geometry <POLYGON [°]>, and abbreviated variable names ¹​p_folded_sim,\n#   ²​skewness, ³​kurtosis"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#visualizing-gi",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#visualizing-gi",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "4.2 Visualizing Gi*",
+    "text": "4.2 Visualizing Gi*\n\ntmap_mode(\"view\")\ntm_shape(HCSA) +\n  tm_fill(\"gi_star\") +\n  tm_borders(alpha = 0.5) +\n  tm_view(set.zoom.limit = c(6,8))"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#visualizing-p-value-of-hcsa",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-GLSA.html#visualizing-p-value-of-hcsa",
+    "title": "In Class Exercise 7 - GLSA",
+    "section": "4.3 Visualizing p-value of HCSA",
+    "text": "4.3 Visualizing p-value of HCSA\n\ntmap_mode(\"plot\")\ntm_shape(HCSA) + \n  tm_fill(\"p_sim\") +\n  tm_borders(alpha = 0.5)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-EHSA.html",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-EHSA.html",
+    "title": "In Class Exercise 7 - Emerging Hot Spot Analysis: sfdep methods",
+    "section": "",
+    "text": "pacman::p_load(sf, sfdep, tmap, plotly, tidyverse, zoo, Kendall)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-EHSA.html#deriving-spatial-weights",
+    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07-EHSA.html#deriving-spatial-weights",
+    "title": "In Class Exercise 7 - Emerging Hot Spot Analysis: sfdep methods",
+    "section": "Deriving spatial weights",
+    "text": "Deriving spatial weights\n\nGDPPC_nb <- GDPPC_st %>%\n  activate(\"geometry\") %>%\n  mutate(nb = include_self(st_contiguity(geometry)),\n         wt = st_inverse_distance(nb, geometry,\n                                  scale = 1,\n                                  alpha = 1),\n         .before = 1) %>%\n  set_nbs(\"nb\") %>%\n  set_wts(\"wt\")\n\n\n\n\n\n\n\nNote\n\n\n\n\nactivate() of dplyr package is used to activate the geometry context\nmutate() of dplyr package is used to create two new columns nb and wt.\nThen we will activate the data context again and copy over the nb and wt columns to each time-slice using set_nbs() and set_wts()\n\nrow order is very important so do not rearrange the observations after using set_nbs() or set_wts().\n\n\n\n\n\nhead(GDPPC_nb)\n\n# A tibble: 6 × 5\n   Year County  GDPPC nb        wt       \n  <dbl> <chr>   <dbl> <list>    <list>   \n1  2005 Anxiang  8184 <int [6]> <dbl [6]>\n2  2005 Hanshou  6560 <int [6]> <dbl [6]>\n3  2005 Jinshi   9956 <int [5]> <dbl [5]>\n4  2005 Li       8394 <int [5]> <dbl [5]>\n5  2005 Linli    8850 <int [5]> <dbl [5]>\n6  2005 Shimen   9244 <int [6]> <dbl [6]>"
+  },
+  {
     "objectID": "In-Class_Ex/In-Class_Ex06/In-Class_Ex06.html",
     "href": "In-Class_Ex/In-Class_Ex06/In-Class_Ex06.html",
     "title": "In Class Exercise 6",
@@ -1244,124 +1370,5 @@
     "title": "In Class Exercise 6",
     "section": "3.2 Rooks method",
     "text": "3.2 Rooks method\n\nwm_r <- hunan_GDPPC %>%\n  mutate(nb = st_contiguity(geometry),\n         queen = FALSE,\n         wt = st_weights(nb),\n         .before = 1)"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html",
-    "title": "In Class Exercise 7",
-    "section": "",
-    "text": "pacman::p_load(sf, sfdep, tmap, tidyverse, plotly)"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#importing-shape-file",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#importing-shape-file",
-    "title": "In Class Exercise 7",
-    "section": "2.1 Importing Shape File",
-    "text": "2.1 Importing Shape File\n\nhunan <- st_read(dsn = \"data/geospatial\", \n                 layer = \"Hunan\")\n\nReading layer `Hunan' from data source \n  `/Users/danielchng/Desktop/Github/SMU-IS415/IS415-GAA/In-Class_Ex/In-Class_Ex07/data/geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 88 features and 7 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#importing-csv-file",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#importing-csv-file",
-    "title": "In Class Exercise 7",
-    "section": "2.2 Importing csv file",
-    "text": "2.2 Importing csv file\n\nhunan2012 <- read_csv(\"data/aspatial/Hunan_2012.csv\")"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#joining-them-together",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#joining-them-together",
-    "title": "In Class Exercise 7",
-    "section": "2.3 Joining them together",
-    "text": "2.3 Joining them together\n\nhunan_GDPPC <- left_join(hunan,hunan2012) %>%\n  select(1:4, 7, 15)"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#plotting-choropleth-map",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#plotting-choropleth-map",
-    "title": "In Class Exercise 7",
-    "section": "2.4 Plotting Choropleth map",
-    "text": "2.4 Plotting Choropleth map\n\ntmap_mode(\"plot\")\ntm_shape(hunan_GDPPC) +\n  tm_fill(\"GDPPC\",\n          style = \"quantile\",\n          palette = \"Blues\",\n          title = \"GDPPC\") +\n  tm_layout(main.title = \"Distribution of GDP per capita by district, Hunan Province\",\n            main.title.position = \"center\",\n            main.title.size = 1.2,\n            legend.height = 0.45,\n            legend.width = 0.35,\n            frame = TRUE) +\n  tm_borders(alpha = 0.5) +\n  tm_compass(type=\"8star\", size = 2) + \n  tm_scale_bar() +\n  tm_grid(alpha = 0.2)"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#deriving-contiguity-weights-queen-method",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#deriving-contiguity-weights-queen-method",
-    "title": "In Class Exercise 7",
-    "section": "3.1 Deriving contiguity weights: Queen Method",
-    "text": "3.1 Deriving contiguity weights: Queen Method\n\nwm_q <- hunan_GDPPC %>%\n  mutate(nb = st_contiguity(geometry),\n         wt = st_weights(nb,\n                         style = \"W\"),\n         .before = 1)"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#computing-global-moran-i",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#computing-global-moran-i",
-    "title": "In Class Exercise 7",
-    "section": "3.2 Computing Global Moran’ I",
-    "text": "3.2 Computing Global Moran’ I\n\nmoranI <- global_moran(wm_q$GDPPC,\n                       wm_q$nb,\n                       wm_q$wt)"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#performing-global-morani-test",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#performing-global-morani-test",
-    "title": "In Class Exercise 7",
-    "section": "3.3 Performing Global Moran’I Test",
-    "text": "3.3 Performing Global Moran’I Test\n\nglobal_moran_test(wm_q$GDPPC,\n                       wm_q$nb,\n                       wm_q$wt)\n\n\n    Moran I test under randomisation\n\ndata:  x  \nweights: listw    \n\nMoran I statistic standard deviate = 4.7351, p-value = 1.095e-06\nalternative hypothesis: greater\nsample estimates:\nMoran I statistic       Expectation          Variance \n      0.300749970      -0.011494253       0.004348351"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#performing-global-morani-permutation-test",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#performing-global-morani-permutation-test",
-    "title": "In Class Exercise 7",
-    "section": "3.4 Performing Global Moran’I Permutation Test",
-    "text": "3.4 Performing Global Moran’I Permutation Test\n\n\n\n\n\n\nNote\n\n\n\nRemember to set seed value so that the result will be consistent (Put outside to make seed standard)\n\n\n\nset.seed(1234)\n\n\nglobal_moran_perm(wm_q$GDPPC,\n                  wm_q$nb,\n                  wm_q$wt,\n                  nsim = 99)\n\n\n    Monte-Carlo simulation of Moran I\n\ndata:  x \nweights: listw  \nnumber of simulations + 1: 100 \n\nstatistic = 0.30075, observed rank = 100, p-value < 2.2e-16\nalternative hypothesis: two.sided"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#computing-local-morans-i",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#computing-local-morans-i",
-    "title": "In Class Exercise 7",
-    "section": "3.5 Computing Local Moran’s I",
-    "text": "3.5 Computing Local Moran’s I\n\nlisa <- wm_q %>%\n  mutate(local_moran = local_moran(GDPPC, nb, wt, nsim = 99),\n         .before = 1) %>%\n  unnest(local_moran)\nlisa\n\nSimple feature collection with 88 features and 20 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84\n# A tibble: 88 × 21\n         ii        eii   var_ii    z_ii    p_ii p_ii_…¹ p_fol…² skewn…³ kurtosis\n      <dbl>      <dbl>    <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>    <dbl>\n 1 -0.00147  0.00177    4.18e-4 -0.158  0.874      0.82    0.41  -0.812  0.652  \n 2  0.0259   0.00641    1.05e-2  0.190  0.849      0.96    0.48  -1.09   1.89   \n 3 -0.0120  -0.0374     1.02e-1  0.0796 0.937      0.76    0.38   0.824  0.0461 \n 4  0.00102 -0.0000349  4.37e-6  0.506  0.613      0.64    0.32   1.04   1.61   \n 5  0.0148  -0.00340    1.65e-3  0.449  0.654      0.5     0.25   1.64   3.96   \n 6 -0.0388  -0.00339    5.45e-3 -0.480  0.631      0.82    0.41   0.614 -0.264  \n 7  3.37    -0.198      1.41e+0  3.00   0.00266    0.08    0.04   1.46   2.74   \n 8  1.56    -0.265      8.04e-1  2.04   0.0417     0.08    0.04   0.459 -0.519  \n 9  4.42     0.0450     1.79e+0  3.27   0.00108    0.02    0.01   0.746 -0.00582\n10 -0.399   -0.0505     8.59e-2 -1.19   0.234      0.28    0.14  -0.685  0.134  \n# … with 78 more rows, 12 more variables: mean <fct>, median <fct>,\n#   pysal <fct>, nb <nb>, wt <list>, NAME_2 <chr>, ID_3 <int>, NAME_3 <chr>,\n#   ENGTYPE_3 <chr>, County <chr>, GDPPC <dbl>, geometry <POLYGON [°]>, and\n#   abbreviated variable names ¹​p_ii_sim, ²​p_folded_sim, ³​skewness"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#visualizing-local-morans-i",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#visualizing-local-morans-i",
-    "title": "In Class Exercise 7",
-    "section": "3.6 Visualizing local Moran’s I",
-    "text": "3.6 Visualizing local Moran’s I\n\ntmap_mode(\"plot\")\ntm_shape(lisa) +\n  tm_fill(\"ii\") +\n  tm_borders(alpha = 0.5) +\n  tm_view(set.zoom.limits = c(6,8))"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#visualizing-the-simulated-one",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#visualizing-the-simulated-one",
-    "title": "In Class Exercise 7",
-    "section": "3.7 Visualizing the simulated one",
-    "text": "3.7 Visualizing the simulated one\n\ntmap_mode(\"plot\")\ntm_shape(lisa) +\n  tm_fill(\"p_ii_sim\") +\n  tm_borders(alpha = 0.5)"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#visualizing-local-morans-i-1",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#visualizing-local-morans-i-1",
-    "title": "In Class Exercise 7",
-    "section": "3.8 Visualizing local Moran’s I",
-    "text": "3.8 Visualizing local Moran’s I\n\nlisa_sig <- lisa %>%\n  filter(p_ii <0.05)\ntmap_mode(\"plot\")\ntm_shape(lisa) +\n  tm_polygons() +\n  tm_borders(alpha = 0.5) +\ntm_shape(lisa_sig) +\n  tm_fill(\"mean\") +\n  tm_borders(alpha = 0.4)"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#computing-local-morans-i-1",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#computing-local-morans-i-1",
-    "title": "In Class Exercise 7",
-    "section": "4.1 Computing local Moran’s I",
-    "text": "4.1 Computing local Moran’s I\n\nHCSA <- wm_q %>%\n  mutate(local_Gi = local_gstar_perm(\n    GDPPC, nb, wt, nsim = 99),\n    .before = 1) %>%\n  unnest(local_Gi)\nHCSA\n\nSimple feature collection with 88 features and 16 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84\n# A tibble: 88 × 17\n    gi_star   e_gi     var_gi  p_value p_sim p_fol…¹ skewn…² kurto…³ nb    wt   \n      <dbl>  <dbl>      <dbl>    <dbl> <dbl>   <dbl>   <dbl>   <dbl> <nb>  <lis>\n 1 -0.00567 0.0115 0.00000812  9.95e-1  0.82    0.41   1.03    1.23  <int> <dbl>\n 2 -0.235   0.0110 0.00000581  8.14e-1  1       0.5    0.912   1.05  <int> <dbl>\n 3  0.298   0.0114 0.00000776  7.65e-1  0.7     0.35   0.455  -0.732 <int> <dbl>\n 4  0.145   0.0121 0.0000111   8.84e-1  0.64    0.32   0.900   0.726 <int> <dbl>\n 5  0.356   0.0113 0.0000119   7.21e-1  0.64    0.32   1.08    1.31  <int> <dbl>\n 6 -0.480   0.0116 0.00000706  6.31e-1  0.82    0.41   0.364  -0.676 <int> <dbl>\n 7  3.66    0.0116 0.00000825  2.47e-4  0.02    0.01   0.909   0.664 <int> <dbl>\n 8  2.14    0.0116 0.00000714  3.26e-2  0.16    0.08   1.13    1.48  <int> <dbl>\n 9  4.55    0.0113 0.00000656  5.28e-6  0.02    0.01   1.36    4.14  <int> <dbl>\n10  1.61    0.0109 0.00000341  1.08e-1  0.18    0.09   0.269  -0.396 <int> <dbl>\n# … with 78 more rows, 7 more variables: NAME_2 <chr>, ID_3 <int>,\n#   NAME_3 <chr>, ENGTYPE_3 <chr>, County <chr>, GDPPC <dbl>,\n#   geometry <POLYGON [°]>, and abbreviated variable names ¹​p_folded_sim,\n#   ²​skewness, ³​kurtosis"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#visualizing-gi",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#visualizing-gi",
-    "title": "In Class Exercise 7",
-    "section": "4.2 Visualizing Gi*",
-    "text": "4.2 Visualizing Gi*\n\ntmap_mode(\"view\")\ntm_shape(HCSA) +\n  tm_fill(\"gi_star\") +\n  tm_borders(alpha = 0.5) +\n  tm_view(set.zoom.limit = c(6,8))"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#visualizing-p-value-of-hcsa",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#visualizing-p-value-of-hcsa",
-    "title": "In Class Exercise 7",
-    "section": "4.3 Visualizing p-value of HCSA",
-    "text": "4.3 Visualizing p-value of HCSA\n\ntmap_mode(\"plot\")\ntm_shape(HCSA) + \n  tm_fill(\"p_sim\") +\n  tm_borders(alpha = 0.5)"
-  },
-  {
-    "objectID": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#computing-gi",
-    "href": "In-Class_Ex/In-Class_Ex07/In-Class_Ex07.html#computing-gi",
-    "title": "In Class Exercise 7",
-    "section": "Computing GI\\*",
-    "text": "Computing GI\\*\n{r}\ngi_stars <- GDPPC_nb %>%\n  group_by(Year) %>%\n  mutate(gi_star = local_gstar_perm(\n    GDPPC, nb, wt, nsim = 99)) %>%\n  tidyr::unnest(gi_star)"
   }
 ]
