@@ -250,19 +250,29 @@ vaccJak <- vaccJak %>%
     )
 ```
 
-### 2.3.5 Formating Data
+### 2.3.5 Changing Locale Date for File Reading
+
+#### 2.3.5.1 Changing for Windows
 
 ```{r}
-#Sys.setlocale(locale="ind")
+Sys.setlocale(locale="ind")
 #Sys.setlocale("LC_TIME", "id_ID.UTF-8")
+#default_locale()
+```
+
+#### 2.3.5.2 Changing for Mac - Still solving
+
+```{#|eval:false}
+{r}
 locale(
   date_names = "id",
   date_format ="%d %B %Y",
   tz = "UTC",
   encoding = "UTF-8"
 )
-default_locale()
 ```
+
+### 2.3.6 Formating Data
 
 ```{r}
 
@@ -272,7 +282,7 @@ vaccJak$Date <- c(vaccJak$Date) %>%
 glimpse(vaccJak)
 ```
 
-### 2.3.6 Checking for Missing Values
+### 2.3.7 Checking for Missing Values
 
 ```{r}
 sum(is.na(vaccJak))
