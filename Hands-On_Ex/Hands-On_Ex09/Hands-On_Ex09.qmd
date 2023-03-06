@@ -32,7 +32,7 @@ Two data sets will be used in this model building exercise, they are:
 # Importing Package
 
 ```{r}
-pacman::p_load(olsrr, ggpubr, sf, spdep, GWmodel, tmap, tidyverse, gtsummary)
+pacman::p_load(olsrr, ggpubr, sf, spdep, corrplot, GWmodel, tmap, tidyverse, gtsummary)
 ```
 
 # Importing Data
