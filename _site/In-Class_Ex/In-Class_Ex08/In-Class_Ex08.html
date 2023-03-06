@@ -235,6 +235,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="dropdown-item" href="../../Take-Home_Ex/Take-Home_Ex02/Take-Home_Ex02.html">
  <span class="dropdown-text">Take Home Exercise 2</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-Home_Ex/Take-Home_Ex03/Take-Home_Ex03.html">
+ <span class="dropdown-text">Take Home Exercise 3</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -324,20 +328,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1>Importing Modules</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(olsrr, ggpubr, sf, spdep, GWmodel, tmap, tidyverse, gtsummary, readr, dplyr, tidyselect)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-The downloaded binary packages are in
-    /var/folders/ns/nx1zvhcn653fwh2vzkpxp8z80000gn/T//Rtmpb1tP2X/downloaded_packages
-
-The downloaded binary packages are in
-    /var/folders/ns/nx1zvhcn653fwh2vzkpxp8z80000gn/T//Rtmpb1tP2X/downloaded_packages
-
-The downloaded binary packages are in
-    /var/folders/ns/nx1zvhcn653fwh2vzkpxp8z80000gn/T//Rtmpb1tP2X/downloaded_packages
-
-The downloaded binary packages are in
-    /var/folders/ns/nx1zvhcn653fwh2vzkpxp8z80000gn/T//Rtmpb1tP2X/downloaded_packages</code></pre>
-</div>
 </div>
 </section>
 <section id="importing-data" class="level1">
@@ -345,10 +335,10 @@ The downloaded binary packages are in
 <section id="geospatial-data" class="level2">
 <h2 class="anchored" data-anchor-id="geospatial-data">Geospatial Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">=</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial"</span>, <span class="at">layer =</span> <span class="st">"MP14_SUBZONE_WEB_PL"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">=</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial"</span>, <span class="at">layer =</span> <span class="st">"MP14_SUBZONE_WEB_PL"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `MP14_SUBZONE_WEB_PL' from data source 
-  `/Users/danielchng/Desktop/Github/SMU-IS415/IS415-GAA/In-Class_Ex/In-Class_Ex08/data/geospatial' 
+  `C:\Users\Daniel\Desktop\Github\IS419\IS415-GAA\In-Class_Ex\In-Class_Ex08\data\geospatial' 
   using driver `ESRI Shapefile'
 Simple feature collection with 323 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -358,19 +348,19 @@ Projected CRS: SVY21</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mpsz_svy21 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(mpsz, <span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mpsz_svy21 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(mpsz, <span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="aspatial-data" class="level2">
 <h2 class="anchored" data-anchor-id="aspatial-data">Aspatial Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>condo_resale <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/aspatial/Condo_resale_2015.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>condo_resale <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/aspatial/Condo_resale_2015.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="converting-aspatial-data-to-sf-object" class="level2">
 <h2 class="anchored" data-anchor-id="converting-aspatial-data-to-sf-object">Converting Aspatial Data to sf Object</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>condo_resale.sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(condo_resale, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"LONGITUDE"</span>, <span class="st">"LATITUDE"</span>), <span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">%&gt;%</span> <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>condo_resale.sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(condo_resale, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"LONGITUDE"</span>, <span class="st">"LATITUDE"</span>), <span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">%&gt;%</span> <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -379,9 +369,9 @@ Projected CRS: SVY21</code></pre>
 <section id="simple-linear-regression-method" class="level2">
 <h2 class="anchored" data-anchor-id="simple-linear-regression-method">Simple Linear Regression Method</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>condo.slr <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula=</span>SELLING_PRICE <span class="sc">~</span> AREA_SQM, <span class="at">data =</span> condo_resale.sf)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>condo_resale.sf,<span class="fu">aes</span>(<span class="at">x=</span>AREA_SQM, <span class="at">y=</span>SELLING_PRICE)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>condo.slr <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula=</span>SELLING_PRICE <span class="sc">~</span> AREA_SQM, <span class="at">data =</span> condo_resale.sf)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>condo_resale.sf,<span class="fu">aes</span>(<span class="at">x=</span>AREA_SQM, <span class="at">y=</span>SELLING_PRICE)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="In-Class_Ex08_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -390,21 +380,21 @@ Projected CRS: SVY21</code></pre>
 <section id="multiple-linear-regression-method" class="level2">
 <h2 class="anchored" data-anchor-id="multiple-linear-regression-method">Multiple Linear Regression Method</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(<span class="fu">cor</span>(condo_resale[, <span class="dv">5</span><span class="sc">:</span><span class="dv">23</span>]), <span class="at">diag =</span> <span class="cn">FALSE</span>, <span class="at">order =</span> <span class="st">"AOE"</span>,</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">t1.pos =</span> <span class="st">"td"</span>, <span class="at">t1.cex =</span> <span class="fl">0.5</span>, <span class="at">method =</span> <span class="st">"number"</span>, <span class="at">type =</span> <span class="st">"upper"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(<span class="fu">cor</span>(condo_resale[, <span class="dv">5</span><span class="sc">:</span><span class="dv">23</span>]), <span class="at">diag =</span> <span class="cn">FALSE</span>, <span class="at">order =</span> <span class="st">"AOE"</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">t1.pos =</span> <span class="st">"td"</span>, <span class="at">t1.cex =</span> <span class="fl">0.5</span>, <span class="at">method =</span> <span class="st">"number"</span>, <span class="at">type =</span> <span class="st">"upper"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="In-Class_Ex08_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>condo.mlr <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> SELLING_PRICE <span class="sc">~</span> AREA_SQM <span class="sc">+</span> AGE    <span class="sc">+</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                  PROX_CBD <span class="sc">+</span> PROX_CHILDCARE <span class="sc">+</span> PROX_ELDERLYCARE <span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                  PROX_URA_GROWTH_AREA <span class="sc">+</span> PROX_HAWKER_MARKET <span class="sc">+</span> PROX_KINDERGARTEN <span class="sc">+</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                  PROX_MRT  <span class="sc">+</span> PROX_PARK <span class="sc">+</span> PROX_PRIMARY_SCH <span class="sc">+</span> </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                  PROX_TOP_PRIMARY_SCH <span class="sc">+</span> PROX_SHOPPING_MALL <span class="sc">+</span> PROX_SUPERMARKET <span class="sc">+</span> </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                  PROX_BUS_STOP <span class="sc">+</span> NO_Of_UNITS <span class="sc">+</span> FAMILY_FRIENDLY <span class="sc">+</span> FREEHOLD, </span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">data=</span>condo_resale.sf)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(condo.mlr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>condo.mlr <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> SELLING_PRICE <span class="sc">~</span> AREA_SQM <span class="sc">+</span> AGE    <span class="sc">+</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                  PROX_CBD <span class="sc">+</span> PROX_CHILDCARE <span class="sc">+</span> PROX_ELDERLYCARE <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                  PROX_URA_GROWTH_AREA <span class="sc">+</span> PROX_HAWKER_MARKET <span class="sc">+</span> PROX_KINDERGARTEN <span class="sc">+</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                  PROX_MRT  <span class="sc">+</span> PROX_PARK <span class="sc">+</span> PROX_PRIMARY_SCH <span class="sc">+</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                  PROX_TOP_PRIMARY_SCH <span class="sc">+</span> PROX_SHOPPING_MALL <span class="sc">+</span> PROX_SUPERMARKET <span class="sc">+</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                  PROX_BUS_STOP <span class="sc">+</span> NO_Of_UNITS <span class="sc">+</span> FAMILY_FRIENDLY <span class="sc">+</span> FREEHOLD, </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">data=</span>condo_resale.sf)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(condo.mlr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -449,13 +439,13 @@ F-statistic: 147.4 on 18 and 1417 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>condo.mlr1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> SELLING_PRICE <span class="sc">~</span> AREA_SQM <span class="sc">+</span> AGE <span class="sc">+</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                   PROX_CBD <span class="sc">+</span> PROX_CHILDCARE <span class="sc">+</span> PROX_ELDERLYCARE <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                   PROX_URA_GROWTH_AREA <span class="sc">+</span> PROX_MRT  <span class="sc">+</span> PROX_PARK <span class="sc">+</span> </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                   PROX_PRIMARY_SCH <span class="sc">+</span> PROX_SHOPPING_MALL    <span class="sc">+</span> PROX_BUS_STOP <span class="sc">+</span> </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                   NO_Of_UNITS <span class="sc">+</span> FAMILY_FRIENDLY <span class="sc">+</span> FREEHOLD,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data=</span>condo_resale.sf)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ols_regress</span>(condo.mlr1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>condo.mlr1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> SELLING_PRICE <span class="sc">~</span> AREA_SQM <span class="sc">+</span> AGE <span class="sc">+</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                   PROX_CBD <span class="sc">+</span> PROX_CHILDCARE <span class="sc">+</span> PROX_ELDERLYCARE <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                   PROX_URA_GROWTH_AREA <span class="sc">+</span> PROX_MRT  <span class="sc">+</span> PROX_PARK <span class="sc">+</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                   PROX_PRIMARY_SCH <span class="sc">+</span> PROX_SHOPPING_MALL    <span class="sc">+</span> PROX_BUS_STOP <span class="sc">+</span> </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                   NO_Of_UNITS <span class="sc">+</span> FAMILY_FRIENDLY <span class="sc">+</span> FREEHOLD,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data=</span>condo_resale.sf)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ols_regress</span>(condo.mlr1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                             Model Summary                               
 ------------------------------------------------------------------------
@@ -501,21 +491,21 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(condo.mlr1, </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">intercept =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_glance_source_note</span>(</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(sigma <span class="sc">~</span> <span class="st">"\U03C3"</span>),</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(r.squared, adj.r.squared, </span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                AIC, statistic,</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                p.value, sigma))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(condo.mlr1, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">intercept =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_glance_source_note</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(sigma <span class="sc">~</span> <span class="st">"\U03C3"</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(r.squared, adj.r.squared, </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                AIC, statistic,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                p.value, sigma))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="imeuzsxxmh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ebmdwuohej" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-:where(#imeuzsxxmh) .gt_table {
+:where(#ebmdwuohej) .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -540,7 +530,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   border-left-color: #D3D3D3;
 }
 
-:where(#imeuzsxxmh) .gt_heading {
+:where(#ebmdwuohej) .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -552,12 +542,12 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   border-right-color: #D3D3D3;
 }
 
-:where(#imeuzsxxmh) .gt_caption {
+:where(#ebmdwuohej) .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-:where(#imeuzsxxmh) .gt_title {
+:where(#ebmdwuohej) .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -569,7 +559,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   border-bottom-width: 0;
 }
 
-:where(#imeuzsxxmh) .gt_subtitle {
+:where(#ebmdwuohej) .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -581,13 +571,13 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   border-top-width: 0;
 }
 
-:where(#imeuzsxxmh) .gt_bottom_border {
+:where(#ebmdwuohej) .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-:where(#imeuzsxxmh) .gt_col_headings {
+:where(#ebmdwuohej) .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -602,7 +592,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   border-right-color: #D3D3D3;
 }
 
-:where(#imeuzsxxmh) .gt_col_heading {
+:where(#ebmdwuohej) .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -622,7 +612,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   overflow-x: hidden;
 }
 
-:where(#imeuzsxxmh) .gt_column_spanner_outer {
+:where(#ebmdwuohej) .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -634,15 +624,15 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   padding-right: 4px;
 }
 
-:where(#imeuzsxxmh) .gt_column_spanner_outer:first-child {
+:where(#ebmdwuohej) .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-:where(#imeuzsxxmh) .gt_column_spanner_outer:last-child {
+:where(#ebmdwuohej) .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-:where(#imeuzsxxmh) .gt_column_spanner {
+:where(#ebmdwuohej) .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -654,7 +644,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   width: 100%;
 }
 
-:where(#imeuzsxxmh) .gt_group_heading {
+:where(#ebmdwuohej) .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -680,7 +670,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   text-align: left;
 }
 
-:where(#imeuzsxxmh) .gt_empty_group_heading {
+:where(#ebmdwuohej) .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -695,15 +685,15 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   vertical-align: middle;
 }
 
-:where(#imeuzsxxmh) .gt_from_md > :first-child {
+:where(#ebmdwuohej) .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-:where(#imeuzsxxmh) .gt_from_md > :last-child {
+:where(#ebmdwuohej) .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-:where(#imeuzsxxmh) .gt_row {
+:where(#ebmdwuohej) .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -722,7 +712,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   overflow-x: hidden;
 }
 
-:where(#imeuzsxxmh) .gt_stub {
+:where(#ebmdwuohej) .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -735,7 +725,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   padding-right: 5px;
 }
 
-:where(#imeuzsxxmh) .gt_stub_row_group {
+:where(#ebmdwuohej) .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -749,11 +739,11 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   vertical-align: top;
 }
 
-:where(#imeuzsxxmh) .gt_row_group_first td {
+:where(#ebmdwuohej) .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-:where(#imeuzsxxmh) .gt_summary_row {
+:where(#ebmdwuohej) .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -763,16 +753,16 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   padding-right: 5px;
 }
 
-:where(#imeuzsxxmh) .gt_first_summary_row {
+:where(#ebmdwuohej) .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-:where(#imeuzsxxmh) .gt_first_summary_row.thick {
+:where(#ebmdwuohej) .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-:where(#imeuzsxxmh) .gt_last_summary_row {
+:where(#ebmdwuohej) .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -782,7 +772,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   border-bottom-color: #D3D3D3;
 }
 
-:where(#imeuzsxxmh) .gt_grand_summary_row {
+:where(#ebmdwuohej) .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -792,7 +782,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   padding-right: 5px;
 }
 
-:where(#imeuzsxxmh) .gt_first_grand_summary_row {
+:where(#ebmdwuohej) .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -802,11 +792,11 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   border-top-color: #D3D3D3;
 }
 
-:where(#imeuzsxxmh) .gt_striped {
+:where(#ebmdwuohej) .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-:where(#imeuzsxxmh) .gt_table_body {
+:where(#ebmdwuohej) .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -815,7 +805,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   border-bottom-color: #D3D3D3;
 }
 
-:where(#imeuzsxxmh) .gt_footnotes {
+:where(#ebmdwuohej) .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -829,7 +819,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   border-right-color: #D3D3D3;
 }
 
-:where(#imeuzsxxmh) .gt_footnote {
+:where(#ebmdwuohej) .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -838,7 +828,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   padding-right: 5px;
 }
 
-:where(#imeuzsxxmh) .gt_sourcenotes {
+:where(#ebmdwuohej) .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -852,7 +842,7 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   border-right-color: #D3D3D3;
 }
 
-:where(#imeuzsxxmh) .gt_sourcenote {
+:where(#ebmdwuohej) .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -860,64 +850,64 @@ PROX_URA_GROWTH_AREA      39163.254     11754.829        0.060      3.332    0.0
   padding-right: 5px;
 }
 
-:where(#imeuzsxxmh) .gt_left {
+:where(#ebmdwuohej) .gt_left {
   text-align: left;
 }
 
-:where(#imeuzsxxmh) .gt_center {
+:where(#ebmdwuohej) .gt_center {
   text-align: center;
 }
 
-:where(#imeuzsxxmh) .gt_right {
+:where(#ebmdwuohej) .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-:where(#imeuzsxxmh) .gt_font_normal {
+:where(#ebmdwuohej) .gt_font_normal {
   font-weight: normal;
 }
 
-:where(#imeuzsxxmh) .gt_font_bold {
+:where(#ebmdwuohej) .gt_font_bold {
   font-weight: bold;
 }
 
-:where(#imeuzsxxmh) .gt_font_italic {
+:where(#ebmdwuohej) .gt_font_italic {
   font-style: italic;
 }
 
-:where(#imeuzsxxmh) .gt_super {
+:where(#ebmdwuohej) .gt_super {
   font-size: 65%;
 }
 
-:where(#imeuzsxxmh) .gt_footnote_marks {
+:where(#ebmdwuohej) .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-:where(#imeuzsxxmh) .gt_asterisk {
+:where(#ebmdwuohej) .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-:where(#imeuzsxxmh) .gt_indent_1 {
+:where(#ebmdwuohej) .gt_indent_1 {
   text-indent: 5px;
 }
 
-:where(#imeuzsxxmh) .gt_indent_2 {
+:where(#ebmdwuohej) .gt_indent_2 {
   text-indent: 10px;
 }
 
-:where(#imeuzsxxmh) .gt_indent_3 {
+:where(#ebmdwuohej) .gt_indent_3 {
   text-indent: 15px;
 }
 
-:where(#imeuzsxxmh) .gt_indent_4 {
+:where(#ebmdwuohej) .gt_indent_4 {
   text-indent: 20px;
 }
 
-:where(#imeuzsxxmh) .gt_indent_5 {
+:where(#ebmdwuohej) .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
