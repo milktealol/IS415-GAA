@@ -32,7 +32,7 @@ Two data sets will be used in this model building exercise, they are:
 # Importing Package
 
 ```{r}
-pacman::p_load(olsrr, corrplot, ggpubr, sf, spdep, GWmodel, tmap, tidyverse, gtsummary)
+pacman::p_load(olsrr, ggpubr, sf, spdep, GWmodel, tmap, tidyverse, gtsummary)
 ```
 
 # Importing Data
@@ -165,7 +165,7 @@ tmap_mode("view")
 ```
 
 ```{r}
-sf_use_s2(FALSE)
+tmap_options(check.and.fix = TRUE)
 tm_shape(mpsz_svy21)+
   tm_polygons() +
 tm_shape(condo_resale.sf) +  
