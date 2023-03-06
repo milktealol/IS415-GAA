@@ -18,7 +18,9 @@ Geographically weighted regression (GWR) is a spatial statistical technique that
 
 # Importing Modules
 
-{r} pacman::p_load(olsrr, ggpubr, sf, spdep, GWmodel, tmap, tidyverse, gtsummary, readr, dplyr, tidyselect)
+```{r}
+pacman::p_load(olsrr, ggpubr, sf, spdep, GWmodel, tmap, tidyverse, gtsummary, readr, dplyr, tidyselect)
+```
 
 # Importing Data
 
