@@ -1,0 +1,191 @@
+---
+title: "In Class Exercise 9"
+author: "Daniel Chng"
+date: "13 March 2023"
+date-modified: "`r Sys.Date()`"
+format: html
+execute: 
+  eval: true
+  echo: true
+  message: false
+  warning: false
+editor: visual
+---
+
+# Import Packages
+
+```{r}
+pacman::p_load(sf, spdep, GWmodel, SpatialML, tidyverse, tmap, ggpubr, olsrr, devtools, tidymodels)
+```
+
+olsrr - Model diagnostic
+
+tinymodel - Advance way to display models
+
+ggpubr - Data visualisation and analysis
+
+## Preparing Data
+
+### Reading data file to rds
+
+Reading the input data sets. It is in simple feature data frame.
+
+```{r}
+mdata <- read_rds("data/aspatial/mdata.rds")
+```
+
+### Data Sampling
+
+The entire data are split into training and test data sets with 65% training and 35% test data
+
+::: callout-note
+Remember to set seed for all functions that always get different result
+:::
+
+```{r}
+set.seed(1234)
+resale_split <- initial_split(mdata,
+                             prop = 6.5/10,)
+train_data <-training(resale_split)
+test_data <- testing(resale_split)
+```
+
+::: callout-note
+If error initial_split(), remove tidymodels in packages and use rsample insteadeval
+:::
+
+```{r}
+# Save the file
+write_rds(train_data, "data/model/train_data_rds")
+write_rds(test_data, "data/model/test_data_rds")
+```
+
+## Building a non-spatial multiple linear regression
+
+```{r}
+price_mlr <- lm(resale_price ~ floor_area_sqm +
+                  storey_order + remaining_lease_mths +
+                  PROX_CBD + PROX_ELDERLYCARE + PROX_HAWKER +
+                  PROX_MRT + PROX_PARK + PROX_MALL +
+                  PROX_SUPERMARKET + WITHIN_350M_KINDERGARTEN +
+                  WITHIN_350M_CHILDCARE + WITHIN_350M_BUS +
+                  WITHIN_1KM_PRISCH,
+                data = train_data)
+summary(price_mlr)
+```
+
+```{r}
+write_rds(price_mlr, "data/model/price_mlr.rds")
+```
+
+## GWR predictive method
+
+### Converting sf data.frame to SpatialPointDataFrame
+
+Convert training data from sf to spatialpointdataframe in order to be used
+
+-   Note: Its already projected, thus we do not need to change the CRS value
+
+```{r}
+train_data_sp <- as_Spatial(train_data)
+train_data_sp
+```
+
+## Preparing Coordinate Data
+
+### Extracting coordinates data
+
+Extract the x,y coordinates of the full, training and test data sets (Drop all data excepts for coordinates)
+
+Required to do so if not ranger will not be able to generate the algo.
+
+```{r}
+coords <-st_coordinates(mdata)
+coords_train <- st_coordinates(train_data)
+coords_test <- st_coordinates(test_data)
+```
+
+Before continuing, we write all the output into rds for future use
+
+```{r}
+coords_train <-write_rds(coords_train, "data/model/coords_train.rds")
+coords_test <- write_rds(coords_test, "data/model/coords_test.rds")
+```
+
+### Dropping geometry field
+
+```{r}
+train_data <- train_data %>%
+  st_drop_geometry()
+```
+
+## Calibrating Random Forest
+
+Performing random forest calibration by using ranger package
+
+```{r}
+set.seed(1234)
+rf <- ranger(resale_price ~ floor_area_sqm +
+                  storey_order + remaining_lease_mths +
+                  PROX_CBD + PROX_ELDERLYCARE + PROX_HAWKER +
+                  PROX_MRT + PROX_PARK + PROX_MALL +
+                  PROX_SUPERMARKET + WITHIN_350M_KINDERGARTEN +
+                  WITHIN_350M_CHILDCARE + WITHIN_350M_BUS +
+                  WITHIN_1KM_PRISCH,
+                data = train_data)
+```
+
+```{r}
+print(rf)
+```
+
+```{r}
+set.seed(1234)
+gwRF_adaptive <- grf(formula = resale_price ~ floor_area_sqm +
+                  storey_order + remaining_lease_mths +
+                  PROX_CBD + PROX_ELDERLYCARE + PROX_HAWKER +
+                  PROX_MRT + PROX_PARK + PROX_MALL +
+                  PROX_SUPERMARKET + WITHIN_350M_KINDERGARTEN +
+                  WITHIN_350M_CHILDCARE + WITHIN_350M_BUS +
+                  WITHIN_1KM_PRISCH,
+                dframe = train_data,
+                bw=55,
+                kernel="adaptive",
+                coords=coords_train)
+```
+
+::: callout-note
+Use grf.bw to derive the bandwidth number
+:::
+
+```{r}
+gwRF_adaptive <- write_rds(gwRF_adaptive, "data/model/gwRF_adaptive.rds")
+```
+
+### Predicting using test data
+
+#### Preparing test data
+
+Need to combine test data with coordinates data
+
+```{r}
+test_data <- cbind(test_data, coords_test) %>%
+  st_drop_geometry()
+```
+
+::: callout-note
+Notice that the data variables change to 19 from 17.
+:::
+
+#### Predicting with the test data
+
+```{r}
+gwRF_pred <- predict.grf(gwRF_adaptive,
+                         test_data,
+                         x.var.name="X",
+                         y.var.name="Y",
+                         local.w=1,
+                         global.w=0)
+```
+
+#### Converting predicting output into a data frame

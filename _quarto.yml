@@ -42,6 +42,8 @@ website:
             text: In-Class Exercise 7-EHSA
           - href: In-Class_Ex/In-Class_Ex08/In-Class_Ex08.html
             text: In-Class Exercise 8
+          - href: In-Class_Ex/In-Class_Ex09/In-Class_Ex09.html
+            text: In-Class Exercise 9
       - text: Take Home Exercise
         menu:
           - href: Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html
