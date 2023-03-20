@@ -23,7 +23,7 @@ By the end of this hands-on exercise, you will be able:
 
 -   to import aspatial data into R and save them as simple feature data frame by using appropriate functions of sf package of R;
 
--   to computer accessibility measure by using Hansen\'s potential model and Spatial Accessibility Measure (SAM); and
+-   to computer accessibility measure by using Hansen's potential model and Spatial Accessibility Measure (SAM); and
 
 -   to visualise the accessibility measures by using tmap and ggplot2 packages.
 
@@ -172,9 +172,9 @@ distmat_km <- as.matrix(distmat/1000)
 
 ## Computing Hansen's accessibility
 
-Now, we ready to compute Hansen\'s accessibility by using *ac()* of [**SpatialAcc**](https://cran.r-project.org/web/packages/SpatialAcc/) package. Before getting started, you are encourage to read the [arguments](https://cran.r-project.org/web/packages/SpatialAcc/SpatialAcc.pdf) of the function at least once in order to ensure that the required inputs are available.
+Now, we ready to compute Hansen's accessibility by using *ac()* of [**SpatialAcc**](https://cran.r-project.org/web/packages/SpatialAcc/) package. Before getting started, you are encourage to read the [arguments](https://cran.r-project.org/web/packages/SpatialAcc/SpatialAcc.pdf) of the function at least once in order to ensure that the required inputs are available.
 
-The code chunk below calculates Hansen\'s accessibility using *ac()* of **SpatialAcc** and *data.frame()* is used to save the output in a data frame called `acc_Handsen`.
+The code chunk below calculates Hansen's accessibility using *ac()* of **SpatialAcc** and *data.frame()* is used to save the output in a data frame called `acc_Handsen`.
 
 ```{r}
 acc_Hansen <- data.frame(ac(hexagons$demand,
@@ -280,7 +280,7 @@ ggplot(data=hexagon_Hansen,
 ## Computing KD2SFCA's accessibility
 
 In this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk.\
-The code chunk below calculates Hansen\'s accessibility using *ac()* of **SpatialAcc** and *data.frame()* is used to save the output in a data frame called `acc_KD2SFCA`. Notice that `KD2SFCA` is used for family argument.
+The code chunk below calculates Hansen's accessibility using *ac()* of **SpatialAcc** and *data.frame()* is used to save the output in a data frame called `acc_KD2SFCA`. Notice that `KD2SFCA` is used for family argument.
 
 ```{r}
 acc_KD2SFCA <- data.frame(ac(hexagons$demand,
@@ -351,7 +351,7 @@ ggplot(data=hexagon_KD2SFCA,
 ## Computing SAM accessibility
 
 In this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk.\
-The code chunk below calculates Hansen\'s accessibility using *ac()* of **SpatialAcc** and *data.frame()* is used to save the output in a data frame called `acc_SAM`. Notice that `SAM` is used for family argument.
+The code chunk below calculates Hansen's accessibility using *ac()* of **SpatialAcc** and *data.frame()* is used to save the output in a data frame called `acc_SAM`. Notice that `SAM` is used for family argument.
 
 ```{r}
 acc_SAM <- data.frame(ac(hexagons$demand,

@@ -522,7 +522,7 @@
     "href": "Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html",
     "title": "Hands On Exercise 10",
     "section": "",
-    "text": "By the end of this hands-on exercise, you will be able:\n\nto import GIS polygon data into R and save them as simple feature data frame by using appropriate functions of sf package of R;\nto import aspatial data into R and save them as simple feature data frame by using appropriate functions of sf package of R;\nto computer accessibility measure by using Hansen's potential model and Spatial Accessibility Measure (SAM); and\nto visualise the accessibility measures by using tmap and ggplot2 packages."
+    "text": "By the end of this hands-on exercise, you will be able:\n\nto import GIS polygon data into R and save them as simple feature data frame by using appropriate functions of sf package of R;\nto import aspatial data into R and save them as simple feature data frame by using appropriate functions of sf package of R;\nto computer accessibility measure by using Hansen’s potential model and Spatial Accessibility Measure (SAM); and\nto visualise the accessibility measures by using tmap and ggplot2 packages."
   },
   {
     "objectID": "Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html#importing-geospatial-data",
@@ -550,7 +550,7 @@
     "href": "Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html#computing-hansens-accessibility",
     "title": "Hands On Exercise 10",
     "section": "Computing Hansen’s accessibility",
-    "text": "Computing Hansen’s accessibility\nNow, we ready to compute Hansen's accessibility by using ac() of SpatialAcc package. Before getting started, you are encourage to read the arguments of the function at least once in order to ensure that the required inputs are available.\nThe code chunk below calculates Hansen's accessibility using ac() of SpatialAcc and data.frame() is used to save the output in a data frame called acc_Handsen.\n\nacc_Hansen <- data.frame(ac(hexagons$demand,\n                            eldercare$capacity,\n                            distmat_km, \n                            #d0 = 50,\n                            power = 2, \n                            family = \"Hansen\"))\n\nThe default field name is very messy, we will rename it to accHansen by using the code chunk below.\n\ncolnames(acc_Hansen) <- \"accHansen\"\n\nNext, we will convert the data table into tibble format by using the code chunk below.\n\nacc_Hansen <- tbl_df(acc_Hansen)\n\nLastly, bind_cols() of dplyr will be used to join the acc_Hansen tibble data frame with the hexagons simple feature data frame. The output is called hexagon_Hansen.\n\nhexagon_Hansen <- bind_cols(hexagons, acc_Hansen)\n\nNotice that hexagon_Hansen is a simple feature data frame and not a typical tibble data frame. Now we will change the format\n\nacc_Hansen <- data.frame(ac(hexagons$demand,\n                            eldercare$capacity,\n                            distmat_km, \n                            #d0 = 50,\n                            power = 0.5, \n                            family = \"Hansen\"))\n\ncolnames(acc_Hansen) <- \"accHansen\"\nacc_Hansen <- tbl_df(acc_Hansen)\nhexagon_Hansen <- bind_cols(hexagons, acc_Hansen)"
+    "text": "Computing Hansen’s accessibility\nNow, we ready to compute Hansen’s accessibility by using ac() of SpatialAcc package. Before getting started, you are encourage to read the arguments of the function at least once in order to ensure that the required inputs are available.\nThe code chunk below calculates Hansen’s accessibility using ac() of SpatialAcc and data.frame() is used to save the output in a data frame called acc_Handsen.\n\nacc_Hansen <- data.frame(ac(hexagons$demand,\n                            eldercare$capacity,\n                            distmat_km, \n                            #d0 = 50,\n                            power = 2, \n                            family = \"Hansen\"))\n\nThe default field name is very messy, we will rename it to accHansen by using the code chunk below.\n\ncolnames(acc_Hansen) <- \"accHansen\"\n\nNext, we will convert the data table into tibble format by using the code chunk below.\n\nacc_Hansen <- tbl_df(acc_Hansen)\n\nLastly, bind_cols() of dplyr will be used to join the acc_Hansen tibble data frame with the hexagons simple feature data frame. The output is called hexagon_Hansen.\n\nhexagon_Hansen <- bind_cols(hexagons, acc_Hansen)\n\nNotice that hexagon_Hansen is a simple feature data frame and not a typical tibble data frame. Now we will change the format\n\nacc_Hansen <- data.frame(ac(hexagons$demand,\n                            eldercare$capacity,\n                            distmat_km, \n                            #d0 = 50,\n                            power = 0.5, \n                            family = \"Hansen\"))\n\ncolnames(acc_Hansen) <- \"accHansen\"\nacc_Hansen <- tbl_df(acc_Hansen)\nhexagon_Hansen <- bind_cols(hexagons, acc_Hansen)"
   },
   {
     "objectID": "Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html#visualising-hansens-accessibility",
@@ -564,7 +564,7 @@
     "href": "Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html#computing-kd2sfcas-accessibility",
     "title": "Hands On Exercise 10",
     "section": "Computing KD2SFCA’s accessibility",
-    "text": "Computing KD2SFCA’s accessibility\nIn this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk.\nThe code chunk below calculates Hansen's accessibility using ac() of SpatialAcc and data.frame() is used to save the output in a data frame called acc_KD2SFCA. Notice that KD2SFCA is used for family argument.\n\nacc_KD2SFCA <- data.frame(ac(hexagons$demand,\n                            eldercare$capacity,\n                            distmat_km, \n                            d0 = 50,\n                            power = 2, \n                            family = \"KD2SFCA\"))\n\ncolnames(acc_KD2SFCA) <- \"accKD2SFCA\"\nacc_KD2SFCA <- tbl_df(acc_KD2SFCA)\nhexagon_KD2SFCA <- bind_cols(hexagons, acc_KD2SFCA)"
+    "text": "Computing KD2SFCA’s accessibility\nIn this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk.\nThe code chunk below calculates Hansen’s accessibility using ac() of SpatialAcc and data.frame() is used to save the output in a data frame called acc_KD2SFCA. Notice that KD2SFCA is used for family argument.\n\nacc_KD2SFCA <- data.frame(ac(hexagons$demand,\n                            eldercare$capacity,\n                            distmat_km, \n                            d0 = 50,\n                            power = 2, \n                            family = \"KD2SFCA\"))\n\ncolnames(acc_KD2SFCA) <- \"accKD2SFCA\"\nacc_KD2SFCA <- tbl_df(acc_KD2SFCA)\nhexagon_KD2SFCA <- bind_cols(hexagons, acc_KD2SFCA)"
   },
   {
     "objectID": "Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html#visualising-kd2sfcas-accessibility",
@@ -585,7 +585,7 @@
     "href": "Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html#computing-sam-accessibility",
     "title": "Hands On Exercise 10",
     "section": "Computing SAM accessibility",
-    "text": "Computing SAM accessibility\nIn this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk.\nThe code chunk below calculates Hansen's accessibility using ac() of SpatialAcc and data.frame() is used to save the output in a data frame called acc_SAM. Notice that SAM is used for family argument.\n\nacc_SAM <- data.frame(ac(hexagons$demand,\n                         eldercare$capacity,\n                         distmat_km, \n                         d0 = 50,\n                         power = 2, \n                         family = \"SAM\"))\n\ncolnames(acc_SAM) <- \"accSAM\"\nacc_SAM <- tbl_df(acc_SAM)\nhexagon_SAM <- bind_cols(hexagons, acc_SAM)"
+    "text": "Computing SAM accessibility\nIn this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk.\nThe code chunk below calculates Hansen’s accessibility using ac() of SpatialAcc and data.frame() is used to save the output in a data frame called acc_SAM. Notice that SAM is used for family argument.\n\nacc_SAM <- data.frame(ac(hexagons$demand,\n                         eldercare$capacity,\n                         distmat_km, \n                         d0 = 50,\n                         power = 2, \n                         family = \"SAM\"))\n\ncolnames(acc_SAM) <- \"accSAM\"\nacc_SAM <- tbl_df(acc_SAM)\nhexagon_SAM <- bind_cols(hexagons, acc_SAM)"
   },
   {
     "objectID": "Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html#visualising-sams-accessibility",
@@ -620,7 +620,7 @@
     "href": "In-Class_Ex/In-Class_Ex10/In-Class_Ex10.html",
     "title": "In Class Exercise 10",
     "section": "",
-    "text": "Import Packages\n\npacman::p_load(sf, spdep, GWmodel, SpatialML, tidyverse, tmap, ggpubr, olsrr, devtools, tidymodels)"
+    "text": "pacman::p_load(tmap, SpatialAcc, sf, \n               ggstatsplot, reshape2, fca,\n               tidyverse)"
   },
   {
     "objectID": "In-Class_Ex/In-Class_Ex10/data/geospatial/ELDERCARE.html",
@@ -635,5 +635,26 @@
     "title": "IS415-GAA",
     "section": "",
     "text": "<!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’>     dataset\n\n\n                 0 0     false"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex10/In-Class_Ex10.html#tidy-up-distance-matrix",
+    "href": "In-Class_Ex/In-Class_Ex10/In-Class_Ex10.html#tidy-up-distance-matrix",
+    "title": "In Class Exercise 10",
+    "section": "Tidy up distance matrix",
+    "text": "Tidy up distance matrix\n\ndistmat <- ODMatrix %>%\n  select(origin_id, destination_id, total_cost) %>%\n  spread(destination_id, total_cost)%>%\n  select(c(-c('origin_id')))"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex10/In-Class_Ex10.html#change-distance-matrix-to-km",
+    "href": "In-Class_Ex/In-Class_Ex10/In-Class_Ex10.html#change-distance-matrix-to-km",
+    "title": "In Class Exercise 10",
+    "section": "Change distance matrix to km",
+    "text": "Change distance matrix to km\n\ndistmat_km <- as.matrix(distmat/1000)"
+  },
+  {
+    "objectID": "In-Class_Ex/In-Class_Ex10/In-Class_Ex10.html#computing-distance-matrix-optional",
+    "href": "In-Class_Ex/In-Class_Ex10/In-Class_Ex10.html#computing-distance-matrix-optional",
+    "title": "In Class Exercise 10",
+    "section": "Computing Distance matrix (Optional)",
+    "text": "Computing Distance matrix (Optional)\n\neldercare_coord <- st_coordinates(eldercare)\nhexagon_coord <- st_coordinates(hexagons)\n\n\nEucMatrix <- SpatialAcc:: distance(hexagon_coord, eldercare_coord, type = \"euclidean\")"
   }
 ]

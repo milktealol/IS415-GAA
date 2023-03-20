@@ -181,6 +181,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="dropdown-item" href="../../Hands-On_Ex/Hands-On_Ex09/Hands-On_Ex09.html">
  <span class="dropdown-text">Hands-On Exercise 9</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html">
+ <span class="dropdown-text">Hands-On Exercise 10</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -223,6 +227,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li>
     <a class="dropdown-item" href="../../In-Class_Ex/In-Class_Ex09/In-Class_Ex09.html">
  <span class="dropdown-text">In-Class Exercise 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-Class_Ex/In-Class_Ex10/In-Class_Ex10.html">
+ <span class="dropdown-text">In-Class Exercise 10</span></a>
   </li>  
     </ul>
   </li>
@@ -352,7 +360,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li><p>to import GIS polygon data into R and save them as simple feature data frame by using appropriate functions of sf package of R;</p></li>
 <li><p>to import aspatial data into R and save them as simple feature data frame by using appropriate functions of sf package of R;</p></li>
-<li><p>to computer accessibility measure by using Hansen's potential model and Spatial Accessibility Measure (SAM); and</p></li>
+<li><p>to computer accessibility measure by using Hansen’s potential model and Spatial Accessibility Measure (SAM); and</p></li>
 <li><p>to visualise the accessibility measures by using tmap and ggplot2 packages.</p></li>
 </ul>
 </section>
@@ -556,8 +564,8 @@ PROJCRS["SVY21 / Singapore TM",
 <h1>Modelling and visualising Accessibility using Hansen Method</h1>
 <section id="computing-hansens-accessibility" class="level2">
 <h2 class="anchored" data-anchor-id="computing-hansens-accessibility">Computing Hansen’s accessibility</h2>
-<p>Now, we ready to compute Hansen's accessibility by using <em>ac()</em> of <a href="https://cran.r-project.org/web/packages/SpatialAcc/"><strong>SpatialAcc</strong></a> package. Before getting started, you are encourage to read the <a href="https://cran.r-project.org/web/packages/SpatialAcc/SpatialAcc.pdf">arguments</a> of the function at least once in order to ensure that the required inputs are available.</p>
-<p>The code chunk below calculates Hansen's accessibility using <em>ac()</em> of <strong>SpatialAcc</strong> and <em>data.frame()</em> is used to save the output in a data frame called <code>acc_Handsen</code>.</p>
+<p>Now, we ready to compute Hansen’s accessibility by using <em>ac()</em> of <a href="https://cran.r-project.org/web/packages/SpatialAcc/"><strong>SpatialAcc</strong></a> package. Before getting started, you are encourage to read the <a href="https://cran.r-project.org/web/packages/SpatialAcc/SpatialAcc.pdf">arguments</a> of the function at least once in order to ensure that the required inputs are available.</p>
+<p>The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of <strong>SpatialAcc</strong> and <em>data.frame()</em> is used to save the output in a data frame called <code>acc_Handsen</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>acc_Hansen <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">ac</span>(hexagons<span class="sc">$</span>demand,</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                            eldercare<span class="sc">$</span>capacity,</span>
@@ -657,7 +665,7 @@ PROJCRS["SVY21 / Singapore TM",
 <section id="computing-kd2sfcas-accessibility" class="level2">
 <h2 class="anchored" data-anchor-id="computing-kd2sfcas-accessibility">Computing KD2SFCA’s accessibility</h2>
 <p>In this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk.<br>
-The code chunk below calculates Hansen's accessibility using <em>ac()</em> of <strong>SpatialAcc</strong> and <em>data.frame()</em> is used to save the output in a data frame called <code>acc_KD2SFCA</code>. Notice that <code>KD2SFCA</code> is used for family argument.</p>
+The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of <strong>SpatialAcc</strong> and <em>data.frame()</em> is used to save the output in a data frame called <code>acc_KD2SFCA</code>. Notice that <code>KD2SFCA</code> is used for family argument.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>acc_KD2SFCA <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">ac</span>(hexagons<span class="sc">$</span>demand,</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                            eldercare<span class="sc">$</span>capacity,</span>
@@ -730,7 +738,7 @@ The code chunk below calculates Hansen's accessibility using <em>ac()</em> of <s
 <section id="computing-sam-accessibility" class="level2">
 <h2 class="anchored" data-anchor-id="computing-sam-accessibility">Computing SAM accessibility</h2>
 <p>In this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk.<br>
-The code chunk below calculates Hansen's accessibility using <em>ac()</em> of <strong>SpatialAcc</strong> and <em>data.frame()</em> is used to save the output in a data frame called <code>acc_SAM</code>. Notice that <code>SAM</code> is used for family argument.</p>
+The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of <strong>SpatialAcc</strong> and <em>data.frame()</em> is used to save the output in a data frame called <code>acc_SAM</code>. Notice that <code>SAM</code> is used for family argument.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>acc_SAM <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">ac</span>(hexagons<span class="sc">$</span>demand,</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                         eldercare<span class="sc">$</span>capacity,</span>

@@ -181,6 +181,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="dropdown-item" href="../../Hands-On_Ex/Hands-On_Ex09/Hands-On_Ex09.html">
  <span class="dropdown-text">Hands-On Exercise 9</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html">
+ <span class="dropdown-text">Hands-On Exercise 10</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -223,6 +227,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li>
     <a class="dropdown-item" href="../../In-Class_Ex/In-Class_Ex09/In-Class_Ex09.html">
  <span class="dropdown-text">In-Class Exercise 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-Class_Ex/In-Class_Ex10/In-Class_Ex10.html">
+ <span class="dropdown-text">In-Class Exercise 10</span></a>
   </li>  
     </ul>
   </li>
@@ -271,6 +279,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#import-packages" id="toc-import-packages" class="nav-link active" data-scroll-target="#import-packages">Import Packages</a></li>
+  <li><a href="#importing-spatial-data" id="toc-importing-spatial-data" class="nav-link" data-scroll-target="#importing-spatial-data">Importing spatial data</a></li>
+  <li><a href="#updating-crs-information" id="toc-updating-crs-information" class="nav-link" data-scroll-target="#updating-crs-information">Updating CRS Information</a></li>
+  <li><a href="#cleaning-and-updating-attribute-fields-of-geospatial-data" id="toc-cleaning-and-updating-attribute-fields-of-geospatial-data" class="nav-link" data-scroll-target="#cleaning-and-updating-attribute-fields-of-geospatial-data">Cleaning and updating attribute fields of geospatial data</a></li>
+  <li><a href="#apsatial-data-handling-and-wrangling" id="toc-apsatial-data-handling-and-wrangling" class="nav-link" data-scroll-target="#apsatial-data-handling-and-wrangling">Apsatial data handling and wrangling</a>
+  <ul class="collapse">
+  <li><a href="#tidy-up-distance-matrix" id="toc-tidy-up-distance-matrix" class="nav-link" data-scroll-target="#tidy-up-distance-matrix">Tidy up distance matrix</a></li>
+  <li><a href="#change-distance-matrix-to-km" id="toc-change-distance-matrix-to-km" class="nav-link" data-scroll-target="#change-distance-matrix-to-km">Change distance matrix to km</a></li>
+  <li><a href="#computing-distance-matrix-optional" id="toc-computing-distance-matrix-optional" class="nav-link" data-scroll-target="#computing-distance-matrix-optional">Computing Distance matrix (Optional)</a></li>
+  </ul></li>
+  <li><a href="#hansen-method" id="toc-hansen-method" class="nav-link" data-scroll-target="#hansen-method">Hansen method</a></li>
+  <li><a href="#visualising-hansens-accessibility" id="toc-visualising-hansens-accessibility" class="nav-link" data-scroll-target="#visualising-hansens-accessibility">Visualising Hansen’s Accessibility</a></li>
+  <li><a href="#statistical-graphic-visualization" id="toc-statistical-graphic-visualization" class="nav-link" data-scroll-target="#statistical-graphic-visualization">Statistical Graphic Visualization</a></li>
   </ul>
 </nav>
     </div>
@@ -315,7 +335,245 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="import-packages" class="level1">
 <h1>Import Packages</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, spdep, GWmodel, SpatialML, tidyverse, tmap, ggpubr, olsrr, devtools, tidymodels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tmap, SpatialAcc, sf, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               ggstatsplot, reshape2, fca,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="importing-spatial-data" class="level1">
+<h1>Importing spatial data</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>hexagons <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial"</span>, <span class="at">layer =</span> <span class="st">"hexagons"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `hexagons' from data source 
+  `/Users/danielchng/Desktop/Github/SMU-IS415/IS415-GAA/In-Class_Ex/In-Class_Ex10/data/geospatial' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 3125 features and 6 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 2667.538 ymin: 21506.33 xmax: 50010.26 ymax: 50256.33
+Projected CRS: SVY21 / Singapore TM</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>eldercare <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial"</span>, <span class="at">layer =</span> <span class="st">"ELDERCARE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `ELDERCARE' from data source 
+  `/Users/danielchng/Desktop/Github/SMU-IS415/IS415-GAA/In-Class_Ex/In-Class_Ex10/data/geospatial' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 120 features and 19 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 14481.92 ymin: 28218.43 xmax: 41665.14 ymax: 46804.9
+Projected CRS: SVY21 / Singapore TM</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial"</span>, <span class="at">layer =</span> <span class="st">"MP14_SUBZONE_NO_SEA_PL"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `MP14_SUBZONE_NO_SEA_PL' from data source 
+  `/Users/danielchng/Desktop/Github/SMU-IS415/IS415-GAA/In-Class_Ex/In-Class_Ex10/data/geospatial' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 323 features and 15 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 2667.538 ymin: 15748.72 xmax: 56396.44 ymax: 50256.33
+Projected CRS: SVY21</code></pre>
+</div>
+</div>
+</section>
+<section id="updating-crs-information" class="level1">
+<h1>Updating CRS Information</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(mpsz, <span class="dv">3414</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>eldercare <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(eldercare, <span class="dv">3414</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>hexagons <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(hexagons, <span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>verify it is converted to EPSG 3414</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(mpsz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coordinate Reference System:
+  User input: EPSG:3414 
+  wkt:
+PROJCRS["SVY21 / Singapore TM",
+    BASEGEOGCRS["SVY21",
+        DATUM["SVY21",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433]],
+        ID["EPSG",4757]],
+    CONVERSION["Singapore Transverse Mercator",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",1.36666666666667,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",103.833333333333,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",1,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",28001.642,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",38744.572,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["northing (N)",north,
+            ORDER[1],
+            LENGTHUNIT["metre",1]],
+        AXIS["easting (E)",east,
+            ORDER[2],
+            LENGTHUNIT["metre",1]],
+    USAGE[
+        SCOPE["Cadastre, engineering survey, topographic mapping."],
+        AREA["Singapore - onshore and offshore."],
+        BBOX[1.13,103.59,1.47,104.07]],
+    ID["EPSG",3414]]</code></pre>
+</div>
+</div>
+</section>
+<section id="cleaning-and-updating-attribute-fields-of-geospatial-data" class="level1">
+<h1>Cleaning and updating attribute fields of geospatial data</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>eldercare <span class="ot">&lt;-</span> eldercare <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(fid, ADDRESSPOS) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">capacity =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By right the capacity needs to be checked with all the elderly care. But for this exercise, we assume all is at 100.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>hexagons <span class="ot">&lt;-</span> hexagons <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(fid) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">demand =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="apsatial-data-handling-and-wrangling" class="level1">
+<h1>Apsatial data handling and wrangling</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ODMatrix <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/aspatial/OD_Matrix.csv"</span>, <span class="at">skip =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="tidy-up-distance-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="tidy-up-distance-matrix">Tidy up distance matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>distmat <span class="ot">&lt;-</span> ODMatrix <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(origin_id, destination_id, total_cost) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(destination_id, total_cost)<span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">'origin_id'</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="change-distance-matrix-to-km" class="level2">
+<h2 class="anchored" data-anchor-id="change-distance-matrix-to-km">Change distance matrix to km</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>distmat_km <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(distmat<span class="sc">/</span><span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="computing-distance-matrix-optional" class="level2">
+<h2 class="anchored" data-anchor-id="computing-distance-matrix-optional">Computing Distance matrix (Optional)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>eldercare_coord <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(eldercare)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>hexagon_coord <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(hexagons)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>EucMatrix <span class="ot">&lt;-</span> SpatialAcc<span class="sc">::</span> <span class="fu">distance</span>(hexagon_coord, eldercare_coord, <span class="at">type =</span> <span class="st">"euclidean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="hansen-method" class="level1">
+<h1>Hansen method</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>acc_Hansen <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">ac</span>(hexagons<span class="sc">$</span>demand,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                            eldercare<span class="sc">$</span>capacity,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                            distmat_km, </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                            <span class="co">#d0 = 50,</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">power =</span> <span class="dv">2</span>, </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">family =</span> <span class="st">"Hansen"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(acc_Hansen) <span class="ot">&lt;-</span> <span class="st">"accHansen"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>acc_Hansen <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(acc_Hansen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>hexagon_Hansen <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(hexagons, acc_Hansen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Can write the code chunk together below</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>acc_Hansen <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">ac</span>(hexagons<span class="sc">$</span>demand,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                            eldercare<span class="sc">$</span>capacity,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                            distmat_km, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                            <span class="co">#d0 = 50,</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">power =</span> <span class="fl">0.5</span>, </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">family =</span> <span class="st">"Hansen"</span>))</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(acc_Hansen) <span class="ot">&lt;-</span> <span class="st">"accHansen"</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>acc_Hansen <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(acc_Hansen)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>hexagon_Hansen <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(hexagons, acc_Hansen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualising-hansens-accessibility" class="level1">
+<h1>Visualising Hansen’s Accessibility</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>mapex <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(hexagons)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"plot"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(hexagon_Hansen,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">bbox =</span> mapex) <span class="sc">+</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"accHansen"</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">n =</span> <span class="dv">10</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"quantile"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">border.col =</span> <span class="st">"black"</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">border.lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(eldercare) <span class="sc">+</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"Accessibility to eldercare: Hansen method"</span>,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.position =</span> <span class="st">"center"</span>,</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="dv">2</span>,</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.height =</span> <span class="fl">0.45</span>, </span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.width =</span> <span class="fl">3.0</span>,</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.format =</span> <span class="fu">list</span>(<span class="at">digits =</span> <span class="dv">6</span>),</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"top"</span>),</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">frame =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_compass</span>(<span class="at">type=</span><span class="st">"8star"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">width =</span> <span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_grid</span>(<span class="at">lwd =</span> <span class="fl">0.1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-Class_Ex10_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="statistical-graphic-visualization" class="level1">
+<h1>Statistical Graphic Visualization</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>hexagon_Hansen <span class="ot">&lt;-</span> <span class="fu">st_join</span>(hexagon_Hansen, mpsz, </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">join =</span> st_intersects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>hexagon_Hansen, </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">log</span>(accHansen), </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">x=</span> REGION_N)) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">stat=</span><span class="st">"summary"</span>, </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">fun.y=</span><span class="st">"mean"</span>, </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">colour =</span><span class="st">"red"</span>, </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-Class_Ex10_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
 </div>
 
 
