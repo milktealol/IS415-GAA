@@ -23,6 +23,8 @@ website:
             text: Hands-On Exercise 7.1
           - href: Hands-On_Ex/Hands-On_Ex09/Hands-On_Ex09.html
             text: Hands-On Exercise 9
+          - href: Hands-On_Ex/Hands-On_Ex10/Hands-On_Ex10.html
+            text: Hands-On Exercise 10
           
       - text: In-class Exercise
         menu:
@@ -44,6 +46,8 @@ website:
             text: In-Class Exercise 8
           - href: In-Class_Ex/In-Class_Ex09/In-Class_Ex09.html
             text: In-Class Exercise 9
+          - href: In-Class_Ex/In-Class_Ex10/In-Class_Ex10.html
+            text: In-Class Exercise 10
       - text: Take Home Exercise
         menu:
           - href: Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html

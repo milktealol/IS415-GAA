@@ -1,0 +1,19 @@
+---
+title: "In Class Exercise 10"
+author: "Daniel Chng"
+date: "20 March 2023"
+date-modified: "`r Sys.Date()`"
+format: html
+execute: 
+  eval: true
+  echo: true
+  message: false
+  warning: false
+editor: visual
+---
+
+# Import Packages
+
+```{r}
+pacman::p_load(sf, spdep, GWmodel, SpatialML, tidyverse, tmap, ggpubr, olsrr, devtools, tidymodels)
+```
