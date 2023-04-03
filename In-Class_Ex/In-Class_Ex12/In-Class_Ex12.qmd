@@ -1,0 +1,579 @@
+---
+title: "In Class Exercise 12"
+author: "Daniel Chng"
+date: "3 Apr 2023"
+date-modified: "`r Sys.Date()`"
+format: html
+execute: 
+  eval: true
+  echo: true
+  message: false
+  warning: false
+editor: visual
+---
+
+# Getting Started
+
+## Importing Module
+
+```{r}
+pacman::p_load(tmap, sf, sp, stplanr, 
+               reshape2, broom, performance,
+               gtsummary, ggpubr, tidyverse)
+```
+
+## Importing OD Data
+
+```{r}
+odbus <- read_csv("data/aspatial/origin_destination_bus_202210.csv")
+```
+
+```{r}
+odbus$ORIGIN_PT_CODE <- as.factor(odbus$ORIGIN_PT_CODE)
+odbus$DESTINATION_PT_CODE <- as.factor(odbus$DESTINATION_PT_CODE) 
+```
+
+### Extracting Study Data
+
+```{r}
+odbus7_9 <- odbus %>%
+  filter(DAY_TYPE == "WEEKDAY") %>%
+  filter(TIME_PER_HOUR >= 7 &
+           TIME_PER_HOUR <= 9) %>%
+  group_by(ORIGIN_PT_CODE,
+           DESTINATION_PT_CODE) %>%
+  summarise(TRIPS = sum(TOTAL_TRIPS))
+```
+
+```{r}
+write_rds(odbus7_9, "data/rds/odbus7_9.rds")
+```
+
+```{r}
+odbus7_9 <- read_rds("data/rds/odbus7_9.rds")
+```
+
+## Importing Geospatial Data
+
+```{r}
+busstop <- st_read(dsn = "data/geospatial",
+                   layer = "BusStop") %>%
+  st_transform(crs = 3414)
+```
+
+```{r}
+mpsz <- st_read(dsn = "data/geospatial",
+                   layer = "MPSZ-2019") %>%
+  st_transform(crs = 3414)
+```
+
+### Geospatial Data Wrangling
+
+#### Combining Busstop and MPSZ
+
+```{r}
+busstop_mpsz <- st_intersection(busstop, mpsz) %>%
+  select(BUS_STOP_N, SUBZONE_C) %>%
+  st_drop_geometry()
+```
+
+```{r}
+write_rds(busstop_mpsz, "data/rds/busstop_mpsz.csv")  
+```
+
+```{r}
+od_data <- left_join(odbus7_9 , busstop_mpsz,
+            by = c("ORIGIN_PT_CODE" = "BUS_STOP_N")) %>%
+  rename(ORIGIN_BS = ORIGIN_PT_CODE,
+         ORIGIN_SZ = SUBZONE_C,
+         DESTIN_BS = DESTINATION_PT_CODE)
+```
+
+```{r}
+duplicate <- od_data %>%
+  group_by_all() %>%
+  filter(n()>1) %>%
+  ungroup()
+```
+
+```{r}
+od_data <- unique(od_data)
+```
+
+```{r}
+od_data <- left_join(od_data , busstop_mpsz,
+            by = c("DESTIN_BS" = "BUS_STOP_N")) 
+```
+
+```{r}
+duplicate <- od_data %>%
+  group_by_all() %>%
+  filter(n()>1) %>%
+  ungroup()
+```
+
+```{r}
+od_data <- unique(od_data)
+```
+
+```{r}
+od_data <- od_data %>%
+  rename(DESTIN_SZ = SUBZONE_C) %>%
+  drop_na()
+```
+
+```{r}
+write_rds(od_data, "data/rds/od_data.rds")
+```
+
+```{r}
+od_data <- read_rds("data/rds/od_data.rds")
+```
+
+#### Visualising Geospatial Data
+
+```{r}
+tmap_mode("plot")
+tmap_options(check.and.fix = TRUE)
+qtm(mpsz)
+```
+
+#### Isolating SUBZONE_C into a new df
+
+```{r}
+mpsz <- mpsz[order(mpsz$SUBZONE_C),]
+head(mpsz, 10)
+```
+
+# Computing Distance Matrix
+
+## Converting from sf data.table to SpatialPolygonDataFrame
+
+```{r}
+mpsz_sp <- as(mpsz, "Spatial")
+```
+
+## Computing the Distance Matrix
+
+```{r}
+dist <- spDists(mpsz_sp)
+dist 
+```
+
+## Sorting the Distance Matrix by Plannint Sub-Zone Code
+
+```{r}
+sz_names <- mpsz$SUBZONE_C
+```
+
+## Attaching SUBZONE_C to Row and Column
+
+```{r}
+colnames(dist) <- paste0(sz_names)
+rownames(dist) <- paste0(sz_names)
+```
+
+## Pivoting Distance Value by SUBZONE_C
+
+```{r}
+distPair <- melt(dist) %>%
+  rename(dist = value)
+head(distPair, 10)
+```
+
+## Updating Intra-Zonal Distances
+
+```{r}
+distPair %>%
+  filter(dist > 0) %>%
+  summary()
+```
+
+A constant distance value of 50m is added into intra-zones
+
+```{r}
+distPair$dist <- ifelse(distPair$dist == 0,
+                        50, distPair$dist)
+```
+
+```{r}
+distPair %>%
+  summary()
+```
+
+```{r}
+distPair <- distPair %>%
+  rename(orig = Var1,
+         dest = Var2)
+```
+
+```{r}
+write_rds(distPair, "data/distPair.rds") 
+```
+
+# Preparing Flow Data
+
+```{r}
+od_data <- read_rds("data/rds/od_data.rds")
+```
+
+```{r}
+flow_data <- od_data %>%
+  group_by(ORIGIN_SZ, DESTIN_SZ) %>% 
+  summarize(TRIPS = sum(TRIPS)) 
+```
+
+## Separing Intra-Flow from Passenger Volume df
+
+```{r}
+flow_data$FlowNoIntra <- ifelse(
+  flow_data$ORIGIN_SZ == flow_data$DESTIN_SZ, 
+  0, flow_data$TRIPS)
+flow_data$offset <- ifelse(
+  flow_data$ORIGIN_SZ == flow_data$DESTIN_SZ, 
+  0.000001, 1)
+```
+
+## Combining Passenger Volume Data with Distance Value
+
+```{r}
+flow_data$ORIGIN_SZ <- as.factor(flow_data$ORIGIN_SZ)
+flow_data$DESTIN_SZ <- as.factor(flow_data$DESTIN_SZ)
+```
+
+```{r}
+flow_data1 <- flow_data %>%
+  left_join (distPair,
+             by = c("ORIGIN_SZ" = "orig",
+                    "DESTIN_SZ" = "dest"))
+```
+
+# Visualising Spatial Interaction
+
+## Removing Intra-Zonal Flows
+
+```{r}
+flow_data1 <- flow_data1[flow_data1$ORIGIN_SZ!=flow_data1$DESTIN_SZ,]
+```
+
+```{r}
+OD_data <- flow_data1[,c(1,2,3)]
+```
+
+## Creating Desire Lines
+
+```{r}
+flowLine <- od2line(flow = OD_data, 
+                    zones = mpsz,
+                    zone_code = "SUBZONE_C")
+```
+
+## Visualising the Desire Lines
+
+```{r}
+tm_shape(mpsz) +
+  tm_polygons() +
+tm_shape(flowLine) +
+  tm_lines(lwd = "TRIPS",
+           style = "quantile",
+           scale = c(0.1, 1, 3, 5, 10),
+           n = 5,
+           alpha = 0.1)
+```
+
+# Preparing Origin and Destination Attributes
+
+## Importing Population Data
+
+```{r}
+pop <- read_csv("data/aspatial/pop.csv")
+```
+
+## Geospatial Data Wrangling
+
+```{r}
+pop <- pop %>%
+  left_join(mpsz,
+            by = c("PA" = "PLN_AREA_N",
+                   "SZ" = "SUBZONE_N")) %>%
+  select(1:6) %>%
+  rename(SZ_NAME = SZ,
+         SZ = SUBZONE_C)
+```
+
+## Preparing Origin Attribute
+
+```{r}
+flow_data1 <- flow_data1 %>%
+  left_join(pop,
+            by = c(ORIGIN_SZ = "SZ")) %>%
+  rename(ORIGIN_AGE7_12 = AGE7_12,
+         ORIGIN_AGE13_24 = AGE13_24,
+         ORIGIN_AGE25_64 = AGE25_64) %>%
+  select(-c(PA, SZ_NAME))
+```
+
+## Preparing Destination Attribute
+
+```{r}
+flow_data1 <- flow_data1 %>%
+  left_join(pop,
+            by = c(DESTIN_SZ = "SZ")) %>%
+  rename(DESTIN_AGE7_12 = AGE7_12,
+         DESTIN_AGE13_24 = AGE13_24,
+         DESTIN_AGE25_64 = AGE25_64) %>%
+  select(-c(PA, SZ_NAME))
+```
+
+```{r}
+write_rds(flow_data1, "data/rds/SIM_data")
+```
+
+# Calibrating Spatial Interaction Models
+
+## Importing the Modelling Data
+
+```{r}
+SIM_data <- read_rds("data/rds/SIM_data.rds")
+```
+
+## Visualising the Dependent Variable
+
+```{r}
+ggplot(data = SIM_data,
+       aes(x = TRIPS)) +
+  geom_histogram()
+```
+
+```{r}
+ggplot(data = SIM_data,
+       aes(x = dist,
+           y = TRIPS)) +
+  geom_point() +
+  geom_smooth(method = lm)
+```
+
+```{r}
+ggplot(data = SIM_data,
+       aes(x = log(dist),
+           y = log(TRIPS))) +
+  geom_point() +
+  geom_smooth(method = lm)
+```
+
+## Checking for Variables with Zero Values
+
+```{r}
+summary(SIM_data)
+```
+
+```{r}
+SIM_data$DESTIN_AGE7_12 <- ifelse(
+  SIM_data$DESTIN_AGE7_12 == 0,
+  0.99, SIM_data$DESTIN_AGE7_12)
+SIM_data$DESTIN_AGE13_24 <- ifelse(
+  SIM_data$DESTIN_AGE13_24 == 0,
+  0.99, SIM_data$DESTIN_AGE13_24)
+SIM_data$DESTIN_AGE25_64 <- ifelse(
+  SIM_data$DESTIN_AGE25_64 == 0,
+  0.99, SIM_data$DESTIN_AGE25_64)
+SIM_data$ORIGIN_AGE7_12 <- ifelse(
+  SIM_data$ORIGIN_AGE7_12 == 0,
+  0.99, SIM_data$ORIGIN_AGE7_12)
+SIM_data$ORIGIN_AGE13_24 <- ifelse(
+  SIM_data$ORIGIN_AGE13_24 == 0,
+  0.99, SIM_data$ORIGIN_AGE13_24)
+SIM_data$ORIGIN_AGE25_64 <- ifelse(
+  SIM_data$ORIGIN_AGE25_64 == 0,
+  0.99, SIM_data$ORIGIN_AGE25_64)
+```
+
+```{r}
+summary(SIM_data)
+```
+
+## Unconstrained Spatial Interaction Model
+
+![](images/image-528884476.png)
+
+```{r}
+uncSIM <- glm(formula = TRIPS ~ 
+                log(ORIGIN_AGE25_64) + 
+                log(DESTIN_AGE25_64) +
+                log(dist),
+              family = poisson(link = "log"),
+              data = SIM_data,
+              na.action = na.exclude)
+uncSIM
+```
+
+### R-Squared Function
+
+```{r}
+CalcRSquared <- function(observed,estimated){
+  r <- cor(observed,estimated)
+  R2 <- r^2
+  R2
+}
+```
+
+```{r}
+CalcRSquared(uncSIM$data$TRIPS, uncSIM$fitted.values)
+```
+
+```{r}
+r2_mcfadden(uncSIM)
+```
+
+## Origin (Production) Constrained SIM
+
+![](images/image-1658134954.png)
+
+```{r}
+orcSIM <- glm(formula = TRIPS ~ 
+                 ORIGIN_SZ +
+                 log(DESTIN_AGE25_64) +
+                 log(dist),
+              family = poisson(link = "log"),
+              data = SIM_data,
+              na.action = na.exclude)
+summary(orcSIM)
+```
+
+### R-Sqaured
+
+```{r}
+CalcRSquared(orcSIM$data$TRIPS, orcSIM$fitted.values)
+```
+
+## Destination Constrained
+
+![](images/image-681988011.png)
+
+```{r}
+decSIM <- glm(formula = TRIPS ~ 
+                DESTIN_SZ + 
+                log(ORIGIN_AGE25_64) + 
+                log(dist),
+              family = poisson(link = "log"),
+              data = SIM_data,
+              na.action = na.exclude)
+summary(decSIM)
+```
+
+### R-Sqaured
+
+```{r}
+CalcRSquared(decSIM$data$TRIPS, decSIM$fitted.values)
+```
+
+## Doubly Constrained
+
+![](images/image-1282367499.png)
+
+```{r}
+dbcSIM <- glm(formula = TRIPS ~ 
+                ORIGIN_SZ + 
+                DESTIN_SZ + 
+                log(dist),
+              family = poisson(link = "log"),
+              data = SIM_data,
+              na.action = na.exclude)
+summary(dbcSIM)
+```
+
+### R-Squared
+
+```{r}
+CalcRSquared(dbcSIM$data$TRIPS, dbcSIM$fitted.values)
+```
+
+# Model Comparison
+
+```{r}
+model_list <- list(unconstrained=uncSIM,
+                   originConstrained=orcSIM,
+                   destinationConstrained=decSIM,
+                   doublyConstrained=dbcSIM)
+```
+
+```{r}
+compare_performance(model_list,
+                    metrics = "RMSE")
+```
+
+## Visualising Fitted
+
+```{r}
+df <- as.data.frame(uncSIM$fitted.values) %>%
+  round(digits = 0)
+```
+
+```{r}
+SIM_data <- SIM_data %>%
+  cbind(df) %>%
+  rename(uncTRIPS = "uncSIM$fitted.values")
+```
+
+```{r}
+df <- as.data.frame(orcSIM$fitted.values) %>%
+  round(digits = 0)
+```
+
+```{r}
+SIM_data <- SIM_data %>%
+  cbind(df) %>%
+  rename(orcTRIPS = "orcSIM$fitted.values")
+```
+
+```{r}
+df <- as.data.frame(decSIM$fitted.values) %>%
+  round(digits = 0)
+```
+
+```{r}
+SIM_data <- SIM_data %>%
+  cbind(df) %>%
+  rename(decTRIPS = "decSIM$fitted.values")
+```
+
+```{r}
+df <- as.data.frame(dbcSIM$fitted.values) %>%
+  round(digits = 0)
+```
+
+```{r}
+SIM_data <- SIM_data %>%
+  cbind(df) %>%
+  rename(dbcTRIPS = "dbcSIM$fitted.values")
+```
+
+```{r}
+unc_p <- ggplot(data = SIM_data,
+                aes(x = uncTRIPS,
+                    y = TRIPS)) +
+  geom_point() +
+  geom_smooth(method = lm)
+
+orc_p <- ggplot(data = SIM_data,
+                aes(x = orcTRIPS,
+                    y = TRIPS)) +
+  geom_point() +
+  geom_smooth(method = lm)
+
+dec_p <- ggplot(data = SIM_data,
+                aes(x = decTRIPS,
+                    y = TRIPS)) +
+  geom_point() +
+  geom_smooth(method = lm)
+
+dbc_p <- ggplot(data = SIM_data,
+                aes(x = dbcTRIPS,
+                    y = TRIPS)) +
+  geom_point() +
+  geom_smooth(method = lm)
+
+ggarrange(unc_p, orc_p, dec_p, dbc_p,
+          ncol = 2,
+          nrow = 2)
+```
